@@ -4,12 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🌸 Mi's Study Space</title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon-16x16.png" type="image/x-icon">
-<link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
-<link rel="shortcut icon" href="android-chrome-192x192.png" type="image/x-icon">
-<link rel="shortcut icon" href="android-chrome-512x512.png" type="image/x-icon">
-<link rel="shortcut icon" href="apple-touch-icon.png" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -264,16 +258,6 @@ select.inp{cursor:pointer}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 .d1{animation-delay:0.1s}.d2{animation-delay:0.2s}.d3{animation-delay:0.3s}.d4{animation-delay:0.4s}.d5{animation-delay:0.5s}
 
-/* HERO ACTION BUTTONS */
-.hero-actions{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:20px;flex-wrap:wrap}
-.hero-room-btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--rose),var(--p5),#c030a0);color:white;border-radius:50px;padding:13px 28px;font-family:'Outfit',sans-serif;font-size:0.95rem;font-weight:600;text-decoration:none;box-shadow:0 6px 28px rgba(240,80,160,0.42);transition:all 0.25s;overflow:hidden;letter-spacing:0.2px}
-.hero-room-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 36px rgba(240,80,160,0.55)}
-.hero-room-glow{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 30%,rgba(255,255,255,0.22) 0%,transparent 70%);pointer-events:none}
-.hero-room-ico{font-size:1.3rem;animation:bounce-ico 2s ease-in-out infinite}
-@keyframes bounce-ico{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.hero-hist-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.75);backdrop-filter:blur(12px);color:var(--p5);border:1.5px solid var(--p2);border-radius:50px;padding:11px 22px;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.22s;box-shadow:var(--shadow2)}
-.hero-hist-btn:hover{background:var(--p1);border-color:var(--p3);transform:translateY(-2px)}
-
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--p1)}
 ::-webkit-scrollbar-thumb{background:var(--p3);border-radius:6px}
@@ -299,27 +283,6 @@ select.inp{cursor:pointer}
     <h1 class="hero-h1">Mi's Study <em>Space</em></h1>
     <span class="hero-flowers">🌸 🌷 💕 🌷 🌸</span>
     <div class="hero-date" id="heroDate"></div>
-    <div class="hero-actions">
-      <a href="study-room.html" class="hero-room-btn">
-        <span class="hero-room-glow"></span>
-        <span class="hero-room-ico">👯‍♀️</span>
-        <span class="hero-room-txt">Học chung cùng Mi nè :3</span>
-      </a>
-      <button class="hero-hist-btn" onclick="openHistory()">
-        <span>📖</span> Lịch sử học
-      </button>
-    </div>
-  </div>
-
-  <!-- HISTORY MODAL -->
-  <div id="histModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(42,15,30,0.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
-    <div style="background:white;border-radius:28px;padding:32px;max-width:640px;width:100%;max-height:82vh;overflow-y:auto;animation:fadeUp 0.4s both">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;flex:1">📖 Lịch sử buổi học</div>
-        <button onclick="closeHistory()" style="background:var(--p1);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--p5)">✕</button>
-      </div>
-      <div id="histList"></div>
-    </div>
   </div>
 
   <!-- MOOD BAR -->
@@ -930,65 +893,6 @@ function init(){
   setInterval(rClock,1000);setInterval(()=>{rSlots();rTT();chkNotif()},20000);setInterval(rExams,60000);setInterval(rStats,60000);rClock();
   let ld=new Date().getDate();setInterval(()=>{if(new Date().getDate()!==ld){ld=new Date().getDate();renderHero();seedT();rTasks();rSlots();rTT();notify('🌅 Ngày mới! Danh sách làm mới rồi 💕','🌸')}},30000);
 }
-
-// ─── STUDY HISTORY ───
-function openHistory(){
-  const modal=document.getElementById('histModal');
-  modal.style.display='flex';
-  const history=JSON.parse(localStorage.getItem('study_history')||'[]');
-  const list=document.getElementById('histList');
-  if(!history.length){
-    list.innerHTML='<div style="text-align:center;color:var(--ink3);padding:28px 0;font-size:0.9rem">Chưa có buổi học nào 🌙<br><small>Vào phòng học chung để bắt đầu!</small></div>';
-    return;
-  }
-  list.innerHTML=history.map((h,i)=>{
-    const d=new Date(h.date);
-    const ds=`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
-    const ts=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    const totalMins=h.members.reduce((s,m)=>s+(m.studyMinutes||m.studyTime||0),0);
-    const imgUploads=(h.uploads||[]).filter(u=>u.imageData);
-    return`<div style="border:1.5px solid var(--p2);border-radius:16px;padding:16px;margin-bottom:12px;background:var(--p0);${i===0?'border-color:var(--p4)':''}">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;flex:1">
-          ${i===0?'⭐ ':''}Buổi học ${ds} lúc ${ts}
-        </div>
-        ${h.challenge?`<span style="font-size:0.7rem;background:var(--p1);color:var(--p5);padding:2px 9px;border-radius:20px;border:1px solid var(--p2)">🎯 ${h.challenge}</span>`:''}
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        ${h.members.map(m=>`<div style="background:white;border:1px solid var(--p2);border-radius:10px;padding:8px 12px;font-size:0.8rem;text-align:center;min-width:90px">
-          <div style="font-size:1.3rem">${m.avatar||'👤'}</div>
-          <div style="font-weight:600;font-size:0.82rem">${m.name}</div>
-          <div style="color:var(--p5);font-family:'Cormorant Garamond',serif;font-size:1.1rem">${m.studyMinutes||m.studyTime||0}p</div>
-          ${m.subject?`<div style="font-size:0.65rem;color:var(--ink3)">${m.subject}</div>`:''}
-        </div>`).join('')}
-      </div>
-      ${imgUploads.length?`<div style="border-top:1px solid var(--p1);padding-top:10px;margin-top:4px">
-        <div style="font-size:0.75rem;font-weight:600;color:var(--ink2);margin-bottom:8px">🖼 Bài tập đã nộp:</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:7px">
-          ${imgUploads.map(u=>`<div style="position:relative;border-radius:10px;overflow:hidden;border:1.5px solid var(--p2);aspect-ratio:1;cursor:pointer" onclick="histOpenImg('${u.imageData}','${u.mName||u.memberName||''}')">
-            <img src="${u.imageData}" style="width:100%;height:100%;object-fit:cover" alt="${u.mName||''}">
-            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.65);color:#fff;font-size:.55rem;padding:2px 4px;text-align:center">${u.mAva||u.memberAvatar||'👤'} ${u.mName||u.memberName||''}</div>
-          </div>`).join('')}
-        </div>
-      </div>`:''}
-      <div style="font-size:0.72rem;color:var(--ink3);margin-top:10px;text-align:right">Tổng: ${totalMins} phút học · ${h.members.length} người</div>
-    </div>`;
-  }).join('');
-}
-
-function histOpenImg(src,name){
-  // Simple full-screen image view
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:16px';
-  overlay.innerHTML=`<img src="${src}" style="max-width:94vw;max-height:90vh;border-radius:12px;object-fit:contain"><div style="position:absolute;top:18px;right:22px;color:#fff;font-size:2rem;cursor:pointer;opacity:.7;line-height:1">✕</div>${name?`<div style="position:absolute;bottom:20px;color:#fff;font-size:.85rem;opacity:.6;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px">${name}</div>`:''}`;
-  overlay.onclick=()=>overlay.remove();
-  document.body.appendChild(overlay);
-}
-
-function closeHistory(){
-  document.getElementById('histModal').style.display='none';
-}
-
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>

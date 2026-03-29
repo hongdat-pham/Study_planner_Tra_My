@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>📱 Nộp bài qua QR</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+
+<script type="module">
+  import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set, get, push }
+                              from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7FRkytqmcRGq0Th1Sg3Mt6gy96LJctRQ",
+    authDomain: "study-planner-01.firebaseapp.com",
+    databaseURL: "https://study-planner-01-default-rtdb.firebaseio.com",
+    projectId: "study-planner-01",
+    storageBucket: "study-planner-01.firebasestorage.app",
+    messagingSenderId: "540883054890",
+    appId: "1:540883054890:web:6c0ea1847ecff80465ae53"
+  };
+  try{
+    const app=initializeApp(firebaseConfig);
+    const db=getDatabase(app);
+    window._FB={db,ref,set,get,push};
+    window._FB_READY=true;
+  }catch(e){window._FB_FAILED=true;}
+</script>
+
+<style>
+:root{--p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--rose:#ff6bae;--ink:#2a0f1e;--ink3:#9a5070;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.wrap{max-width:440px;width:100%}
+.brand{text-align:center;margin-bottom:28px}
+.brand-script{font-family:'Sacramento',cursive;font-size:1.9rem;color:var(--rose)}
+.brand-h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;line-height:1.1;margin:4px 0 6px}
+.brand-h1 em{color:var(--p5);font-style:italic}
+.card{background:rgba(255,255,255,.9);border-radius:24px;border:1px solid var(--p2);box-shadow:0 8px 32px rgba(200,50,120,.12);padding:28px}
+.field{margin-bottom:16px}
+.field label{font-size:.72rem;color:var(--ink3);font-weight:500;display:block;margin-bottom:6px}
+.inp{width:100%;padding:11px 16px;border-radius:14px;border:1.5px solid var(--p2);background:rgba(255,255,255,.9);font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:all .2s}
+.inp:focus{border-color:var(--p4);box-shadow:0 0 0 3px rgba(255,128,188,.14)}
+.btn{width:100%;font-family:'Outfit',sans-serif;font-size:.92rem;font-weight:500;padding:13px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.btn-rose{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;box-shadow:0 4px 16px rgba(240,80,160,.3)}
+.btn-rose:hover{transform:translateY(-2px)}
+.btn-rose:disabled{opacity:.5;transform:none;cursor:not-allowed}
+
+/* Camera zone */
+.cam-zone{border:2px dashed var(--p3);border-radius:18px;padding:20px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:all .2s;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:16px}
+.cam-zone:hover{background:var(--p0);border-color:var(--p4)}
+.cam-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cam-zone img{max-width:100%;max-height:280px;border-radius:12px;object-fit:contain}
+.cam-zone.has-img{padding:8px}
+.cam-placeholder{pointer-events:none}
+
+/* Success */
+#successView{display:none;text-align:center}
+@keyframes pop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+.success-ico{font-size:4rem;animation:pop .4s both;margin-bottom:12px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;margin-bottom:6px}
+.success-sub{font-size:.85rem;color:var(--ink3);line-height:1.6}
+.preview-thumb{width:120px;height:120px;border-radius:16px;object-fit:cover;margin:14px auto;display:block;border:2px solid var(--p2);cursor:pointer}
+
+.err{font-size:.78rem;color:#e53935;background:#fff5f5;border:1px solid #ffcdd2;border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none}
+.err.show{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-script">nộp bài qua điện thoại 📱</div>
+    <h1 class="brand-h1">Nộp bài <em>của bạn</em></h1>
+  </div>
+
+  <!-- SUBMIT FORM -->
+  <div class="card" id="formView">
+    <div class="err" id="errBox"></div>
+
+    <div class="field">
+      <label>Tên của bạn</label>
+      <input class="inp" id="subName" placeholder="VD: Mi, Linh, Bảo..." maxlength="16">
+    </div>
+
+    <div class="field">
+      <label>Ảnh bài làm — nhấn để chụp hoặc chọn ảnh</label>
+      <div class="cam-zone" id="camZone">
+        <input type="file" id="imgInput" accept="image/*" capture="environment" onchange="onImgSelect(this)">
+        <div class="cam-placeholder" id="camPlaceholder">
+          <div style="font-size:2.5rem;margin-bottom:8px">📸</div>
+          <div style="font-size:.88rem;color:var(--ink3)">Chụp ảnh / Chọn ảnh từ thư viện</div>
+        </div>
+        <img id="imgPreview" style="display:none;pointer-events:none" alt="preview">
+      </div>
+    </div>
+
+    <button class="btn btn-rose" id="submitBtn" onclick="doSubmit()">📎 Nộp bài ngay!</button>
+  </div>
+
+  <!-- SUCCESS VIEW -->
+  <div class="card" id="successView">
+    <div class="success-ico">🎉</div>
+    <div class="success-title">Đã nộp bài xong!</div>
+    <div class="success-sub">Bài của bạn đã được gửi vào phòng học.<br>Có thể xem tổng kết trên máy tính nhé! 🌸</div>
+    <img id="successThumb" class="preview-thumb" src="" alt="bài nộp">
+    <button class="btn btn-rose" style="margin-top:12px" onclick="resetForm()">📎 Nộp thêm bài khác</button>
+  </div>
+</div>
+
+<script>
+let selectedImageData=null;
+
+function showErr(msg){const el=document.getElementById('errBox');el.textContent=msg;el.classList.add('show')}
+function hideErr(){document.getElementById('errBox').classList.remove('show')}
+
+function onImgSelect(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    selectedImageData=e.target.result;
+    const preview=document.getElementById('imgPreview');
+    const placeholder=document.getElementById('camPlaceholder');
+    preview.src=selectedImageData;
+    preview.style.display='block';
+    placeholder.style.display='none';
+    document.getElementById('camZone').classList.add('has-img');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function doSubmit(){
+  hideErr();
+  const name=document.getElementById('subName').value.trim();
+  if(!name){showErr('Nhập tên của bạn nhé!');return}
+  if(!selectedImageData){showErr('Chọn ảnh bài làm nhé!');return}
+  if(!window._FB_READY){showErr('Đang kết nối, thử lại sau nhé!');return}
+
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Đang nộp...';
+
+  try{
+    const{db,ref,push,get}=window._FB;
+    // Get challenge info
+    const chSnap=await get(ref(db,'room/challenge'));
+    const ch=chSnap.exists()?chSnap.val():null;
+
+    await push(ref(db,'room/challenge/submissions'),{
+      slotId:'qr_'+Date.now(),
+      name,avatar:'📱',
+      fileName:`ảnh_${name}.jpg`,
+      imageData:selectedImageData,
+      uploadedAt:Date.now(),
+      fromQR:true
+    });
+
+    // Show success
+    document.getElementById('formView').style.display='none';
+    document.getElementById('successView').style.display='block';
+    document.getElementById('successThumb').src=selectedImageData;
+    document.getElementById('successThumb').onclick=()=>{
+      // full screen preview
+      const w=window.open('','_blank');
+      w.document.write(`<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="${selectedImageData}" style="max-width:100%;max-height:100vh;object-fit:contain"></body></html>`);
+    };
+  }catch(e){
+    showErr('Lỗi nộp bài, thử lại nhé!');
+    btn.disabled=false;btn.textContent='📎 Nộp bài ngay!';
+  }
+}
+
+function resetForm(){
+  selectedImageData=null;
+  document.getElementById('subName').value='';
+  document.getElementById('imgPreview').style.display='none';
+  document.getElementById('imgPreview').src='';
+  document.getElementById('camPlaceholder').style.display='flex';
+  document.getElementById('camZone').classList.remove('has-img');
+  document.getElementById('imgInput').value='';
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('submitBtn').textContent='📎 Nộp bài ngay!';
+  document.getElementById('formView').style.display='block';
+  document.getElementById('successView').style.display='none';
+  hideErr();
+}
+</script>
+</body>
+</html>
