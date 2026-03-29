@@ -17,7 +17,6 @@
 html{scroll-behavior:smooth}
 body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;overflow-x:hidden}
 
-/* BG */
 .bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .bg-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:0.3;animation:blobMove 14s ease-in-out infinite alternate}
 .b1{width:520px;height:520px;background:#ffc0e0;top:-160px;right:-100px;animation-duration:16s}
@@ -26,10 +25,8 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 @keyframes blobMove{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.1)}}
 #petalsCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* LAYOUT */
 .page{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:36px 24px 72px}
 
-/* HERO */
 .hero{text-align:center;margin-bottom:48px;animation:heroIn 1s cubic-bezier(0.16,1,0.3,1) both}
 @keyframes heroIn{from{opacity:0;transform:translateY(-28px) scale(0.96)}to{opacity:1;transform:none}}
 .hero-eye{font-family:'Sacramento',cursive;font-size:1.7rem;color:var(--rose);margin-bottom:4px;letter-spacing:1px}
@@ -38,7 +35,6 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 .hero-flowers{font-size:1.5rem;letter-spacing:8px;margin:14px 0 8px;display:block}
 .hero-date{font-size:0.88rem;color:var(--ink3);font-weight:300;background:rgba(255,255,255,0.65);backdrop-filter:blur(12px);display:inline-block;padding:6px 20px;border-radius:50px;border:1px solid var(--p2);margin-top:10px}
 
-/* MOOD */
 .mood-bar{background:rgba(255,255,255,0.72);backdrop-filter:blur(16px);border-radius:60px;border:1px solid var(--p2);padding:12px 24px;display:flex;align-items:center;gap:14px;margin-bottom:32px;box-shadow:var(--shadow2);animation:fadeUp 0.7s 0.2s both;flex-wrap:wrap}
 .mood-lbl{font-size:0.79rem;color:var(--ink3);font-weight:500;white-space:nowrap}
 .mood-emojis{display:flex;gap:4px;flex:1}
@@ -47,7 +43,6 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 .mood-btn.on{background:var(--p1);box-shadow:0 0 0 2px var(--p3);transform:scale(1.2)}
 .mood-txt{font-size:0.8rem;color:var(--p5);font-style:italic;margin-left:auto}
 
-/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;animation:fadeUp 0.6s 0.05s both}
 @media(max-width:700px){.stats-row{grid-template-columns:repeat(2,1fr)}}
 .stat-c{background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-radius:18px;padding:18px 16px;text-align:center;border:1px solid rgba(255,200,224,0.4);box-shadow:var(--shadow2);transition:transform 0.2s}
@@ -55,20 +50,19 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 .stat-num{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:var(--p5);line-height:1}
 .stat-lbl{font-size:0.7rem;color:var(--ink3);margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
 
-/* CARDS */
 .card{background:rgba(255,255,255,0.84);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid rgba(255,200,224,0.45);box-shadow:var(--shadow);padding:28px;animation:fadeUp 0.6s both}
 .clabel{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:8px}
 .clabel .lico{font-size:1.1rem}
 .clabel .cact{font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:400;color:var(--ink3);margin-left:auto;cursor:pointer;transition:color 0.2s}
 .clabel .cact:hover{color:var(--p5)}
+.clabel .tt-cfg-btn{font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:500;color:var(--ink3);margin-left:auto;cursor:pointer;transition:all 0.2s;background:var(--p1);border:1px solid var(--p2);border-radius:50px;padding:5px 14px;display:inline-flex;align-items:center;gap:5px}
+.clabel .tt-cfg-btn:hover{background:var(--p2);color:var(--p5)}
 
-/* GRIDS */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}
 @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
 .mb{margin-bottom:18px}
 
-/* BTNS */
 .btn{font-family:'Outfit',sans-serif;font-size:0.85rem;font-weight:500;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:all 0.2s}
 .btn-rose{background:linear-gradient(135deg,var(--rose),var(--p5));color:white;box-shadow:0 4px 16px rgba(240,80,160,0.3)}
 .btn-rose:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(240,80,160,0.42)}
@@ -78,15 +72,12 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 .btn-ghost:hover{background:var(--p1);color:var(--p5)}
 .btn-sm{padding:7px 14px;font-size:0.78rem}
 
-/* INP */
 .inp{width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid var(--p2);background:rgba(255,255,255,0.9);font-family:'Outfit',sans-serif;font-size:0.88rem;color:var(--ink);outline:none;transition:all 0.2s}
 .inp:focus{border-color:var(--p4);background:white;box-shadow:0 0 0 3px rgba(255,128,188,0.14)}
 select.inp{cursor:pointer}
 
-/* DIVIDER */
 .div{height:1px;background:linear-gradient(90deg,transparent,var(--p2),transparent);margin:16px 0}
 
-/* QUOTE BANNER */
 .q-banner{background:linear-gradient(135deg,var(--rose) 0%,var(--p5) 55%,#c030a0 100%);border-radius:20px;padding:30px 40px;position:relative;overflow:hidden;margin-bottom:18px;color:white;text-align:center;animation:fadeUp 0.6s 0.1s both}
 .q-banner::before{content:'❝';position:absolute;font-size:11rem;top:-30px;left:16px;opacity:0.07;font-family:Georgia;line-height:1}
 .q-banner::after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;background:radial-gradient(ellipse at 80% 20%,rgba(255,255,255,0.08) 0%,transparent 60%);pointer-events:none}
@@ -117,6 +108,12 @@ select.inp{cursor:pointer}
 .cfg-item label{font-size:0.75rem;color:var(--ink3);display:block;margin-bottom:4px}
 .cfg-item input[type=range]{width:100%;accent-color:var(--p5)}
 .cfg-val{font-size:0.82rem;color:var(--p5);font-weight:600;text-align:right}
+.clock-sound-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 14px;background:var(--p0);border-radius:12px;border:1px solid var(--p1)}
+.clock-sound-row label{font-size:0.75rem;color:var(--ink3);flex:1}
+.sound-toggle{position:relative;width:40px;height:22px;background:var(--p2);border-radius:11px;cursor:pointer;border:none;transition:background 0.3s;flex-shrink:0}
+.sound-toggle.on{background:var(--p5)}
+.sound-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:transform 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.2)}
+.sound-toggle.on::after{transform:translateX(18px)}
 
 /* CLOCK */
 .clock-big{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,3.8rem);font-weight:300;letter-spacing:3px;color:var(--ink);line-height:1;text-align:center}
@@ -173,7 +170,7 @@ select.inp{cursor:pointer}
 .ttag{font-size:0.68rem;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap}
 .ta{background:#e3f2fd;color:#1565c0}.ts{background:#fce4ec;color:#c62828}
 .tv{background:#f3e5f5;color:#6a1b9a}.td{background:#e8f5e9;color:#2e7d32}
-.to{background:#fff3e0;color:#e65100}
+.to{background:#fff3e0;color:#e65100}.tly{background:#e0f7fa;color:#006064}.tho{background:#fce4ec;color:#880e4f}
 .tdel{background:none;border:none;color:#ddd;cursor:pointer;font-size:0.9rem;transition:color 0.2s;line-height:1}
 .tdel:hover{color:var(--p4)}
 .task-note{font-size:0.72rem;color:var(--ink3);margin-top:12px;text-align:center}
@@ -191,6 +188,8 @@ select.inp{cursor:pointer}
 .spill{font-size:0.78rem;padding:4px 12px;border-radius:20px;font-weight:500}
 .sa{background:#e3f2fd;color:#1565c0}.ss{background:#fce4ec;color:#c62828}
 .sv{background:#f3e5f5;color:#6a1b9a}.sdg{background:#e8f5e9;color:#2e7d32}
+.sly{background:#e0f7fa;color:#006064}.sho{background:#fce4ec;color:#880e4f}
+.sto{background:#fff3e0;color:#e65100}.smt{background:#f3e5f5;color:#4a148c}
 .live-badge{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--p5);font-weight:600}
 .no-class{text-align:center;color:var(--ink3);padding:24px 0;font-size:0.88rem}
 
@@ -205,6 +204,27 @@ select.inp{cursor:pointer}
 .spill2{display:inline-block;padding:4px 10px;border-radius:20px;font-size:0.73rem;font-weight:500}
 .empty-m{color:#e0c8d8}
 .tt-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:0.76rem;align-items:center}
+
+/* TIMETABLE EDITOR */
+.tt-editor{background:var(--p0);border-radius:18px;padding:20px;border:1.5px dashed var(--p3);margin-top:16px;display:none}
+.tt-editor.open{display:block}
+.tt-editor-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.slot-editor{margin-bottom:20px;background:white;border-radius:14px;padding:16px;border:1px solid var(--p2)}
+.slot-editor-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.slot-lbl-big{font-weight:600;color:var(--ink2);font-size:0.9rem}
+.slot-time-inputs{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--ink3)}
+.slot-time-inputs input[type=time]{padding:5px 10px;border-radius:8px;border:1.5px solid var(--p2);font-family:'Outfit',sans-serif;font-size:0.8rem;color:var(--ink);background:white;outline:none;cursor:pointer}
+.slot-time-inputs input[type=time]:focus{border-color:var(--p4)}
+.sched-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.sched-cell{display:flex;flex-direction:column;gap:4px;align-items:center}
+.sched-day-lbl{font-size:0.65rem;color:var(--ink3);font-weight:600;text-align:center}
+.sched-cell select{width:100%;padding:5px 6px;border-radius:8px;border:1.5px solid var(--p2);background:white;font-family:'Outfit',sans-serif;font-size:0.68rem;color:var(--ink);outline:none;cursor:pointer;text-align:center}
+.sched-cell select:focus{border-color:var(--p4)}
+.add-slot-btn{background:var(--p1);border:1.5px dashed var(--p3);border-radius:12px;padding:10px;width:100%;font-family:'Outfit',sans-serif;font-size:0.82rem;color:var(--p5);cursor:pointer;transition:all 0.2s;margin-bottom:12px}
+.add-slot-btn:hover{background:var(--p2)}
+.del-slot-btn{background:none;border:none;color:#ffb3cc;cursor:pointer;font-size:0.9rem;margin-left:auto;padding:2px 6px;transition:color 0.2s}
+.del-slot-btn:hover{color:var(--p5)}
+.save-tt-btn{width:100%;margin-top:8px}
 
 /* MUSIC */
 .music-card{background:linear-gradient(135deg,#180918,#2d0a22);border-radius:var(--radius);padding:28px;color:white;position:relative;overflow:hidden;border:1px solid #4a1038}
@@ -232,7 +252,6 @@ select.inp{cursor:pointer}
 .notif.show{transform:translateX(0)}
 .nico{font-size:1.3rem}
 
-/* ANIM */
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 .d1{animation-delay:0.1s}.d2{animation-delay:0.2s}.d3{animation-delay:0.3s}.d4{animation-delay:0.4s}.d5{animation-delay:0.5s}
 
@@ -247,6 +266,11 @@ select.inp{cursor:pointer}
 <canvas id="petalsCanvas"></canvas>
 
 <div class="notif-wrap"><div class="notif" id="notif1"><span class="nico" id="n1i">🌸</span><span id="n1t"></span></div></div>
+
+<!-- Clock audio (dùng file clock.mp3 cùng thư mục) -->
+<audio id="clockAudio" loop preload="auto">
+  <source src="clock.mp3" type="audio/mpeg">
+</audio>
 
 <div class="page">
 
@@ -296,7 +320,7 @@ select.inp{cursor:pointer}
     <div class="exam-panel" id="ePanel">
       <div class="exam-form">
         <input class="inp" id="eN" placeholder="Tên kỳ thi (VD: Thi HK2 Văn)">
-        <select class="inp" id="eSub"><option value="">-- Môn học --</option><option value="Anh">🇬🇧 Tiếng Anh</option><option value="Sử">📜 Lịch Sử</option><option value="Văn">✍️ Ngữ Văn</option><option value="Địa">🌏 Địa Lý</option><option value="Khác">📚 Khác</option></select>
+        <select class="inp" id="eSub"><option value="">-- Môn học --</option><option value="Anh">🇬🇧 Tiếng Anh</option><option value="Toán">📐 Toán</option><option value="Văn">✍️ Ngữ Văn</option><option value="Sử">📜 Lịch Sử</option><option value="Địa">🌏 Địa Lý</option><option value="Hóa">🧪 Hóa Học</option><option value="Lý">⚡ Vật Lý</option><option value="Khác">📚 Khác</option></select>
         <input class="inp" id="eDate" type="date">
         <input class="inp" id="eNote" placeholder="Ghi chú (tuỳ chọn)">
       </div>
@@ -331,6 +355,11 @@ select.inp{cursor:pointer}
           <div class="cfg-item"><label>☕ Nghỉ (phút)</label><input type="range" id="cBreak" min="1" max="30" value="5" oninput="pomoUCfg()"><div class="cfg-val"><span id="cBreakV">5</span> phút</div></div>
         </div>
         <div class="cfg-item" style="margin-top:10px"><label>🔁 Số vòng</label><input type="range" id="cSess" min="2" max="8" value="4" oninput="pomoUCfg()" style="width:100%;accent-color:var(--p5)"><div class="cfg-val"><span id="cSessV">4</span> vòng</div></div>
+        <div class="clock-sound-row">
+          <label>🕐 Âm thanh tick-tack đồng hồ</label>
+          <button class="sound-toggle" id="soundToggle" onclick="toggleClockSound()" title="Bật/tắt tiếng đồng hồ"></button>
+          <span id="soundLbl" style="font-size:0.72rem;color:var(--ink3)">Tắt</span>
+        </div>
       </div>
     </div>
 
@@ -359,46 +388,52 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- TIMETABLE + MUSIC -->
-  <div class="g2">
-    <div class="card d4">
-      <div class="clabel"><span class="lico">📋</span> Thời khoá biểu tuần</div>
-      <div class="div"></div>
-      <div class="tt-wrap"><table class="tt" id="ttTbl"></table></div>
-      <div class="tt-legend">
-        <span><span class="spill2 sa">Anh</span> Tiếng Anh</span>
-        <span><span class="spill2 ss">Sử</span> Lịch Sử</span>
-        <span><span class="spill2 sv">Văn</span> Ngữ Văn</span>
-        <span><span class="spill2 sdg">Địa</span> Địa Lý</span>
-        <span style="margin-left:auto;font-size:0.72rem;color:var(--ink3)">📍 = Hôm nay</span>
-      </div>
+  <!-- TIMETABLE FULL WIDTH -->
+  <div class="card d4 mb">
+    <div class="clabel">
+      <span class="lico">📋</span> Thời khoá biểu tuần
+      <span class="cact tt-cfg-btn" onclick="toggleTTEditor()"><span style="font-size:0.9rem">⚙</span> Chỉnh lịch</span>
     </div>
+    <div class="div"></div>
+    <div class="tt-wrap"><table class="tt" id="ttTbl"></table></div>
+    <div class="tt-legend" id="ttLegend"></div>
+    <!-- TIMETABLE EDITOR -->
+    <div class="tt-editor" id="ttEditor">
+      <div class="tt-editor-title">✏️ Chỉnh sửa thời khoá biểu</div>
+      <div id="slotEditorList"></div>
+      <button class="add-slot-btn" onclick="addSlotEditor()">+ Thêm mốc học</button>
+      <button class="btn btn-rose save-tt-btn" onclick="saveTimetable()">💾 Lưu lịch học</button>
+      <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px" onclick="toggleTTEditor()">✕ Đóng</button>
+    </div>
+  </div>
 
-    <div class="music-card d4">
-      <div class="mc-title">🎵 Focus Vibes</div>
-      <div class="viz off" id="vizEl">
-        <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
-        <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
-      </div>
-      <div class="track-list" id="trkList"></div>
-      <div class="mc-note">Nhấn để mở link nhạc trong tab mới 🎶</div>
+  <!-- MUSIC FULL WIDTH -->
+  <div class="music-card d4 mb">
+    <div class="mc-title">🎵 Focus Vibes</div>
+    <div class="viz off" id="vizEl">
+      <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
+      <div class="vbar"></div><div class="vbar"></div><div class="vbar"></div><div class="vbar"></div>
     </div>
+    <div class="track-list" id="trkList"></div>
+    <div class="mc-note">Nhấn để mở link nhạc trong tab mới 🎶</div>
   </div>
 
 </div>
 
 <script>
-// ─── DATA ───
+// ─── SUBJECTS ───
+const ALL_SUBJECTS = ['Văn','Toán','Anh','Sử','Địa','Hóa','Lý'];
+const SEMO = {Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
+const SCLS = {Anh:'sa',Sử:'ss',Văn:'sv',Địa:'sdg',Toán:'smt',Hóa:'sho',Lý:'sly',Khác:'sto'};
+const SCLS2 = {Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 sdg',Toán:'spill2 smt',Hóa:'spill2 sho',Lý:'spill2 sly',Khác:'spill2 sto'};
+const TCLS = {Anh:'ta',Sử:'ts',Văn:'tv',Địa:'td',Toán:'tly',Hóa:'tho',Lý:'tly',Khác:'to'};
+const ECLS = {Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 sdg',Toán:'spill2 smt',Hóa:'spill2 sho',Lý:'spill2 sly',Khác:'spill2 sto'};
+
+// ─── DATE HELPERS ───
 const DAYS_S=['CN','T2','T3','T4','T5','T6','T7'];
 const DAYS_F=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
 const MONTHS=['tháng 1','tháng 2','tháng 3','tháng 4','tháng 5','tháng 6','tháng 7','tháng 8','tháng 9','tháng 10','tháng 11','tháng 12'];
-const SLOTS=[{l:'Mốc 1',s:480,e:600},{l:'Mốc 2',s:840,e:960},{l:'Mốc 3',s:1140,e:1230},{l:'Mốc 4',s:1230,e:1320},{l:'Mốc 5',s:1320,e:1380}];
-const SLOT_STR=['8:00–10:00','14:00–16:00','19:00–20:30','20:30–22:00','22:00–23:00'];
-const SCHED={0:['Anh','Địa','Sử','Văn','Anh'],1:[null,null,'Anh','Sử','Văn'],2:[null,null,'Sử','Anh','Địa'],3:[null,null,'Anh','Sử','Văn'],4:[null,null,'Sử','Anh','Địa'],5:[null,null,'Anh','Sử','Văn'],6:['Văn','Sử','Anh','Địa','Văn']};
-const SCLS={Anh:'sa',Sử:'ss',Văn:'sv',Địa:'sdg'};
-const SCLS2={Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 sdg'};
-const SEMO={Anh:'🇬🇧',Sử:'📜',Văn:'✍️',Địa:'🌏',Khác:'📚'};
-const TCLS={Anh:'ta',Sử:'ts',Văn:'tv',Địa:'td'};
+
 const QUOTES=[
   {t:'"Học hành hôm nay, tương lai rực rỡ ngày mai 💪"',s:'— Cố lên nhaaa, tớ tin em bé của tớ ạ! 🌸'},
   {t:'"Mỗi phút chăm chỉ là một bước gần hơn đến ước mơ ✨"',s:'— Bé giỏi lắm í, tiếp tục cố gắng như em đang làm nha!'},
@@ -420,6 +455,41 @@ const nm=()=>{const d=new Date();return d.getHours()*60+d.getMinutes()};
 const fmM=m=>{if(m<=0)return'0p';const h=Math.floor(m/60),mn=m%60;return h?`${h}h ${mn}p`:`${mn} phút`};
 const LS={g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},s:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
 const tk=()=>{const d=new Date();return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`};
+
+// ─── TIMETABLE DATA ───
+// Default slots & schedule
+const DEFAULT_SLOTS = [
+  {l:'Mốc 1',s:480,e:600},
+  {l:'Mốc 2',s:840,e:960},
+  {l:'Mốc 3',s:1140,e:1230},
+  {l:'Mốc 4',s:1230,e:1320},
+  {l:'Mốc 5',s:1320,e:1380}
+];
+const DEFAULT_SCHED = {
+  0:['Anh','Địa','Sử','Văn','Anh'],
+  1:[null,null,'Anh','Sử','Văn'],
+  2:[null,null,'Sử','Anh','Địa'],
+  3:[null,null,'Anh','Sử','Văn'],
+  4:[null,null,'Sử','Anh','Địa'],
+  5:[null,null,'Anh','Sử','Văn'],
+  6:['Văn','Sử','Anh','Địa','Văn']
+};
+
+function loadTT(){
+  const saved = LS.g('timetable_v1');
+  if(saved && saved.slots && saved.sched) return saved;
+  return {slots: DEFAULT_SLOTS, sched: DEFAULT_SCHED};
+}
+function saveTTData(d){LS.s('timetable_v1',d)}
+
+let ttData = loadTT();
+
+function getSlotStr(sl){
+  const sh=Math.floor(sl.s/60),sm=sl.s%60,eh=Math.floor(sl.e/60),em=sl.e%60;
+  return `${String(sh).padStart(2,'0')}:${String(sm).padStart(2,'0')}–${String(eh).padStart(2,'0')}:${String(em).padStart(2,'0')}`;
+}
+function timeToMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
+function minToTime(m){return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}
 
 // ─── PETALS ───
 (()=>{
@@ -449,6 +519,36 @@ function rQuote(){const q=QUOTES[qI];document.getElementById('qTxt').textContent
 function goQ(i){qI=i;rQuote()}
 setInterval(()=>{qI=(qI+1)%QUOTES.length;rQuote()},8000);
 
+// ─── CLOCK SOUND ───
+let clockSoundOn = true; // default BẬT
+const clockAudio = document.getElementById('clockAudio');
+
+function updateSoundUI(){
+  const btn = document.getElementById('soundToggle');
+  const lbl = document.getElementById('soundLbl');
+  if(clockSoundOn){btn.classList.add('on');lbl.textContent='Bật';}
+  else{btn.classList.remove('on');lbl.textContent='Tắt';}
+}
+
+function toggleClockSound(){
+  clockSoundOn = !clockSoundOn;
+  updateSoundUI();
+  if(!clockSoundOn){clockAudio.pause();clockAudio.currentTime=0;}
+  else if(pSt.run) tryPlayClock();
+}
+
+function tryPlayClock(){
+  if(!clockSoundOn) return;
+  if(clockAudio.paused){
+    clockAudio.play().catch(()=>{});
+  }
+}
+
+function stopClock(){
+  clockAudio.pause();
+  clockAudio.currentTime = 0;
+}
+
 // ─── POMODORO ───
 const pCfg={study:25,brk:5,sess:4};
 let pSt={run:false,isS:true,rem:25*60,sess:0,itv:null};
@@ -468,13 +568,46 @@ function rPomo(){
   document.getElementById('sPo').textContent=LS.g('pomo_'+tk())||0;
 }
 function pomoToggle(){
-  if(pSt.run){clearInterval(pSt.itv);pSt.run=false;document.getElementById('pBtn').textContent='▶ Tiếp tục'}
-  else{pSt.run=true;document.getElementById('pBtn').textContent='⏸ Dừng';pSt.itv=setInterval(()=>{pSt.rem--;if(pSt.rem<=0){clearInterval(pSt.itv);pSt.run=false;if(pSt.isS){notify('🎉 Hết giờ học! Nghỉ ngơi tí nhé em~','🍃');LS.s('pomo_'+tk(),(LS.g('pomo_'+tk())||0)+1);pSt.sess=(pSt.sess+1)%pCfg.sess;pSt.isS=false;pSt.rem=pCfg.brk*60}else{notify('💪 Nghỉ xong rồi! Học tiếp nào!','📖');pSt.isS=true;pSt.rem=pCfg.study*60}document.getElementById('pBtn').textContent='▶ Bắt đầu'}rPomo()},1000)}
+  if(pSt.run){
+    clearInterval(pSt.itv);pSt.run=false;
+    document.getElementById('pBtn').textContent='▶ Tiếp tục';
+    stopClock();
+  } else {
+    pSt.run=true;
+    document.getElementById('pBtn').textContent='⏸ Dừng';
+    tryPlayClock();
+    pSt.itv=setInterval(()=>{
+      pSt.rem--;
+      if(pSt.rem<=0){
+        clearInterval(pSt.itv);pSt.run=false;
+        stopClock();
+        if(pSt.isS){
+          notify('🎉 Hết giờ học! Nghỉ ngơi tí nhé em~','🍃');
+          LS.s('pomo_'+tk(),(LS.g('pomo_'+tk())||0)+1);
+          pSt.sess=(pSt.sess+1)%pCfg.sess;pSt.isS=false;pSt.rem=pCfg.brk*60;
+        } else {
+          notify('💪 Nghỉ xong rồi! Học tiếp nào!','📖');
+          pSt.isS=true;pSt.rem=pCfg.study*60;
+        }
+        document.getElementById('pBtn').textContent='▶ Bắt đầu';
+      }
+      rPomo();
+    },1000);
+  }
 }
-function pomoReset(s){clearInterval(pSt.itv);pSt={...pSt,run:false,isS:true,rem:pCfg.study*60,sess:0,itv:null};document.getElementById('pBtn').textContent='▶ Bắt đầu';rPomo()}
-function pomoSkip(){clearInterval(pSt.itv);pSt.run=false;if(pSt.isS){pSt.isS=false;pSt.rem=pCfg.brk*60;pSt.sess=(pSt.sess+1)%pCfg.sess}else{pSt.isS=true;pSt.rem=pCfg.study*60}document.getElementById('pBtn').textContent='▶ Bắt đầu';rPomo()}
+function pomoReset(s){
+  clearInterval(pSt.itv);stopClock();
+  pSt={...pSt,run:false,isS:true,rem:pCfg.study*60,sess:0,itv:null};
+  document.getElementById('pBtn').textContent='▶ Bắt đầu';rPomo();
+}
+function pomoSkip(){
+  clearInterval(pSt.itv);pSt.run=false;stopClock();
+  if(pSt.isS){pSt.isS=false;pSt.rem=pCfg.brk*60;pSt.sess=(pSt.sess+1)%pCfg.sess}
+  else{pSt.isS=true;pSt.rem=pCfg.study*60}
+  document.getElementById('pBtn').textContent='▶ Bắt đầu';rPomo();
+}
 
-// ─── CLOCK ───
+// ─── CLOCK DISPLAY ───
 function rClock(){
   const d=new Date(),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0'),ss=String(d.getSeconds()).padStart(2,'0');
   document.getElementById('cBig').textContent=`${hh}:${mm}:${ss}`;
@@ -482,15 +615,14 @@ function rClock(){
   rNext(d.getDay());
 }
 function rNext(dj){
-  const m=nm(),nb=document.getElementById('nBox');
-  for(let si=0;si<SLOTS.length;si++){if(m>=SLOTS[si].s&&m<SLOTS[si].e&&SCHED[dj][si]){const s=SCHED[dj][si];nb.innerHTML=`<div class="next-lbl">🟢 Đang học</div><div class="next-subj">${SEMO[s]} ${s}</div><div class="next-time">${SLOT_STR[si]}</div><div class="live-pill"><div class="ldot"></div> Còn lại ${fmM(SLOTS[si].e-m)}</div>`;return}}
-  for(let si=0;si<SLOTS.length;si++){if(SLOTS[si].s>m&&SCHED[dj][si]){const s=SCHED[dj][si];nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo hôm nay</div><div class="next-subj">${SEMO[s]} ${s}</div><div class="next-time">${SLOT_STR[si]}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(SLOTS[si].s-m)}</div>`;return}}
-  for(let dd=1;dd<=7;dd++){const nd=(dj+dd)%7;for(let si=0;si<SLOTS.length;si++){if(SCHED[nd][si]){const s=SCHED[nd][si];const ml=(24*60-m)+(dd-1)*24*60+SLOTS[si].s;nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo — ${DAYS_F[nd]}</div><div class="next-subj">${SEMO[s]} ${s}</div><div class="next-time">${SLOT_STR[si]}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(ml)}</div>`;return}}}
-  nb.innerHTML='<div style="color:var(--ink3);font-size:0.88rem;padding:12px 0">Không có lịch học 🌙</div>';
+  const m=nm(),nb=document.getElementById('nBox'),slots=ttData.slots,sched=ttData.sched;
+  for(let si=0;si<slots.length;si++){if(m>=slots[si].s&&m<slots[si].e&&sched[dj][si]){const s=sched[dj][si];nb.innerHTML=`<div class="next-lbl">🟢 Đang học</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div class="live-pill"><div class="ldot"></div> Còn lại ${fmM(slots[si].e-m)}</div>`;return}}
+  for(let si=0;si<slots.length;si++){if(slots[si].s>m&&sched[dj][si]){const s=sched[dj][si];nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo hôm nay</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(slots[si].s-m)}</div>`;return}}
+  for(let dd=1;dd<=7;dd++){const nd=(dj+dd)%7;for(let si=0;si<slots.length;si++){if(sched[nd][si]){const s=sched[nd][si];const ml=(24*60-m)+(dd-1)*24*60+slots[si].s;nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo — ${DAYS_F[nd]}</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(ml)}</div>`;return}}}
+  nb.innerHTML='<div style="color:var(--ink3);font-size:0.88rem;padding:12px 0">Không có lịch học 🙌</div>';
 }
 
 // ─── EXAM ───
-const ECLS={Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 sdg',Khác:'spill2 to'};
 const lEx=()=>LS.g('exams_v2')||[];
 const sEx=e=>LS.s('exams_v2',e);
 const dU=ds=>{const n=new Date();n.setHours(0,0,0,0);const t=new Date(ds);t.setHours(0,0,0,0);return Math.round((t-n)/86400000)};
@@ -513,8 +645,24 @@ function rExams(){
 // ─── TASKS ───
 const lT=()=>LS.g('tasks_'+tk())||[];
 const sT=t=>LS.s('tasks_'+tk(),t);
-function dTag(txt){if(/anh/i.test(txt))return'Anh';if(/sử|lịch sử/i.test(txt))return'Sử';if(/văn/i.test(txt))return'Văn';if(/địa/i.test(txt))return'Địa';return null}
-function seedT(){if(lT().length>0)return;const dj=new Date().getDay(),t=[];SLOTS.forEach((_,si)=>{const s=SCHED[dj][si];if(s)t.push({text:`${SLOTS[si].l}: Học ${s} (${SLOT_STR[si]})`,done:false,tag:s})});if(t.length)sT(t)}
+function dTag(txt){
+  const lower=txt.toLowerCase();
+  if(/anh|tiếng anh/i.test(lower))return'Anh';
+  if(/sử|lịch sử/i.test(lower))return'Sử';
+  if(/văn|ngữ văn/i.test(lower))return'Văn';
+  if(/địa/i.test(lower))return'Địa';
+  if(/toán/i.test(lower))return'Toán';
+  if(/hóa/i.test(lower))return'Hóa';
+  if(/lý|vật lý/i.test(lower))return'Lý';
+  return null;
+}
+function seedT(){
+  if(lT().length>0)return;
+  const dj=new Date().getDay(),t=[];
+  const{slots,sched}=ttData;
+  slots.forEach((_,si)=>{const s=sched[dj][si];if(s)t.push({text:`${slots[si].l}: Học ${s} (${getSlotStr(slots[si])})`,done:false,tag:s})});
+  if(t.length)sT(t);
+}
 function rTasks(){
   const tasks=lT(),done=tasks.filter(t=>t.done).length;
   document.getElementById('tProg').textContent=`${done}/${tasks.length}`;
@@ -532,20 +680,133 @@ function delT(i){const t=lT();t.splice(i,1);sT(t);rTasks()}
 // ─── TODAY SLOTS ───
 function rSlots(){
   const dj=new Date().getDay(),m=nm();
-  const slots=SLOTS.map((sl,si)=>({...sl,subj:SCHED[dj][si],si})).filter(s=>s.subj);
+  const{slots,sched}=ttData;
+  const items=slots.map((sl,si)=>({...sl,subj:sched[dj][si],si})).filter(s=>s.subj);
   const list=document.getElementById('slotList');
-  if(!slots.length){list.innerHTML='<div class="no-class">Hôm nay không có lịch học 🌸<br><small>Nghỉ ngơi và nạp năng lượng nhé!</small></div>';return}
-  list.innerHTML=slots.map(s=>{const live=m>=s.s&&m<s.e,past=m>=s.e,cls=live?'live':past?'past':'';return`<div class="slot-row ${cls}"><div class="slot-time">${SLOT_STR[s.si]}</div><div class="slot-pills"><span class="spill ${SCLS[s.subj]||''}">${SEMO[s.subj]} ${s.subj}</span></div>${live?'<div class="live-badge"><div class="ldot" style="background:var(--p5)"></div> Đang học</div>':past?'<div style="font-size:0.72rem;color:var(--ink3);margin-left:auto">✓ Xong</div>':''}</div>`}).join('');
+  if(!items.length){list.innerHTML='<div class="no-class">Hôm nay không có lịch học 🌸<br><small>Nghỉ ngơi và nạp năng lượng nhé!</small></div>';return}
+  list.innerHTML=items.map(s=>{const live=m>=s.s&&m<s.e,past=m>=s.e,cls=live?'live':past?'past':'';return`<div class="slot-row ${cls}"><div class="slot-time">${getSlotStr(s)}</div><div class="slot-pills"><span class="spill ${SCLS[s.subj]||'sto'}">${SEMO[s.subj]||'📚'} ${s.subj}</span></div>${live?'<div class="live-badge"><div class="ldot" style="background:var(--p5)"></div> Đang học</div>':past?'<div style="font-size:0.72rem;color:var(--ink3);margin-left:auto">✓ Xong</div>':''}</div>`}).join('');
 }
 
-// ─── TIMETABLE ───
+// ─── TIMETABLE DISPLAY ───
 function rTT(){
   const dj=new Date().getDay(),m=nm(),ORDER=[1,2,3,4,5,6,0];
+  const{slots,sched}=ttData;
   let h='<thead><tr><th>Mốc</th><th>Giờ</th>';
   ORDER.forEach(d=>{h+=`<th class="${d===dj?'tdc':''}">${DAYS_S[d]}${d===dj?' 📍':''}</th>`});
   h+='</tr></thead><tbody>';
-  SLOTS.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}</td><td class="tc">${SLOT_STR[si]}</td>`;ORDER.forEach(d=>{const s=SCHED[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]} ${s}</span>`:'<span class="empty-m">—</span>'}</td>`});h+='</tr>'});
+  slots.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}</td><td class="tc">${getSlotStr(sl)}</td>`;ORDER.forEach(d=>{const s=sched[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]||'📚'} ${s}</span>`:'<span class="empty-m">—</span>'}</td>`});h+='</tr>'});
   h+='</tbody>';document.getElementById('ttTbl').innerHTML=h;
+  // Legend
+  const used=new Set();
+  Object.values(sched).forEach(day=>day.forEach(s=>{if(s)used.add(s)}));
+  document.getElementById('ttLegend').innerHTML=[...used].map(s=>`<span><span class="${SCLS2[s]||'spill2 sto'}">${SEMO[s]||'📚'} ${s}</span></span>`).join('')+'<span style="margin-left:auto;font-size:0.72rem;color:var(--ink3)">📍 = Hôm nay</span>';
+}
+
+// ─── TIMETABLE EDITOR ───
+function toggleTTEditor(){
+  const ed=document.getElementById('ttEditor');
+  ed.classList.toggle('open');
+  if(ed.classList.contains('open')) renderSlotEditors();
+}
+
+function subjOptions(sel){
+  const opts=['<option value="">— Trống —</option>'];
+  ALL_SUBJECTS.forEach(s=>opts.push(`<option value="${s}" ${sel===s?'selected':''}>${SEMO[s]} ${s}</option>`));
+  opts.push(`<option value="Khác" ${sel==='Khác'?'selected':''}>📚 Khác</option>`);
+  return opts.join('');
+}
+
+function renderSlotEditors(){
+  const{slots,sched}=ttData;
+  const ORDER=[1,2,3,4,5,6,0]; // T2→CN
+  const container=document.getElementById('slotEditorList');
+  container.innerHTML=slots.map((sl,si)=>`
+    <div class="slot-editor" id="sled_${si}">
+      <div class="slot-editor-hdr">
+        <span class="slot-lbl-big">${sl.l}</span>
+        <div class="slot-time-inputs">
+          <span>Từ</span>
+          <input type="time" id="stime_${si}" value="${minToTime(sl.s)}" onchange="updateSlotTime(${si})">
+          <span>đến</span>
+          <input type="time" id="etime_${si}" value="${minToTime(sl.e)}" onchange="updateSlotTime(${si})">
+        </div>
+        <button class="del-slot-btn" onclick="delSlotEditor(${si})" title="Xoá mốc này">🗑</button>
+      </div>
+      <div class="sched-grid">
+        ${ORDER.map(d=>`
+          <div class="sched-cell">
+            <div class="sched-day-lbl">${DAYS_S[d]}</div>
+            <select id="sc_${d}_${si}" onchange="updateSchedCell(${d},${si},this.value)">
+              ${subjOptions(sched[d][si])}
+            </select>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateSlotTime(si){
+  const s=timeToMin(document.getElementById(`stime_${si}`).value);
+  const e=timeToMin(document.getElementById(`etime_${si}`).value);
+  if(s>=e){notify('Giờ bắt đầu phải nhỏ hơn giờ kết thúc!','⚠️');return}
+  ttData.slots[si].s=s;
+  ttData.slots[si].e=e;
+}
+
+function updateSchedCell(d,si,val){
+  ttData.sched[d][si]=val||null;
+}
+
+function addSlotEditor(){
+  const n=ttData.slots.length;
+  const lastEnd=n>0?ttData.slots[n-1].e:480;
+  ttData.slots.push({l:`Mốc ${n+1}`,s:lastEnd,e:lastEnd+60});
+  for(let d=0;d<7;d++) ttData.sched[d].push(null);
+  renderSlotEditors();
+}
+
+function delSlotEditor(si){
+  if(ttData.slots.length<=1){notify('Phải có ít nhất 1 mốc học!','⚠️');return}
+  ttData.slots.splice(si,1);
+  for(let d=0;d<7;d++) ttData.sched[d].splice(si,1);
+  // Rename slots
+  ttData.slots.forEach((sl,i)=>sl.l=`Mốc ${i+1}`);
+  renderSlotEditors();
+}
+
+function saveTimetable(){
+  // Read all current values from DOM
+  const{slots,sched}=ttData;
+  const ORDER=[1,2,3,4,5,6,0];
+  slots.forEach((_,si)=>{
+    ORDER.forEach(d=>{
+      const sel=document.getElementById(`sc_${d}_${si}`);
+      if(sel) sched[d][si]=sel.value||null;
+    });
+    const st=document.getElementById(`stime_${si}`);
+    const et=document.getElementById(`etime_${si}`);
+    if(st&&et){
+      const s=timeToMin(st.value),e=timeToMin(et.value);
+      if(s<e){slots[si].s=s;slots[si].e=e}
+    }
+  });
+
+  // Sắp xếp mốc theo giờ bắt đầu (sớm nhất lên trên)
+  const combined = slots.map((sl,si)=>({slot:sl, dayData: Object.fromEntries([0,1,2,3,4,5,6].map(d=>[d, sched[d][si]]))}));
+  combined.sort((a,b)=>a.slot.s - b.slot.s);
+  combined.forEach((item,i)=>{
+    item.slot.l=`Mốc ${i+1}`;
+    ttData.slots[i]=item.slot;
+    [0,1,2,3,4,5,6].forEach(d=>{ ttData.sched[d][i]=item.dayData[d]; });
+  });
+
+  saveTTData(ttData);
+  rTT();rSlots();rNext(new Date().getDay());
+  // Reset today's tasks to reflect new schedule
+  LS.s('tasks_'+tk(),[]);seedT();rTasks();
+  notify('✅ Đã lưu & sắp xếp thời khoá biểu!','📋');
+  document.getElementById('ttEditor').classList.remove('open');
 }
 
 // ─── MUSIC ───
@@ -564,11 +825,17 @@ function rStats(){
 
 // ─── SESSION NOTIF ───
 let lastNM=-1;
-function chkNotif(){const dj=new Date().getDay(),m=nm();if(m===lastNM)return;lastNM=m;SLOTS.forEach((sl,si)=>{if(!SCHED[dj][si])return;const s=SCHED[dj][si];if(sl.s-m===15)notify(`⏰ Còn 15 phút nữa học ${s}!`,'📚');if(sl.s===m)notify(`🔔 Đến giờ học ${s} rồi em ơi!`,SEMO[s])})}
+function chkNotif(){
+  const dj=new Date().getDay(),m=nm();
+  if(m===lastNM)return;lastNM=m;
+  const{slots,sched}=ttData;
+  slots.forEach((sl,si)=>{if(!sched[dj][si])return;const s=sched[dj][si];if(sl.s-m===15)notify(`⏰ Còn 15 phút nữa học ${s}!`,'📚');if(sl.s===m)notify(`🔔 Đến giờ học ${s} rồi em ơi!`,SEMO[s]||'📚')});
+}
 
 // ─── INIT ───
 function init(){
   renderHero();restoreMood();qI=Math.floor(Math.random()*QUOTES.length);rQuote();pomoReset(true);rExams();seedT();rTasks();rSlots();rTT();rMusic();rStats();
+  updateSoundUI(); // sync sound toggle UI với default bật
   setInterval(rClock,1000);setInterval(()=>{rSlots();rTT();chkNotif()},20000);setInterval(rExams,60000);setInterval(rStats,60000);rClock();
   let ld=new Date().getDate();setInterval(()=>{if(new Date().getDate()!==ld){ld=new Date().getDate();renderHero();seedT();rTasks();rSlots();rTT();notify('🌅 Ngày mới! Danh sách làm mới rồi 💕','🌸')}},30000);
 }
