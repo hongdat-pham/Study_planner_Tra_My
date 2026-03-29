@@ -117,15 +117,18 @@ select.inp{cursor:pointer}
 
 /* CLOCK */
 .clock-big{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,3.8rem);font-weight:300;letter-spacing:3px;color:var(--ink);line-height:1;text-align:center}
-.clock-sub{text-align:center;font-size:0.82rem;color:var(--ink3);margin:6px 0 20px}
-.next-box{background:linear-gradient(135deg,var(--p0),var(--p1));border-radius:16px;padding:18px;border:1px solid var(--p2)}
-.next-lbl{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink3);margin-bottom:6px}
-.next-subj{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--ink);margin-bottom:2px}
-.next-time{font-size:0.82rem;color:var(--p5);font-weight:500}
-.next-cd{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--p5);font-weight:600;margin-top:8px}
-.live-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--p4),var(--p5));color:white;border-radius:50px;padding:6px 14px;font-size:0.82rem;font-weight:500;margin-top:8px}
+.clock-sub{text-align:center;font-size:0.82rem;color:var(--ink3);margin:6px 0 16px}
+.next-boxes{display:flex;gap:10px;flex-direction:column}
+.next-box{background:linear-gradient(135deg,var(--p0),var(--p1));border-radius:16px;padding:16px 18px;border:1px solid var(--p2);flex:1}
+.next-box.live-box{background:linear-gradient(135deg,#fff0f8,#ffe4f3);border-color:var(--p3);box-shadow:0 4px 16px rgba(240,80,160,0.1)}
+.next-lbl{font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink3);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.next-subj{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--ink);margin-bottom:2px;line-height:1.2}
+.next-time{font-size:0.8rem;color:var(--p5);font-weight:500}
+.next-cd{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--p5);font-weight:600;margin-top:6px}
+.live-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--p4),var(--p5));color:white;border-radius:50px;padding:5px 13px;font-size:0.8rem;font-weight:500;margin-top:7px}
 .ldot{width:8px;height:8px;border-radius:50%;background:white;animation:lpulse 1.2s ease-in-out infinite}
 @keyframes lpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+.upcoming-pill{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--p1),var(--p2));color:var(--p6);border-radius:50px;padding:5px 13px;font-size:0.8rem;font-weight:500;margin-top:7px;border:1px solid var(--p2)}
 
 /* EXAM */
 .exam-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px}
@@ -367,7 +370,7 @@ select.inp{cursor:pointer}
       <div class="clabel"><span class="lico">⏰</span> Đồng hồ & Mốc học</div>
       <div class="clock-big" id="cBig">00:00:00</div>
       <div class="clock-sub" id="cSub"></div>
-      <div class="next-box" id="nBox"></div>
+      <div class="next-boxes" id="nBoxes"></div>
     </div>
   </div>
 
@@ -615,11 +618,62 @@ function rClock(){
   rNext(d.getDay());
 }
 function rNext(dj){
-  const m=nm(),nb=document.getElementById('nBox'),slots=ttData.slots,sched=ttData.sched;
-  for(let si=0;si<slots.length;si++){if(m>=slots[si].s&&m<slots[si].e&&sched[dj][si]){const s=sched[dj][si];nb.innerHTML=`<div class="next-lbl">🟢 Đang học</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div class="live-pill"><div class="ldot"></div> Còn lại ${fmM(slots[si].e-m)}</div>`;return}}
-  for(let si=0;si<slots.length;si++){if(slots[si].s>m&&sched[dj][si]){const s=sched[dj][si];nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo hôm nay</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(slots[si].s-m)}</div>`;return}}
-  for(let dd=1;dd<=7;dd++){const nd=(dj+dd)%7;for(let si=0;si<slots.length;si++){if(sched[nd][si]){const s=sched[nd][si];const ml=(24*60-m)+(dd-1)*24*60+slots[si].s;nb.innerHTML=`<div class="next-lbl">Mốc tiếp theo — ${DAYS_F[nd]}</div><div class="next-subj">${SEMO[s]||'📚'} ${s}</div><div class="next-time">${getSlotStr(slots[si])}</div><div style="font-size:0.75rem;color:var(--ink3);margin-top:4px">Còn</div><div class="next-cd">${fmM(ml)}</div>`;return}}}
-  nb.innerHTML='<div style="color:var(--ink3);font-size:0.88rem;padding:12px 0">Không có lịch học 🙌</div>';
+  const m=nm(),wrap=document.getElementById('nBoxes'),slots=ttData.slots,sched=ttData.sched;
+  let liveHTML='',upcomingHTML='';
+
+  // Tìm mốc ĐANG học
+  for(let si=0;si<slots.length;si++){
+    if(m>=slots[si].s&&m<slots[si].e&&sched[dj][si]){
+      const s=sched[dj][si];
+      liveHTML=`<div class="next-box live-box">
+        <div class="next-lbl">🟢 Đang học</div>
+        <div class="next-subj">${SEMO[s]||'📚'} ${s}</div>
+        <div class="next-time">${getSlotStr(slots[si])}</div>
+        <div class="live-pill"><div class="ldot"></div> Còn lại ${fmM(slots[si].e-m)}</div>
+      </div>`;
+      break;
+    }
+  }
+
+  // Tìm mốc SẮP HỌC tiếp theo (hôm nay hoặc ngày tới)
+  let foundUpcoming=false;
+  for(let si=0;si<slots.length;si++){
+    if(slots[si].s>m&&sched[dj][si]){
+      const s=sched[dj][si];
+      upcomingHTML=`<div class="next-box">
+        <div class="next-lbl">⏳ Sắp học</div>
+        <div class="next-subj">${SEMO[s]||'📚'} ${s}</div>
+        <div class="next-time">${getSlotStr(slots[si])}</div>
+        <div class="upcoming-pill">🕐 Còn ${fmM(slots[si].s-m)}</div>
+      </div>`;
+      foundUpcoming=true;break;
+    }
+  }
+  if(!foundUpcoming){
+    for(let dd=1;dd<=7;dd++){
+      const nd=(dj+dd)%7;
+      for(let si=0;si<slots.length;si++){
+        if(sched[nd][si]){
+          const s=sched[nd][si];
+          const ml=(24*60-m)+(dd-1)*24*60+slots[si].s;
+          upcomingHTML=`<div class="next-box">
+            <div class="next-lbl">⏳ Sắp học — ${DAYS_F[nd]}</div>
+            <div class="next-subj">${SEMO[s]||'📚'} ${s}</div>
+            <div class="next-time">${getSlotStr(slots[si])}</div>
+            <div class="upcoming-pill">🕐 Còn ${fmM(ml)}</div>
+          </div>`;
+          foundUpcoming=true;break;
+        }
+      }
+      if(foundUpcoming)break;
+    }
+  }
+
+  if(!liveHTML&&!upcomingHTML){
+    wrap.innerHTML='<div class="next-box" style="color:var(--ink3);font-size:0.88rem;text-align:center">Không có lịch học 🙌</div>';
+    return;
+  }
+  wrap.innerHTML=liveHTML+upcomingHTML;
 }
 
 // ─── EXAM ───
