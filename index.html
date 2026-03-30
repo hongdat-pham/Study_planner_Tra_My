@@ -13,10 +13,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
 <style>
 :root {
-  --p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--p6:#c8307a;
-  --rose:#ff6bae;--blush:#ffc8e0;--mint:#e8fff5;--mint2:#a8e6cf;
-  --ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;
-  --shadow:0 8px 32px rgba(200,50,120,0.12);--shadow2:0 2px 8px rgba(200,50,120,0.08);
+  --p0:#fff8fb;
+  --p1:#ffe8f3;
+  --p2:#ffd0e8;
+  --p3:#ffadd4;
+  --p4:#ff80bc;
+  --p5:#f050a0;
+  --p6:#c8307a;
+  --rose:#ff6bae;
+  --blush:#ffc8e0;
+  --mint:#e8fff5;
+  --mint2:#a8e6cf;
+  --ink:#2a0f1e;
+  --ink2:#5a2040;
+  --ink3:#9a5070;
+  --shadow:0 8px 32px rgba(200,50,120,0.12);
+  --shadow2:0 2px 8px rgba(200,50,120,0.08);
   --radius:22px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -274,6 +286,531 @@ select.inp{cursor:pointer}
 .hero-hist-btn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.75);backdrop-filter:blur(12px);color:var(--p5);border:1.5px solid var(--p2);border-radius:50px;padding:11px 22px;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.22s;box-shadow:var(--shadow2)}
 .hero-hist-btn:hover{background:var(--p1);border-color:var(--p3);transform:translateY(-2px)}
 
+/* HISTORY MODAL STYLES */
+.hist-modal-content {
+  background: white;
+  border-radius: 28px;
+  padding: 32px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: fadeUp 0.4s both;
+}
+
+.hist-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--p2);
+}
+
+.hist-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem;
+  font-weight: 300;
+  flex: 1;
+  color: var(--ink);
+}
+
+.hist-modal-close {
+  background: var(--p1);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--p5);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hist-modal-close:hover {
+  background: var(--p2);
+  transform: rotate(90deg);
+}
+
+/* FILTER BAR */
+.hist-filter-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--p2);
+}
+
+.hist-filter-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink3);
+  background: var(--p1);
+  padding: 6px 14px;
+  border-radius: 30px;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hist-filter-label span {
+  font-size: 1rem;
+}
+
+.hist-filter-scroll {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-height: 100px;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.hist-filter-scroll::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.hist-filter-scroll::-webkit-scrollbar-track {
+  background: var(--p1);
+  border-radius: 10px;
+}
+
+.hist-filter-scroll::-webkit-scrollbar-thumb {
+  background: var(--p3);
+  border-radius: 10px;
+}
+
+.hist-date-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 40px;
+  border: 1.5px solid var(--p2);
+  background: white;
+  cursor: pointer;
+  color: var(--ink3);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hist-date-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--p3), var(--p5));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 0;
+}
+
+.hist-date-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.hist-date-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--p4);
+  box-shadow: 0 4px 12px rgba(240, 80, 160, 0.2);
+  color: var(--p5);
+}
+
+.hist-date-btn:hover::before {
+  opacity: 0.08;
+}
+
+.hist-date-btn.active {
+  background: linear-gradient(135deg, var(--rose), var(--p5));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(240, 80, 160, 0.35);
+}
+
+.hist-date-btn.active::before {
+  display: none;
+}
+
+.hist-date-btn.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(240, 80, 160, 0.45);
+}
+
+.hist-date-btn.today-btn {
+  background: linear-gradient(135deg, #fff0f8, white);
+  border-color: var(--p3);
+  color: var(--p5);
+  font-weight: 600;
+}
+
+.hist-date-btn.today-btn.active {
+  background: linear-gradient(135deg, var(--rose), var(--p5));
+  color: white;
+  border-color: transparent;
+}
+
+.hist-clear-btn {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 30px;
+  border: 1px solid var(--p2);
+  background: var(--p0);
+  cursor: pointer;
+  color: var(--ink3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hist-clear-btn:hover {
+  background: var(--p1);
+  border-color: var(--p4);
+  color: var(--p5);
+  transform: translateY(-1px);
+}
+
+/* HISTORY SESSION CARDS */
+.hist-session {
+  border: 1.5px solid var(--p2);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  background: var(--p0);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hist-session:hover {
+  border-color: var(--p4);
+  background: var(--p1);
+  transform: translateX(4px);
+}
+
+.hist-session.today {
+  border-color: var(--p4);
+  background: linear-gradient(135deg, #fff0f8, var(--p0));
+  box-shadow: 0 2px 12px rgba(240, 80, 160, 0.1);
+}
+
+.hist-session-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.hist-session-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hist-session-badge {
+  font-size: 0.65rem;
+  background: var(--p1);
+  color: var(--p5);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--p2);
+}
+
+.hist-session-time {
+  font-size: 0.75rem;
+  color: var(--ink3);
+  background: var(--p1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hist-session-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.hist-avatar-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hist-avatar {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.hist-stat-text {
+  font-size: 0.75rem;
+  color: var(--ink3);
+  background: rgba(255,255,255,0.6);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.hist-detail-btn {
+  margin-top: 12px;
+}
+
+.hist-detail {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1.5px solid var(--p2);
+}
+
+.hist-detail.open {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hist-members-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.hist-member-card {
+  background: white;
+  border: 1.5px solid var(--p2);
+  border-radius: 12px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 85px;
+  transition: all 0.2s;
+}
+
+.hist-member-card:hover {
+  border-color: var(--p4);
+  transform: translateY(-2px);
+}
+
+.hist-member-avatar {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.hist-member-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+.hist-member-time {
+  color: var(--p5);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.hist-member-subject {
+  font-size: 0.62rem;
+  color: var(--ink3);
+  margin-top: 2px;
+}
+
+.hist-challenge-section {
+  margin-bottom: 12px;
+}
+
+.hist-challenge-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink2);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hist-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 8px;
+}
+
+.hist-image-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1.5px solid var(--p2);
+  aspect-ratio: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hist-image-item:hover {
+  border-color: var(--p4);
+  transform: scale(1.05);
+}
+
+.hist-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hist-image-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(42, 15, 30, 0.7);
+  color: #fff;
+  font-size: 0.55rem;
+  padding: 3px 5px;
+  text-align: center;
+}
+
+.hist-empty-state {
+  text-align: center;
+  color: var(--ink3);
+  padding: 48px 24px;
+  background: var(--p0);
+  border-radius: 20px;
+  border: 1.5px dashed var(--p2);
+}
+
+.hist-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.hist-empty-text {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.hist-empty-hint {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* DATE PICKER MODAL */
+.date-picker-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  background: rgba(42, 15, 30, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.date-picker-content {
+  background: white;
+  border-radius: 28px;
+  padding: 28px;
+  max-width: 520px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: pop 0.3s both;
+}
+
+.date-picker-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--p2);
+}
+
+.date-picker-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  flex: 1;
+  color: var(--ink);
+}
+
+.date-picker-close {
+  background: var(--p1);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--p5);
+  transition: all 0.2s;
+}
+
+.date-picker-close:hover {
+  background: var(--p2);
+  transform: rotate(90deg);
+}
+
+.date-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--p1)}
 ::-webkit-scrollbar-thumb{background:var(--p3);border-radius:6px}
@@ -286,7 +823,7 @@ select.inp{cursor:pointer}
 
 <div class="notif-wrap"><div class="notif" id="notif1"><span class="nico" id="n1i">🌸</span><span id="n1t"></span></div></div>
 
-<!-- Clock audio (dùng file clock.mp3 cùng thư mục) -->
+<!-- Clock audio -->
 <audio id="clockAudio" loop preload="auto">
   <source src="clock.mp3" type="audio/mpeg">
 </audio>
@@ -313,11 +850,12 @@ select.inp{cursor:pointer}
 
   <!-- HISTORY MODAL -->
   <div id="histModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(42,15,30,0.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
-    <div style="background:white;border-radius:28px;padding:32px;max-width:640px;width:100%;max-height:82vh;overflow-y:auto;animation:fadeUp 0.4s both">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;flex:1">📖 Lịch sử buổi học</div>
-        <button onclick="closeHistory()" style="background:var(--p1);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--p5)">✕</button>
+    <div class="hist-modal-content">
+      <div class="hist-modal-header">
+        <div class="hist-modal-title">📖 Lịch sử buổi học</div>
+        <button class="hist-modal-close" onclick="closeHistory()">✕</button>
       </div>
+      <div class="hist-filter-bar" id="histFilterBar"></div>
       <div id="histList"></div>
     </div>
   </div>
@@ -496,8 +1034,20 @@ const fmM=m=>{if(m<=0)return'0p';const h=Math.floor(m/60),mn=m%60;return h?`${h}
 const LS={g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},s:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
 const tk=()=>{const d=new Date();return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`};
 
+function escapeHtml(str) {
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatTimeRange(startTime, endTime){
+  if(!startTime || !endTime) return '';
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  if(isNaN(start) || isNaN(end)) return '';
+  return `${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')} → ${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`;
+}
+
 // ─── TIMETABLE DATA ───
-// Default slots & schedule
 const DEFAULT_SLOTS = [
   {l:'Mốc 1',s:480,e:600},
   {l:'Mốc 2',s:840,e:960},
@@ -560,7 +1110,7 @@ function goQ(i){qI=i;rQuote()}
 setInterval(()=>{qI=(qI+1)%QUOTES.length;rQuote()},8000);
 
 // ─── CLOCK SOUND ───
-let clockSoundOn = true; // default BẬT
+let clockSoundOn = true;
 const clockAudio = document.getElementById('clockAudio');
 
 function updateSoundUI(){
@@ -658,7 +1208,6 @@ function rNext(dj){
   const m=nm(),wrap=document.getElementById('nBoxes'),slots=ttData.slots,sched=ttData.sched;
   let liveHTML='',upcomingHTML='';
 
-  // Tìm mốc ĐANG học
   for(let si=0;si<slots.length;si++){
     if(m>=slots[si].s&&m<slots[si].e&&sched[dj][si]){
       const s=sched[dj][si];
@@ -672,7 +1221,6 @@ function rNext(dj){
     }
   }
 
-  // Tìm mốc SẮP HỌC tiếp theo (hôm nay hoặc ngày tới)
   let foundUpcoming=false;
   for(let si=0;si<slots.length;si++){
     if(slots[si].s>m&&sched[dj][si]){
@@ -782,12 +1330,11 @@ function rSlots(){
 function rTT(){
   const dj=new Date().getDay(),m=nm(),ORDER=[1,2,3,4,5,6,0];
   const{slots,sched}=ttData;
-  let h='<thead><tr><th>Mốc</th><th>Giờ</th>';
+  let h='<thead><th>Mốc</th><th>Giờ</th>';
   ORDER.forEach(d=>{h+=`<th class="${d===dj?'tdc':''}">${DAYS_S[d]}${d===dj?' 📍':''}</th>`});
-  h+='</tr></thead><tbody>';
-  slots.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}</td><td class="tc">${getSlotStr(sl)}</td>`;ORDER.forEach(d=>{const s=sched[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]||'📚'} ${s}</span>`:'<span class="empty-m">—</span>'}</td>`});h+='</tr>'});
+  h+='</thead><tbody>';
+  slots.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}<td class="tc">${getSlotStr(sl)}`;ORDER.forEach(d=>{const s=sched[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]||'📚'} ${s}</span>`:'<span class="empty-m">—</span>'}`});h+='<tr>'});
   h+='</tbody>';document.getElementById('ttTbl').innerHTML=h;
-  // Legend
   const used=new Set();
   Object.values(sched).forEach(day=>day.forEach(s=>{if(s)used.add(s)}));
   document.getElementById('ttLegend').innerHTML=[...used].map(s=>`<span><span class="${SCLS2[s]||'spill2 sto'}">${SEMO[s]||'📚'} ${s}</span></span>`).join('')+'<span style="margin-left:auto;font-size:0.72rem;color:var(--ink3)">📍 = Hôm nay</span>';
@@ -809,7 +1356,7 @@ function subjOptions(sel){
 
 function renderSlotEditors(){
   const{slots,sched}=ttData;
-  const ORDER=[1,2,3,4,5,6,0]; // T2→CN
+  const ORDER=[1,2,3,4,5,6,0];
   const container=document.getElementById('slotEditorList');
   container.innerHTML=slots.map((sl,si)=>`
     <div class="slot-editor" id="sled_${si}">
@@ -861,13 +1408,11 @@ function delSlotEditor(si){
   if(ttData.slots.length<=1){notify('Phải có ít nhất 1 mốc học!','⚠️');return}
   ttData.slots.splice(si,1);
   for(let d=0;d<7;d++) ttData.sched[d].splice(si,1);
-  // Rename slots
   ttData.slots.forEach((sl,i)=>sl.l=`Mốc ${i+1}`);
   renderSlotEditors();
 }
 
 function saveTimetable(){
-  // Read all current values from DOM
   const{slots,sched}=ttData;
   const ORDER=[1,2,3,4,5,6,0];
   slots.forEach((_,si)=>{
@@ -883,7 +1428,6 @@ function saveTimetable(){
     }
   });
 
-  // Sắp xếp mốc theo giờ bắt đầu (sớm nhất lên trên)
   const combined = slots.map((sl,si)=>({slot:sl, dayData: Object.fromEntries([0,1,2,3,4,5,6].map(d=>[d, sched[d][si]]))}));
   combined.sort((a,b)=>a.slot.s - b.slot.s);
   combined.forEach((item,i)=>{
@@ -894,7 +1438,6 @@ function saveTimetable(){
 
   saveTTData(ttData);
   rTT();rSlots();rNext(new Date().getDay());
-  // Reset today's tasks to reflect new schedule
   LS.s('tasks_'+tk(),[]);seedT();rTasks();
   notify('✅ Đã lưu & sắp xếp thời khoá biểu!','📋');
   document.getElementById('ttEditor').classList.remove('open');
@@ -914,6 +1457,211 @@ function rStats(){
   document.getElementById('sEx').textContent=up.length?dU(up[0].date):'—';
 }
 
+// ─── LỊCH SỬ HỌC ĐỒNG BỘ ───
+const HIST_KEY = 'sr_history_v2';
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+}
+
+function fmtTime(sec) {
+  if(!sec || sec < 60) return `${sec || 0}s`;
+  const m = Math.floor(sec / 60);
+  const h = Math.floor(m / 60);
+  const rem = m % 60;
+  return h ? `${h}g ${rem}p` : `${m}p`;
+}
+
+function openHistory() {
+  document.getElementById('histModal').style.display = 'flex';
+  renderHistory();
+}
+
+function closeHistory() {
+  document.getElementById('histModal').style.display = 'none';
+}
+
+function renderHistory(filterDate = null) {
+  let history = [];
+  try {
+    const saved = localStorage.getItem(HIST_KEY);
+    if(saved) history = JSON.parse(saved);
+  } catch(e) {}
+  
+  const dates = [...new Set(history.map(h => h.date))].slice(0, 30);
+  const today = todayStr();
+  const activeFd = filterDate || (dates.includes(today) ? today : (dates[0] || today));
+  
+  let filterButtons = '';
+  
+  filterButtons += `
+    <button class="hist-date-btn ${!activeFd ? 'active' : ''}" onclick="renderHistory(null)">
+      <span>📅</span> Tất cả
+    </button>
+  `;
+  
+  filterButtons += `
+    <button class="hist-date-btn today-btn ${activeFd === today ? 'active' : ''}" onclick="renderHistory('${today}')">
+      <span>🌟</span> Hôm nay
+    </button>
+  `;
+  
+  dates.slice(0, 10).forEach(d => {
+    const isToday = d === today;
+    filterButtons += `
+      <button class="hist-date-btn ${d === activeFd ? 'active' : ''}" onclick="renderHistory('${d}')">
+        <span>📖</span> ${d}
+      </button>
+    `;
+  });
+  
+  if(dates.length > 10) {
+    filterButtons += `
+      <button class="hist-clear-btn" onclick="showAllDatesModal()">
+        <span>📅</span> +${dates.length - 10} ngày khác
+      </button>
+    `;
+  }
+  
+  document.getElementById('histFilterBar').innerHTML = `
+    <div class="hist-filter-label">
+      <span>🔍</span> Lọc theo ngày
+    </div>
+    <div class="hist-filter-scroll">
+      ${filterButtons}
+    </div>
+  `;
+  
+  let filtered = history;
+  if(activeFd) {
+    filtered = history.filter(h => h.date === activeFd);
+  }
+  
+  if(!filtered.length) {
+    document.getElementById('histList').innerHTML = `
+      <div class="hist-empty-state">
+        <div class="hist-empty-icon">📭</div>
+        <div class="hist-empty-text">Chưa có buổi học nào trong ngày này</div>
+        <div class="hist-empty-hint">Hãy vào phòng học chung để bắt đầu nhé! 🌸</div>
+      </div>
+    `;
+    return;
+  }
+  
+  document.getElementById('histList').innerHTML = filtered.map((h, idx) => {
+    const isToday = h.date === today;
+    const totalMins = Math.floor((h.totalStudySec || 0) / 60);
+    const timeRange = h.timeRange || formatTimeRange(h.startTime, h.endTime);
+    const sessionId = `sess_${h.date}_${idx}`;
+    
+    return `
+      <div class="hist-session ${isToday ? 'today' : ''}" onclick="toggleHistDetail('${sessionId}')">
+        <div class="hist-session-header">
+          <div class="hist-session-date">
+            ${isToday ? '⭐' : '📅'} ${h.date}
+            ${timeRange ? `<span class="hist-session-time">🕐 ${timeRange}</span>` : ''}
+          </div>
+          ${h.challenges?.length ? `<span class="hist-session-badge">🎯 ${h.challenges.length} thử thách</span>` : ''}
+        </div>
+        <div class="hist-session-stats">
+          <div class="hist-avatar-group">
+            ${(h.members || []).slice(0, 5).map(m => `<span class="hist-avatar" title="${escapeHtml(m.name)}">${m.avatar || '👤'}</span>`).join('')}
+            ${(h.members || []).length > 5 ? `<span class="hist-stat-text">+${h.members.length-5}</span>` : ''}
+          </div>
+          <span class="hist-stat-text">${h.members?.length || 0} người · ${totalMins} phút</span>
+        </div>
+        <div class="hist-detail-btn">
+          <button class="btn btn-soft btn-xs" onclick="event.stopPropagation();toggleHistDetail('${sessionId}')">📋 Xem chi tiết</button>
+        </div>
+        <div class="hist-detail" id="${sessionId}">
+          <div class="hist-members-grid">
+            ${(h.members || []).map(m => `
+              <div class="hist-member-card">
+                <div class="hist-member-avatar">${m.avatar || '👤'}</div>
+                <div class="hist-member-name">${escapeHtml(m.name)}</div>
+                <div class="hist-member-time">${Math.floor((m.totalStudySec || 0) / 60)}p</div>
+                ${m.subject ? `<div class="hist-member-subject">${SEMO[m.subject] || '📚'} ${escapeHtml(m.subject)}</div>` : ''}
+              </div>
+            `).join('')}
+          </div>
+          ${h.challenges?.length ? h.challenges.map(ch => `
+            <div class="hist-challenge-section">
+              <div class="hist-challenge-title">🎯 ${escapeHtml(ch.name)}</div>
+              ${ch.submissions?.filter(s=>s.imageData).length ? `
+                <div class="hist-images-grid">
+                  ${ch.submissions.filter(s=>s.imageData).map(s => `
+                    <div class="hist-image-item" onclick="openLightboxFromHistory('${s.imageData}','${escapeHtml(s.name || '')}')">
+                      <img src="${s.imageData}" alt="${escapeHtml(s.name || '')}">
+                      <div class="hist-image-label">${s.avatar || '👤'} ${escapeHtml(s.name || '')}</div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : '<div style="font-size:.75rem;color:var(--ink3);padding:4px 0">Không có bài nộp</div>'}
+            </div>
+          `).join('') : ''}
+          <div style="font-size:.65rem;color:var(--ink3);text-align:right;margin-top:12px">Tổng: ${Math.floor((h.totalStudySec || 0) / 60)} phút học</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleHistDetail(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('open');
+}
+
+function openLightboxFromHistory(src, name) {
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:16px';
+  overlay.innerHTML = `
+    <img src="${src}" style="max-width:94vw;max-height:90vh;border-radius:12px;object-fit:contain">
+    <div style="position:absolute;top:18px;right:22px;color:#fff;font-size:2rem;cursor:pointer;opacity:.7;line-height:1">✕</div>
+    ${name ? `<div style="position:absolute;bottom:20px;color:#fff;font-size:.85rem;opacity:.6;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px">${name}</div>` : ''}
+  `;
+  overlay.onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+}
+
+function showAllDatesModal() {
+  let history = [];
+  try {
+    const saved = localStorage.getItem(HIST_KEY);
+    if(saved) history = JSON.parse(saved);
+  } catch(e) {}
+  
+  const dates = [...new Set(history.map(h => h.date))];
+  const today = todayStr();
+  
+  const modalHtml = `
+    <div class="date-picker-modal" id="datePickerModal">
+      <div class="date-picker-content">
+        <div class="date-picker-header">
+          <div class="date-picker-title">📅 Chọn ngày</div>
+          <button class="date-picker-close" onclick="closeDatePickerModal()">✕</button>
+        </div>
+        <div class="date-picker-grid">
+          ${dates.map(d => `
+            <button class="hist-date-btn" style="width:100%;justify-content:center" onclick="renderHistory('${d}');closeDatePickerModal()">
+              <span>${d === today ? '🌟 ' + d : '📖 ' + d}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const modalContainer = document.createElement('div');
+  modalContainer.innerHTML = modalHtml;
+  document.body.appendChild(modalContainer);
+}
+
+function closeDatePickerModal() {
+  const modal = document.getElementById('datePickerModal');
+  if(modal) modal.remove();
+}
+
 // ─── SESSION NOTIF ───
 let lastNM=-1;
 function chkNotif(){
@@ -926,67 +1674,9 @@ function chkNotif(){
 // ─── INIT ───
 function init(){
   renderHero();restoreMood();qI=Math.floor(Math.random()*QUOTES.length);rQuote();pomoReset(true);rExams();seedT();rTasks();rSlots();rTT();rMusic();rStats();
-  updateSoundUI(); // sync sound toggle UI với default bật
+  updateSoundUI();
   setInterval(rClock,1000);setInterval(()=>{rSlots();rTT();chkNotif()},20000);setInterval(rExams,60000);setInterval(rStats,60000);rClock();
   let ld=new Date().getDate();setInterval(()=>{if(new Date().getDate()!==ld){ld=new Date().getDate();renderHero();seedT();rTasks();rSlots();rTT();notify('🌅 Ngày mới! Danh sách làm mới rồi 💕','🌸')}},30000);
-}
-
-// ─── STUDY HISTORY ───
-function openHistory(){
-  const modal=document.getElementById('histModal');
-  modal.style.display='flex';
-  const history=JSON.parse(localStorage.getItem('study_history')||'[]');
-  const list=document.getElementById('histList');
-  if(!history.length){
-    list.innerHTML='<div style="text-align:center;color:var(--ink3);padding:28px 0;font-size:0.9rem">Chưa có buổi học nào 🌙<br><small>Vào phòng học chung để bắt đầu!</small></div>';
-    return;
-  }
-  list.innerHTML=history.map((h,i)=>{
-    const d=new Date(h.date);
-    const ds=`${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
-    const ts=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    const totalMins=h.members.reduce((s,m)=>s+(m.studyMinutes||m.studyTime||0),0);
-    const imgUploads=(h.uploads||[]).filter(u=>u.imageData);
-    return`<div style="border:1.5px solid var(--p2);border-radius:16px;padding:16px;margin-bottom:12px;background:var(--p0);${i===0?'border-color:var(--p4)':''}">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;flex:1">
-          ${i===0?'⭐ ':''}Buổi học ${ds} lúc ${ts}
-        </div>
-        ${h.challenge?`<span style="font-size:0.7rem;background:var(--p1);color:var(--p5);padding:2px 9px;border-radius:20px;border:1px solid var(--p2)">🎯 ${h.challenge}</span>`:''}
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-        ${h.members.map(m=>`<div style="background:white;border:1px solid var(--p2);border-radius:10px;padding:8px 12px;font-size:0.8rem;text-align:center;min-width:90px">
-          <div style="font-size:1.3rem">${m.avatar||'👤'}</div>
-          <div style="font-weight:600;font-size:0.82rem">${m.name}</div>
-          <div style="color:var(--p5);font-family:'Cormorant Garamond',serif;font-size:1.1rem">${m.studyMinutes||m.studyTime||0}p</div>
-          ${m.subject?`<div style="font-size:0.65rem;color:var(--ink3)">${m.subject}</div>`:''}
-        </div>`).join('')}
-      </div>
-      ${imgUploads.length?`<div style="border-top:1px solid var(--p1);padding-top:10px;margin-top:4px">
-        <div style="font-size:0.75rem;font-weight:600;color:var(--ink2);margin-bottom:8px">🖼 Bài tập đã nộp:</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:7px">
-          ${imgUploads.map(u=>`<div style="position:relative;border-radius:10px;overflow:hidden;border:1.5px solid var(--p2);aspect-ratio:1;cursor:pointer" onclick="histOpenImg('${u.imageData}','${u.mName||u.memberName||''}')">
-            <img src="${u.imageData}" style="width:100%;height:100%;object-fit:cover" alt="${u.mName||''}">
-            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.65);color:#fff;font-size:.55rem;padding:2px 4px;text-align:center">${u.mAva||u.memberAvatar||'👤'} ${u.mName||u.memberName||''}</div>
-          </div>`).join('')}
-        </div>
-      </div>`:''}
-      <div style="font-size:0.72rem;color:var(--ink3);margin-top:10px;text-align:right">Tổng: ${totalMins} phút học · ${h.members.length} người</div>
-    </div>`;
-  }).join('');
-}
-
-function histOpenImg(src,name){
-  // Simple full-screen image view
-  const overlay=document.createElement('div');
-  overlay.style.cssText='position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:16px';
-  overlay.innerHTML=`<img src="${src}" style="max-width:94vw;max-height:90vh;border-radius:12px;object-fit:contain"><div style="position:absolute;top:18px;right:22px;color:#fff;font-size:2rem;cursor:pointer;opacity:.7;line-height:1">✕</div>${name?`<div style="position:absolute;bottom:20px;color:#fff;font-size:.85rem;opacity:.6;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px">${name}</div>`:''}`;
-  overlay.onclick=()=>overlay.remove();
-  document.body.appendChild(overlay);
-}
-
-function closeHistory(){
-  document.getElementById('histModal').style.display='none';
 }
 
 document.addEventListener('DOMContentLoaded',init);
