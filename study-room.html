@@ -2,63 +2,30 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>🌸 Học chung cùng Mi</title>
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon-16x16.png" type="image/x-icon">
-<link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
-<link rel="shortcut icon" href="android-chrome-192x192.png" type="image/x-icon">
-<link rel="shortcut icon" href="android-chrome-512x512.png" type="image/x-icon">
-<link rel="shortcut icon" href="apple-touch-icon.png" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
-<!-- QR Code library -->
+<link rel="shortcut icon" href="favicon.ico">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script type="module">
-  import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue, update, push, remove, onDisconnect }
-                              from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyC7FRkytqmcRGq0Th1Sg3Mt6gy96LJctRQ",
-    authDomain: "study-planner-01.firebaseapp.com",
-    databaseURL: "https://study-planner-01-default-rtdb.firebaseio.com",
-    projectId: "study-planner-01",
-    storageBucket: "study-planner-01.firebasestorage.app",
-    messagingSenderId: "540883054890",
-    appId: "1:540883054890:web:6c0ea1847ecff80465ae53"
-  };
-  try {
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
-    window._FB = { db, ref, set, get, onValue, update, push, remove, onDisconnect };
-    window._FB_READY = true;
-    document.dispatchEvent(new Event('fb-ready'));
-  } catch(e) {
-    window._FB_FAILED = true;
-    document.dispatchEvent(new Event('fb-failed'));
-  }
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getDatabase,ref,set,get,onValue,update,push,remove,onDisconnect}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const cfg={apiKey:"AIzaSyC7FRkytqmcRGq0Th1Sg3Mt6gy96LJctRQ",authDomain:"study-planner-01.firebaseapp.com",databaseURL:"https://study-planner-01-default-rtdb.firebaseio.com",projectId:"study-planner-01",storageBucket:"study-planner-01.firebasestorage.app",messagingSenderId:"540883054890",appId:"1:540883054890:web:6c0ea1847ecff80465ae53"};
+try{const app=initializeApp(cfg);const db=getDatabase(app);window._FB={db,ref,set,get,onValue,update,push,remove,onDisconnect};window._FB_READY=true;document.dispatchEvent(new Event('fb-ready'));}catch(e){window._FB_FAILED=true;document.dispatchEvent(new Event('fb-failed'));}
 </script>
-
 <style>
-:root{
-  --p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--p6:#c8307a;
-  --rose:#ff6bae;--ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;
-  --shadow:0 8px 32px rgba(200,50,120,0.12);--shadow2:0 2px 8px rgba(200,50,120,0.08);
-  --radius:22px;--glass:rgba(255,255,255,0.84);
-}
+:root{--p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--p6:#c8307a;--rose:#ff6bae;--ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;--shadow:0 8px 32px rgba(200,50,120,.12);--shadow2:0 2px 8px rgba(200,50,120,.08);--radius:22px;--glass:rgba(255,255,255,.84);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;overflow-x:hidden}
-
 .bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .bg-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.28;animation:blobMove 14s ease-in-out infinite alternate}
 .b1{width:520px;height:520px;background:#ffc0e0;top:-160px;right:-100px;animation-duration:16s}
 .b2{width:400px;height:400px;background:#ffd8b0;bottom:-100px;left:-80px;animation-duration:20s;animation-delay:-5s}
 .b3{width:300px;height:300px;background:#e0d0ff;top:40%;left:25%;animation-duration:11s;animation-delay:-9s}
-@keyframes blobMove{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.1)}}
+@keyframes blobMove{from{transform:translate(0,0)scale(1)}to{transform:translate(40px,30px)scale(1.1)}}
 #petalsCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-.page{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:24px 20px 80px}
+.page{position:relative;z-index:1;max-width:1380px;margin:0 auto;padding:22px 20px 80px}
 .card{background:var(--glass);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid rgba(255,200,224,.45);box-shadow:var(--shadow);padding:24px}
 .btn{font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
 .btn-rose{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;box-shadow:0 4px 16px rgba(240,80,160,.3)}
@@ -69,61 +36,71 @@ body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-h
 .btn-ghost:hover{background:var(--p1);color:var(--p5)}
 .btn-danger{background:transparent;color:#e53935;border:1px solid #ffcdd2}
 .btn-danger:hover{background:#fff5f5}
+.btn-warn{background:transparent;color:#f57c00;border:1px solid #ffe0b2}
+.btn-warn:hover{background:#fff8f0}
 .btn-sm{padding:7px 16px;font-size:.78rem}
 .btn-xs{padding:5px 11px;font-size:.72rem}
 .inp{width:100%;padding:11px 16px;border-radius:14px;border:1.5px solid var(--p2);background:rgba(255,255,255,.9);font-family:'Outfit',sans-serif;font-size:.9rem;color:var(--ink);outline:none;transition:all .2s}
 .inp:focus{border-color:var(--p4);box-shadow:0 0 0 3px rgba(255,128,188,.14)}
 select.inp{cursor:pointer}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--p2),transparent);margin:14px 0}
-
 /* NOTIF */
 .notif-wrap{position:fixed;top:20px;right:20px;z-index:9999;pointer-events:none}
 .notif{background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-radius:14px;padding:13px 18px;box-shadow:0 8px 32px rgba(200,50,120,.18);border:1px solid var(--p2);display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--ink);transform:translateX(calc(100% + 30px));transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:290px}
 .notif.show{transform:translateX(0)}
-
-/* ANIMATIONS */
+/* ANIMS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-@keyframes pop{0%{transform:scale(.88);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
-/* ─── CUSTOM MODAL (replaces confirm/alert) ─── */
-#customModal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(42,15,30,.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+/* CUSTOM MODAL */
+#customModal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(42,15,30,.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
 #customModal.open{display:flex}
-.cm-box{background:#fff;border-radius:24px;padding:32px 28px;max-width:400px;width:100%;text-align:center;animation:pop .3s both;box-shadow:0 20px 60px rgba(200,50,120,.22)}
-.cm-ico{font-size:2.8rem;margin-bottom:12px}
-.cm-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;margin-bottom:8px;color:var(--ink)}
-.cm-msg{font-size:.88rem;color:var(--ink3);line-height:1.6;margin-bottom:22px}
-.cm-btns{display:flex;gap:10px;justify-content:center}
-
-/* ─── AUTH SCREEN ─── */
+.cm-box{background:#fff;border-radius:24px;padding:32px 28px;max-width:420px;width:100%;text-align:center;animation:pop .3s both;box-shadow:0 20px 60px rgba(200,50,120,.22)}
+.cm-ico{font-size:3rem;margin-bottom:12px}
+.cm-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:8px}
+.cm-msg{font-size:.88rem;color:var(--ink3);line-height:1.7;margin-bottom:22px}
+.cm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* CELEBRATION MODAL */
+#celebModal{display:none;position:fixed;inset:0;z-index:10001;background:rgba(42,15,30,.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
+#celebModal.open{display:flex}
+.celeb-box{background:linear-gradient(135deg,#fff8fb,#fff0f8);border-radius:28px;padding:40px;max-width:500px;width:100%;text-align:center;animation:pop .4s both;box-shadow:0 24px 80px rgba(200,50,120,.3);border:2px solid var(--p3)}
+.celeb-confetti{font-size:3rem;animation:pop .5s both;margin-bottom:8px}
+.celeb-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--ink);margin-bottom:6px}
+.celeb-title em{color:var(--p5);font-style:italic}
+.celeb-sub{font-size:.9rem;color:var(--ink3);margin-bottom:24px;line-height:1.6}
+/* LIGHTBOX */
+#lightbox{display:none;position:fixed;inset:0;z-index:12000;background:rgba(0,0,0,.94);align-items:center;justify-content:center;cursor:zoom-out}
+#lightbox.open{display:flex}
+#lightbox img{max-width:94vw;max-height:88vh;border-radius:14px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+.lb-close{position:absolute;top:18px;right:22px;color:#fff;font-size:2.2rem;cursor:pointer;opacity:.7;transition:opacity .2s;background:none;border:none;line-height:1}
+.lb-close:hover{opacity:1}
+.lb-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:.85rem;opacity:.6;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px;white-space:nowrap}
+/* AUTH */
 #authScreen{display:none;min-height:100vh;position:relative;z-index:1;align-items:center;justify-content:center;padding:20px}
 #authScreen.active{display:flex}
 .auth-wrap{width:100%;max-width:440px;animation:fadeUp .6s both}
-.auth-brand{text-align:center;margin-bottom:28px}
+.auth-brand{text-align:center;margin-bottom:26px}
 .auth-script{font-family:'Sacramento',cursive;font-size:2rem;color:var(--rose)}
-.auth-h1{font-family:'Cormorant Garamond',serif;font-size:2.3rem;font-weight:300;line-height:1.1;margin:4px 0 6px}
+.auth-h1{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;line-height:1.1;margin:4px 0 6px}
 .auth-h1 em{color:var(--p5);font-style:italic}
 .auth-sub{font-size:.82rem;color:var(--ink3)}
-.auth-card{background:var(--glass);backdrop-filter:blur(24px);border-radius:28px;border:1px solid rgba(255,200,224,.5);box-shadow:0 20px 60px rgba(200,50,120,.14);padding:32px 28px}
-.auth-tabs{display:flex;gap:0;margin-bottom:24px;background:var(--p0);border-radius:14px;padding:4px}
+.auth-card{background:var(--glass);backdrop-filter:blur(24px);border-radius:28px;border:1px solid rgba(255,200,224,.5);box-shadow:0 20px 60px rgba(200,50,120,.14);padding:30px 28px}
+.auth-tabs{display:flex;gap:0;margin-bottom:22px;background:var(--p0);border-radius:14px;padding:4px}
 .auth-tab{flex:1;padding:9px;border:none;background:none;border-radius:11px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:500;color:var(--ink3);transition:all .2s}
 .auth-tab.active{background:#fff;color:var(--p5);box-shadow:var(--shadow2)}
-.auth-field{margin-bottom:14px}
-.auth-field label{font-size:.72rem;color:var(--ink3);font-weight:500;display:block;margin-bottom:6px}
-.auth-ava-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:16px}
+.auth-field{margin-bottom:13px}
+.auth-field label{font-size:.72rem;color:var(--ink3);font-weight:500;display:block;margin-bottom:5px}
+.auth-ava-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:14px}
 .ava-opt{aspect-ratio:1;background:var(--p1);border:2px solid var(--p2);border-radius:10px;font-size:1.35rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
 .ava-opt:hover{border-color:var(--p4);transform:scale(1.08)}
 .ava-opt.sel{border-color:var(--p5);background:linear-gradient(135deg,#fff0f8,#fff);box-shadow:0 0 0 3px rgba(240,80,160,.18)}
-.auth-or{text-align:center;font-size:.75rem;color:var(--ink3);margin:12px 0;position:relative}
-.auth-or::before,.auth-or::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--p2)}
-.auth-or::before{left:0}.auth-or::after{right:0}
 .auth-err{font-size:.78rem;color:#e53935;background:#fff5f5;border:1px solid #ffcdd2;border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none}
 .auth-err.show{display:block}
-
-/* ─── ROOM ─── */
+/* ROOM */
 #roomScreen{display:none}
 #roomScreen.active{display:block}
-.room-hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.room-hdr{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-wrap:wrap}
 .room-back{font-family:'Outfit',sans-serif;font-size:.8rem;background:var(--p1);border:1px solid var(--p2);border-radius:50px;padding:7px 16px;cursor:pointer;color:var(--ink3);transition:all .2s}
 .room-back:hover{background:var(--p2);color:var(--p5)}
 .room-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;flex:1}
@@ -131,193 +108,191 @@ select.inp{cursor:pointer}
 .online-pill{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--ink3);background:var(--p0);border:1px solid var(--p1);border-radius:50px;padding:5px 14px}
 .online-dot{width:8px;height:8px;border-radius:50%;background:#4caf50;animation:pg 2s infinite;flex-shrink:0}
 @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(76,175,80,.4)}50%{box-shadow:0 0 0 5px rgba(76,175,80,0)}}
-
-/* ─── MEMBER CARDS ─── */
-.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-bottom:18px}
-/* IMPORTANT: fixed height to prevent layout jump when pomo buttons appear */
-.mc{border-radius:20px;border:1.5px solid rgba(255,200,224,.45);box-shadow:var(--shadow2);padding:20px;background:var(--glass);backdrop-filter:blur(16px);transition:box-shadow .3s}
+/* TODAY STATS BAR */
+.today-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.today-stat{background:var(--glass);backdrop-filter:blur(16px);border-radius:16px;border:1px solid rgba(255,200,224,.4);padding:14px 18px;flex:1;min-width:140px;display:flex;align-items:center;gap:12px}
+.today-stat-ico{font-size:1.6rem}
+.today-stat-info{}
+.today-stat-n{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--p5);line-height:1}
+.today-stat-l{font-size:.65rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+/* STREAK */
+.streak-banner{background:linear-gradient(135deg,#fff4e0,#fff8f0);border-radius:16px;border:1.5px solid #ffe0b2;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.streak-fire{font-size:2.2rem;animation:pop .5s both}
+.streak-info{flex:1}
+.streak-days{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:#e65100;line-height:1}
+.streak-label{font-size:.72rem;color:#bf360c;font-weight:500;margin-top:2px}
+.streak-desc{font-size:.75rem;color:#e65100;margin-top:4px;opacity:.8}
+/* MEMBERS */
+.members-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:14px;margin-bottom:16px}
+.mc{border-radius:20px;border:1.5px solid rgba(255,200,224,.45);box-shadow:var(--shadow2);padding:18px;background:var(--glass);backdrop-filter:blur(16px);transition:box-shadow .3s}
 .mc.is-me{border-color:var(--p3);box-shadow:0 4px 20px rgba(240,80,160,.14)}
 .mc.empty{opacity:.36;border-style:dashed}
-.mc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.mc-top{display:flex;align-items:center;gap:11px;margin-bottom:12px}
 .mc-ava-wrap{position:relative;flex-shrink:0}
-.mc-ava{width:50px;height:50px;border-radius:50%;background:var(--p1);border:2px solid var(--p2);display:flex;align-items:center;justify-content:center;font-size:1.8rem}
-.mc-ava-dot{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#4caf50;border:2px solid #fff}
-.mc-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.me-badge{font-family:'Outfit',sans-serif;font-size:.6rem;background:var(--p2);color:var(--p6);padding:1px 7px;border-radius:10px;font-weight:600}
-.mc-subj{margin-top:4px;font-size:.75rem;min-height:20px}/* fixed height */
-.mc-subj select{background:none;border:none;outline:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.75rem;color:var(--p5);font-weight:500;max-width:152px}
-
-/* ─── INDIVIDUAL POMODORO (full ring like index) ─── */
-.mc-pomo{text-align:center;margin-bottom:12px}
-.mc-pomo-inner{display:flex;flex-direction:column;align-items:center}
-.ring-wrap-sm{width:120px;height:120px;margin:0 auto 10px;position:relative}
-.ring-wrap-sm svg{transform:rotate(-90deg)}
-.ring-bg-sm{fill:none;stroke:var(--p1);stroke-width:9}
-.ring-fill-sm{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:339;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .5s;filter:drop-shadow(0 0 5px rgba(255,80,160,.35))}
-.ring-inner-sm{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-time-sm{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;line-height:1}
-.ring-phase-sm{font-size:.58rem;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-.mc-pomo-btns{display:flex;gap:7px;justify-content:center;margin-bottom:6px}
-/* cfg inline panel */
-.mc-pomo-cfg{background:var(--p0);border-radius:12px;padding:10px 12px;border:1px solid var(--p1);margin-top:6px;display:none}
+.mc-ava{width:48px;height:48px;border-radius:50%;background:var(--p1);border:2px solid var(--p2);display:flex;align-items:center;justify-content:center;font-size:1.7rem}
+.mc-ava-dot{position:absolute;bottom:1px;right:1px;width:11px;height:11px;border-radius:50%;background:#4caf50;border:2px solid #fff}
+.mc-name-row{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:600;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.me-badge{font-family:'Outfit',sans-serif;font-size:.58rem;background:var(--p2);color:var(--p6);padding:1px 6px;border-radius:9px;font-weight:600}
+.mc-subj{margin-top:3px;font-size:.75rem;min-height:20px}
+.mc-subj select{background:none;border:none;outline:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.75rem;color:var(--p5);font-weight:500;max-width:150px}
+/* Individual pomo ring */
+.mc-pomo{text-align:center;margin-bottom:10px}
+.ring-sm{width:120px;height:120px;margin:0 auto 8px;position:relative}
+.ring-sm svg{transform:rotate(-90deg)}
+.rs-bg{fill:none;stroke:var(--p1);stroke-width:9}
+.rs-fill{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:339;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .5s;filter:drop-shadow(0 0 5px rgba(255,80,160,.3))}
+.ring-sm-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rst{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:600;line-height:1}
+.rsp{font-size:.56rem;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.rsv{font-size:.54rem;color:var(--p4);margin-top:1px}
+.mc-pomo-btns{display:flex;gap:6px;justify-content:center;margin-bottom:5px}
+.mc-pomo-cfg{background:var(--p0);border-radius:11px;padding:9px 11px;border:1px solid var(--p1);margin-top:4px;display:none}
 .mc-pomo-cfg.open{display:block}
-.pomo-cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.pomo-cfg-item label{font-size:.65rem;color:var(--ink3);display:block;margin-bottom:3px}
-.pomo-cfg-item input[type=range]{width:100%;accent-color:var(--p5)}
-.pomo-cfg-val{font-size:.72rem;color:var(--p5);font-weight:600;text-align:right}
-.mc-stats{display:flex;gap:8px;margin-top:10px}
-.mcs{flex:1;background:var(--p0);border-radius:10px;padding:7px 4px;text-align:center;border:1px solid rgba(255,200,224,.3)}
-.mcs-n{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--p5);line-height:1}
-.mcs-l{font-size:.57rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
-
-/* ─── SHARED POMO ─── */
-.sp-card{background:linear-gradient(135deg,#1a0820,#2d0a22,#1a0820);border-radius:var(--radius);border:1px solid #4a1038;padding:26px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+.pc-g{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pc-item label{font-size:.62rem;color:var(--ink3);display:block;margin-bottom:2px}
+.pc-item input[type=range]{width:100%;accent-color:var(--p5)}
+.pc-val{font-size:.7rem;color:var(--p5);font-weight:600;text-align:right}
+.mc-stats{display:flex;gap:7px;margin-top:8px}
+.mcs{flex:1;background:var(--p0);border-radius:9px;padding:6px 3px;text-align:center;border:1px solid rgba(255,200,224,.3)}
+.mcs-n{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--p5);line-height:1}
+.mcs-l{font-size:.55rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+/* SHARED POMO */
+.sp-card{background:linear-gradient(135deg,#1a0820,#2d0a22,#1a0820);border-radius:var(--radius);border:1px solid #4a1038;padding:24px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden}
 .sp-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 25%,rgba(255,100,180,.13) 0%,transparent 58%);pointer-events:none}
-.sp-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;position:relative;z-index:1}
-.sp-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;flex:1}
-.sp-sync{font-size:.68rem;background:rgba(255,80,160,.2);border:1px solid rgba(255,80,160,.3);border-radius:20px;padding:3px 11px;color:#ffb3d4}
-.sp-cfg-btn{font-size:.68rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 11px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s}
+.sp-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px;position:relative;z-index:1;flex-wrap:wrap}
+.sp-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;flex:1}
+.sp-sync{font-size:.65rem;background:rgba(255,80,160,.2);border:1px solid rgba(255,80,160,.3);border-radius:20px;padding:3px 10px;color:#ffb3d4}
+.sp-cfg-btn{font-size:.65rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s}
 .sp-cfg-btn:hover{background:rgba(255,80,160,.2)}
-.sp-body{display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;z-index:1}
-.sp-ring-wrap{width:160px;height:160px;position:relative;flex-shrink:0}
-.sp-ring-wrap svg{transform:rotate(-90deg)}
+.sp-actor{font-size:.65rem;color:#ffb3d4;background:rgba(255,80,160,.15);border:1px solid rgba(255,80,160,.25);border-radius:20px;padding:3px 10px;animation:slideIn .3s both}
+.sp-body{display:flex;align-items:center;gap:26px;flex-wrap:wrap;position:relative;z-index:1}
+.sp-ring{width:155px;height:155px;position:relative;flex-shrink:0}
+.sp-ring svg{transform:rotate(-90deg)}
 .spr-bg{fill:none;stroke:rgba(255,255,255,.07);stroke-width:10}
 .spr-fill{fill:none;stroke-width:10;stroke-linecap:round;stroke-dasharray:440;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .5s;filter:drop-shadow(0 0 8px rgba(255,80,160,.5))}
 .sp-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.sp-time{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;line-height:1}
-.sp-phase{font-size:.62rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.55;margin-top:3px}
-.sp-right{flex:1;min-width:160px}
-.sp-round{font-size:.74rem;opacity:.5;margin-bottom:8px}
-.sp-dots{display:flex;gap:7px;margin-bottom:16px}
-.sp-dot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.16);transition:all .3s}
+.sp-time{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:600;line-height:1}
+.sp-phase{font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.55;margin-top:3px}
+.sp-right{flex:1;min-width:155px}
+.sp-round{font-size:.72rem;opacity:.48;margin-bottom:8px}
+.sp-dots{display:flex;gap:6px;margin-bottom:14px}
+.sp-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.16);transition:all .3s}
 .sp-dot.done{background:var(--p4)}
 .sp-dot.now{background:#fff;box-shadow:0 0 8px var(--p4);transform:scale(1.25)}
-.sp-btns{display:flex;gap:8px;flex-wrap:wrap}
-.spb{font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;padding:8px 18px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.sp-btns{display:flex;gap:7px;flex-wrap:wrap}
+.spb{font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;padding:8px 17px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
 .spb-primary{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;box-shadow:0 4px 14px rgba(240,80,160,.35)}
 .spb-primary:hover{transform:translateY(-2px)}
 .spb-soft{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.14)}
 .spb-soft:hover{background:rgba(255,80,160,.18)}
-/* sp inline cfg */
-.sp-cfg-inline{background:rgba(255,255,255,.06);border-radius:14px;padding:14px 16px;margin-top:14px;border:1px solid rgba(255,255,255,.1);display:none}
+.sp-cfg-inline{background:rgba(255,255,255,.06);border-radius:14px;padding:14px;margin-top:12px;border:1px solid rgba(255,255,255,.1);display:none}
 .sp-cfg-inline.open{display:block}
 .sp-cfg-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.sp-cfg-item label{font-size:.65rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px}
+.sp-cfg-item label{font-size:.62rem;color:rgba(255,255,255,.5);display:block;margin-bottom:4px}
 .sp-cfg-item input[type=range]{width:100%;accent-color:var(--p4)}
-.sp-cfg-v{font-size:.72rem;color:var(--p4);font-weight:600;text-align:right}
-/* sound row */
-.sp-sound-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.06);border-radius:11px;border:1px solid rgba(255,255,255,.08)}
-.sp-sound-row label{font-size:.75rem;color:rgba(255,255,255,.6);flex:1}
-.sound-toggle{position:relative;width:40px;height:22px;background:rgba(255,255,255,.2);border-radius:11px;cursor:pointer;border:none;transition:background .3s;flex-shrink:0}
+.sp-cfg-v{font-size:.7rem;color:var(--p4);font-weight:600;text-align:right}
+.sp-sound-row{display:flex;align-items:center;gap:10px;margin-top:10px;padding:9px 13px;background:rgba(255,255,255,.06);border-radius:10px;border:1px solid rgba(255,255,255,.08)}
+.sp-sound-row label{font-size:.73rem;color:rgba(255,255,255,.6);flex:1}
+.sound-toggle{position:relative;width:38px;height:21px;background:rgba(255,255,255,.2);border-radius:11px;cursor:pointer;border:none;transition:background .3s;flex-shrink:0}
 .sound-toggle.on{background:var(--p5)}
-.sound-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.sound-toggle.on::after{transform:translateX(18px)}
-
-/* ─── BOTTOM GRID ─── */
-.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.sound-toggle::after{content:'';position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:white;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.sound-toggle.on::after{transform:translateX(17px)}
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
 @media(max-width:780px){.bottom-grid{grid-template-columns:1fr}}
-
-/* ─── LEADERBOARD ─── */
-.lb-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--p0);margin-bottom:6px;transition:background .2s}
+/* LEADERBOARD */
+.lb-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:11px;background:var(--p0);margin-bottom:5px;transition:background .2s}
 .lb-item:hover{background:var(--p1)}
-.lb-rank{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;width:26px;color:var(--p5);text-align:center}
-.lb-ava{width:36px;height:36px;border-radius:50%;background:var(--p1);border:1.5px solid var(--p2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.lb-rank{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;width:25px;color:var(--p5);text-align:center}
+.lb-ava{width:34px;height:34px;border-radius:50%;background:var(--p1);border:1.5px solid var(--p2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .lb-info{flex:1;min-width:0}
-.lb-n{font-size:.87rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lb-bar{height:4px;background:var(--p1);border-radius:10px;margin-top:4px;overflow:hidden}
+.lb-n{font-size:.86rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-bar{height:4px;background:var(--p1);border-radius:10px;margin-top:3px;overflow:hidden}
 .lb-bar-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--p3),var(--p5));transition:width .8s ease}
-.lb-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--p5);font-weight:600}
-
-/* ─── CHALLENGE ─── */
-.ch-name-txt{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;margin-bottom:5px}
-.ch-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-.ch-badge{font-size:.68rem;background:var(--p1);color:var(--p5);padding:2px 10px;border-radius:20px;border:1px solid var(--p2);font-weight:600}
-.ch-cd{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--p5);line-height:1;margin-bottom:10px}
-.ch-pbar{height:8px;background:var(--p1);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.lb-val{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--p5);font-weight:600}
+/* CHALLENGE */
+.ch-card-area{margin-bottom:10px}
+.ch-item{background:var(--p0);border:1.5px solid var(--p2);border-radius:16px;padding:16px;margin-bottom:10px;position:relative}
+.ch-item.active-ch{border-color:var(--p4);background:linear-gradient(135deg,#fff0f8,var(--p0))}
+.ch-item-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ch-item-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;flex:1}
+.ch-badge{font-size:.66rem;background:var(--p1);color:var(--p5);padding:2px 9px;border-radius:18px;border:1px solid var(--p2);font-weight:600}
+.ch-cd{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--p5);line-height:1;margin-bottom:8px}
+.ch-pbar{height:7px;background:var(--p1);border-radius:10px;overflow:hidden;margin-bottom:12px}
 .ch-pbar-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--p3),var(--p5));transition:width .5s}
-.ch-upload-zone{border:1.5px dashed var(--p3);border-radius:14px;padding:16px;text-align:center;cursor:pointer;position:relative;transition:all .2s}
+/* Submissions per-person grid */
+.ch-person-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:10px}
+.ch-person-col{background:white;border-radius:12px;border:1.5px solid var(--p2);padding:10px 8px;text-align:center}
+.ch-person-hdr{font-size:.7rem;font-weight:600;color:var(--ink2);margin-bottom:8px;display:flex;align-items:center;gap:4px;justify-content:center}
+.ch-thumb-mini{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;cursor:pointer;margin-bottom:4px;border:1.5px solid var(--p2);transition:transform .2s}
+.ch-thumb-mini:hover{transform:scale(1.04);border-color:var(--p4)}
+.ch-upload-zone{border:1.5px dashed var(--p3);border-radius:11px;padding:10px 8px;text-align:center;cursor:pointer;position:relative;transition:all .2s;margin-top:4px}
 .ch-upload-zone:hover{background:var(--p0);border-color:var(--p4)}
 .ch-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.ch-done-box{display:flex;align-items:center;gap:8px;background:#f0fff4;border:1.5px solid #a5d6a7;border-radius:12px;padding:10px 14px;font-size:.83rem;color:#2e7d32}
-.ch-subs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:10px}
-.ch-sub-thumb{position:relative;cursor:pointer;border-radius:12px;overflow:hidden;background:var(--p1);border:2px solid var(--p2);transition:all .2s;aspect-ratio:1}
-.ch-sub-thumb:hover{border-color:var(--p4);transform:scale(1.04)}
-.ch-sub-thumb img{width:100%;height:100%;object-fit:cover}
-.ch-sub-label{position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.7);color:#fff;font-size:.58rem;padding:3px 5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* QR panel */
-.qr-panel{background:var(--p0);border-radius:16px;padding:16px;border:1.5px dashed var(--p3);margin-top:12px;text-align:center;display:none}
+.qr-panel{background:var(--p0);border-radius:14px;padding:14px;border:1.5px dashed var(--p3);margin-top:10px;text-align:center;display:none}
 .qr-panel.open{display:block;animation:slideIn .3s both}
-#qrContainer{margin:14px auto;display:flex;justify-content:center}
-
-.ch-create{display:none;margin-top:14px;background:var(--p0);border-radius:16px;padding:18px;border:1.5px dashed var(--p3)}
+#qrContainer{margin:12px auto;display:flex;justify-content:center}
+/* Create/edit form */
+.ch-create{display:none;margin-top:12px;background:var(--p0);border-radius:14px;padding:16px;border:1.5px dashed var(--p3)}
 .ch-create.open{display:block;animation:slideIn .3s both}
 .ch-cg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-@media(max-width:480px){.ch-cg{grid-template-columns:1fr}}
-
-/* ─── SUMMARY MODAL ─── */
-#sumModal{display:none;position:fixed;inset:0;z-index:8000;background:rgba(42,15,30,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px}
+@media(max-width:500px){.ch-cg{grid-template-columns:1fr}}
+/* SUMMARY MODAL */
+#sumModal{display:none;position:fixed;inset:0;z-index:8000;background:rgba(42,15,30,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:14px}
 #sumModal.open{display:flex}
-.sum-box{background:#fff;border-radius:28px;padding:36px;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;animation:pop .4s both;box-shadow:0 24px 80px rgba(200,50,120,.25)}
-.sum-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;text-align:center;margin-bottom:4px}
-.sum-sub{text-align:center;font-size:.83rem;color:var(--ink3);margin-bottom:24px}
-.sum-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;margin-bottom:22px}
-.sum-card{border-radius:18px;padding:18px 14px;border:1.5px solid var(--p2);background:var(--p0);text-align:center}
-.sum-ava{font-size:2rem;margin-bottom:8px}
-.sum-n{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;margin-bottom:10px}
-.sum-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--p5);line-height:1}
-.sum-lbl{font-size:.62rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.sum-subj{margin-top:8px;font-size:.72rem;background:var(--p1);color:var(--p5);padding:3px 10px;border-radius:20px;display:inline-block}
-.sum-uploads-section h4{font-size:.9rem;font-weight:600;color:var(--ink2);margin-bottom:12px}
-.sum-imgs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
-.sum-img-item{border-radius:14px;overflow:hidden;background:var(--p1);border:2px solid var(--p2);cursor:pointer;transition:all .2s;position:relative;aspect-ratio:1}
-.sum-img-item:hover{border-color:var(--p4);transform:scale(1.03)}
+.sum-box{background:#fff;border-radius:26px;padding:32px;max-width:820px;width:100%;max-height:90vh;overflow-y:auto;animation:pop .4s both;box-shadow:0 24px 80px rgba(200,50,120,.25)}
+.sum-title{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;text-align:center;margin-bottom:4px}
+.sum-sub{text-align:center;font-size:.82rem;color:var(--ink3);margin-bottom:20px}
+.sum-members{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.sum-card{border-radius:16px;padding:16px 12px;border:1.5px solid var(--p2);background:var(--p0);text-align:center}
+.sum-num{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:600;color:var(--p5);line-height:1}
+.sum-lbl{font-size:.6rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+.sum-subj{margin-top:7px;font-size:.7rem;background:var(--p1);color:var(--p5);padding:3px 9px;border-radius:18px;display:inline-block}
+.sum-ch-section{margin-top:16px;border-top:1px solid var(--p1);padding-top:16px}
+.sum-ch-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:10px}
+.sum-imgs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.sum-img-item{border-radius:12px;overflow:hidden;border:2px solid var(--p2);cursor:pointer;transition:all .2s;position:relative;aspect-ratio:1}
+.sum-img-item:hover{border-color:var(--p4);transform:scale(1.04)}
 .sum-img-item img{width:100%;height:100%;object-fit:cover}
-.sum-img-label{position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.72);color:#fff;font-size:.62rem;padding:4px 6px;text-align:center}
-.sum-no-uploads{color:var(--ink3);font-size:.84rem;text-align:center;padding:14px}
-
-/* ─── LIGHTBOX ─── */
-#lightbox{display:none;position:fixed;inset:0;z-index:12000;background:rgba(0,0,0,.92);align-items:center;justify-content:center;cursor:zoom-out}
-#lightbox.open{display:flex}
-#lightbox img{max-width:94vw;max-height:90vh;border-radius:12px;object-fit:contain;box-shadow:0 8px 40px rgba(0,0,0,.6)}
-#lightbox .lb-close{position:absolute;top:20px;right:24px;color:#fff;font-size:2rem;cursor:pointer;opacity:.7;transition:opacity .2s;line-height:1;background:none;border:none}
-#lightbox .lb-close:hover{opacity:1}
-#lightbox .lb-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:.85rem;opacity:.65;background:rgba(0,0,0,.4);padding:6px 14px;border-radius:20px}
-
-/* ─── FAB + SETTINGS ─── */
-.fab{position:fixed;bottom:26px;right:26px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;border:none;cursor:pointer;font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(240,80,160,.4);transition:all .25s;z-index:200}
-.fab:hover{transform:scale(1.1) rotate(22deg)}
-.cfg-panel{position:fixed;bottom:88px;right:26px;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 40px rgba(200,50,120,.2);border:1px solid var(--p2);min-width:252px;z-index:200;display:none}
+.sum-img-label{position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.68);color:#fff;font-size:.58rem;padding:3px 5px;text-align:center}
+/* HISTORY MODAL */
+#histModal{display:none;position:fixed;inset:0;z-index:8000;background:rgba(42,15,30,.82);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:14px}
+#histModal.open{display:flex}
+.hist-box{background:#fff;border-radius:26px;padding:30px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;animation:pop .4s both;box-shadow:0 24px 80px rgba(200,50,120,.25)}
+.hist-filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.hist-date-btn{font-family:'Outfit',sans-serif;font-size:.75rem;padding:5px 12px;border-radius:20px;border:1.5px solid var(--p2);background:white;cursor:pointer;color:var(--ink3);transition:all .2s}
+.hist-date-btn.active{background:var(--p5);color:white;border-color:var(--p5)}
+.hist-date-btn:hover:not(.active){background:var(--p1);color:var(--p5)}
+.hist-session{border:1.5px solid var(--p2);border-radius:14px;padding:14px;margin-bottom:10px;background:var(--p0);cursor:pointer;transition:all .2s}
+.hist-session:hover{border-color:var(--p4);background:var(--p1)}
+.hist-session.today{border-color:var(--p4);background:linear-gradient(135deg,#fff0f8,var(--p0))}
+.hist-detail{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--p1)}
+.hist-detail.open{display:block}
+/* FAB */
+.fab{position:fixed;bottom:24px;right:24px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;border:none;cursor:pointer;font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(240,80,160,.4);transition:all .25s;z-index:200}
+.fab:hover{transform:scale(1.1)rotate(22deg)}
+.cfg-panel{position:fixed;bottom:86px;right:24px;background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 40px rgba(200,50,120,.2);border:1px solid var(--p2);min-width:240px;z-index:200;display:none}
 .cfg-panel.open{display:block;animation:slideIn .3s both}
-.cfg-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:14px}
-.cfg-row{display:flex;align-items:center;margin-bottom:12px;font-size:.82rem;color:var(--ink3)}
-.cfg-row label{flex:1}
-.cfg-row input{width:62px;padding:6px 10px;border-radius:9px;border:1.5px solid var(--p2);font-family:'Outfit',sans-serif;font-size:.82rem;color:var(--ink);outline:none;text-align:center}
-.cfg-row input:focus{border-color:var(--p4)}
+.cfg-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:12px}
 </style>
 </head>
 <body>
-
 <div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div><div class="bg-blob b3"></div></div>
 <canvas id="petalsCanvas"></canvas>
 <audio id="clockAudio" loop><source src="clock.mp3" type="audio/mpeg"></audio>
 <div class="notif-wrap"><div class="notif" id="notif1"><span id="nIco">🌸</span>&nbsp;<span id="nTxt"></span></div></div>
 
 <!-- CUSTOM MODAL -->
-<div id="customModal">
-  <div class="cm-box">
-    <div class="cm-ico" id="cmIco">🌸</div>
-    <div class="cm-title" id="cmTitle"></div>
-    <div class="cm-msg" id="cmMsg"></div>
-    <div class="cm-btns" id="cmBtns"></div>
-  </div>
-</div>
-
+<div id="customModal"><div class="cm-box"><div class="cm-ico" id="cmIco"></div><div class="cm-title" id="cmTitle"></div><div class="cm-msg" id="cmMsg"></div><div class="cm-btns" id="cmBtns"></div></div></div>
+<!-- CELEBRATION MODAL -->
+<div id="celebModal"><div class="celeb-box"><div class="celeb-confetti">🎉🌸🎉</div><div class="celeb-title">Thử thách <em>hoàn thành!</em></div><div class="celeb-sub" id="celebMsg"></div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px"><button class="btn btn-rose" onclick="closeCelebAndSummary()">🏆 Xem tổng kết</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('celebModal').classList.remove('open')">Đóng</button></div></div></div>
 <!-- LIGHTBOX -->
-<div id="lightbox" onclick="closeLightbox()">
-  <button class="lb-close" onclick="closeLightbox()">✕</button>
-  <img id="lbImg" src="" alt="">
-  <div class="lb-caption" id="lbCaption"></div>
-</div>
+<div id="lightbox" onclick="closeLightbox()"><button class="lb-close">✕</button><img id="lbImg" src="" alt=""><div class="lb-caption" id="lbCap"></div></div>
+<!-- SUMMARY MODAL -->
+<div id="sumModal"><div class="sum-box"><div style="font-size:2.5rem;text-align:center;margin-bottom:8px">🎉</div><div class="sum-title">Tổng kết buổi học</div><div class="sum-sub" id="sumSub"></div><div class="sum-members" id="sumMembers"></div><div id="sumChallenges"></div><button class="btn btn-rose" style="width:100%;margin-top:18px;padding:12px" onclick="document.getElementById('sumModal').classList.remove('open')">✨ Đóng</button></div></div>
+<!-- HISTORY MODAL -->
+<div id="histModal"><div class="hist-box"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;flex:1">📖 Lịch sử học nhóm</div><button onclick="document.getElementById('histModal').classList.remove('open')" style="background:var(--p1);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:.95rem;color:var(--p5)">✕</button></div><div class="hist-filter-bar" id="histFilterBar"></div><div id="histList"></div></div></div>
 
 <!-- AUTH SCREEN -->
 <div id="authScreen">
@@ -325,53 +300,24 @@ select.inp{cursor:pointer}
     <div class="auth-brand">
       <div class="auth-script">cùng nhau học thôi nào 💕</div>
       <h1 class="auth-h1">Phòng học chung<br><em>cùng Mi</em></h1>
-      <p class="auth-sub">Đăng ký 1 lần · Tự động nhớ tài khoản</p>
+      <p class="auth-sub">Đăng ký 1 lần · Tự nhớ tài khoản · Real-time</p>
     </div>
     <div class="auth-card">
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Đăng nhập</button>
-        <button class="auth-tab" id="tabReg" onclick="switchTab('register')">Đăng ký</button>
-      </div>
+      <div class="auth-tabs"><button class="auth-tab active" id="tabL" onclick="switchTab('l')">Đăng nhập</button><button class="auth-tab" id="tabR" onclick="switchTab('r')">Đăng ký</button></div>
       <div class="auth-err" id="authErr"></div>
-
-      <!-- LOGIN FORM -->
-      <div id="loginForm">
-        <div class="auth-field">
-          <label>Tên người dùng</label>
-          <input class="inp" id="lgUser" placeholder="Tên của bạn..." autocomplete="username">
-        </div>
-        <div class="auth-field">
-          <label>Mật khẩu</label>
-          <input class="inp" id="lgPass" type="password" placeholder="Mật khẩu..." autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-        </div>
-        <button class="btn btn-rose" style="width:100%;padding:13px;font-size:.92rem;margin-top:4px" onclick="doLogin()">🌸 Đăng nhập & vào phòng</button>
-        <p style="text-align:center;font-size:.74rem;color:var(--ink3);margin-top:12px">
-          <a href="index.html" style="color:var(--p5);text-decoration:none">← Quay về trang chính</a>
-        </p>
+      <div id="lgForm">
+        <div class="auth-field"><label>Tên đăng nhập</label><input class="inp" id="lgU" placeholder="username..." autocomplete="username"></div>
+        <div class="auth-field"><label>Mật khẩu</label><input class="inp" id="lgP" type="password" placeholder="Mật khẩu..." autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="btn btn-rose" style="width:100%;padding:12px;font-size:.92rem;margin-top:4px" onclick="doLogin()">🌸 Đăng nhập</button>
+        <p style="text-align:center;font-size:.74rem;color:var(--ink3);margin-top:12px"><a href="index.html" style="color:var(--p5);text-decoration:none">← Quay về trang chính</a></p>
       </div>
-
-      <!-- REGISTER FORM -->
-      <div id="regForm" style="display:none">
-        <div class="auth-field">
-          <label>Chọn avatar</label>
-          <div class="auth-ava-grid" id="regAvaGrid"></div>
-        </div>
-        <div class="auth-field">
-          <label>Tên hiển thị</label>
-          <input class="inp" id="rgName" placeholder="Tên của bạn..." maxlength="16">
-        </div>
-        <div class="auth-field">
-          <label>Tên đăng nhập</label>
-          <input class="inp" id="rgUser" placeholder="VD: mi2024..." maxlength="20" autocomplete="username">
-        </div>
-        <div class="auth-field">
-          <label>Mật khẩu</label>
-          <input class="inp" id="rgPass" type="password" placeholder="Tối thiểu 4 ký tự..." autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
-        </div>
-        <button class="btn btn-rose" style="width:100%;padding:13px;font-size:.92rem;margin-top:4px" onclick="doRegister()">✨ Tạo tài khoản</button>
-        <p style="text-align:center;font-size:.74rem;color:var(--ink3);margin-top:12px">
-          <a href="index.html" style="color:var(--p5);text-decoration:none">← Quay về trang chính</a>
-        </p>
+      <div id="rgForm" style="display:none">
+        <div class="auth-field"><label>Chọn avatar</label><div class="auth-ava-grid" id="rgAvaGrid"></div></div>
+        <div class="auth-field"><label>Tên hiển thị</label><input class="inp" id="rgN" placeholder="Tên của bạn..." maxlength="16"></div>
+        <div class="auth-field"><label>Tên đăng nhập</label><input class="inp" id="rgU" placeholder="username (chữ thường, số, _)..." maxlength="20" autocomplete="username"></div>
+        <div class="auth-field"><label>Mật khẩu (tối thiểu 4 ký tự)</label><input class="inp" id="rgP" type="password" placeholder="Mật khẩu..." autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()"></div>
+        <button class="btn btn-rose" style="width:100%;padding:12px;font-size:.92rem;margin-top:4px" onclick="doRegister()">✨ Tạo tài khoản</button>
+        <p style="text-align:center;font-size:.74rem;color:var(--ink3);margin-top:12px"><a href="index.html" style="color:var(--p5);text-decoration:none">← Quay về trang chính</a></p>
       </div>
     </div>
   </div>
@@ -380,33 +326,28 @@ select.inp{cursor:pointer}
 <!-- ROOM SCREEN -->
 <div id="roomScreen">
   <div class="page">
+    <!-- Header -->
     <div class="room-hdr">
       <button class="room-back" onclick="confirmLeave()">← Về trang chính</button>
       <div class="room-title">Phòng học <em>cùng Mi</em> 🌸</div>
       <div class="online-pill"><div class="online-dot"></div><span id="onlineCount">0</span> người online</div>
     </div>
-
+    <!-- Today stats -->
+    <div class="today-bar" id="todayBar"></div>
+    <!-- Streak banner -->
+    <div class="streak-banner" id="streakBanner" style="display:none"></div>
+    <!-- Members -->
     <div class="members-grid" id="membersGrid"></div>
-
-    <!-- SHARED POMODORO -->
+    <!-- Shared Pomo -->
     <div class="sp-card">
       <div class="sp-hdr">
         <div class="sp-title">🍅 Pomodoro chung</div>
         <div class="sp-sync">🔗 Real-time</div>
+        <div class="sp-actor" id="spActor" style="display:none"></div>
         <button class="sp-cfg-btn" onclick="toggleSpCfg()">⚙ Cài đặt</button>
-        <div style="font-size:.68rem;opacity:.35;margin-left:8px" id="spHostTag"></div>
       </div>
       <div class="sp-body">
-        <div class="sp-ring-wrap">
-          <svg width="160" height="160" viewBox="0 0 160 160">
-            <circle class="spr-bg" cx="80" cy="80" r="70"/>
-            <circle class="spr-fill" id="spFill" cx="80" cy="80" r="70"/>
-          </svg>
-          <div class="sp-inner">
-            <div class="sp-time" id="spTime">25:00</div>
-            <div class="sp-phase" id="spPhase">HỌC TẬP</div>
-          </div>
-        </div>
+        <div class="sp-ring"><svg width="155" height="155" viewBox="0 0 155 155"><circle class="spr-bg" cx="77.5" cy="77.5" r="70"/><circle class="spr-fill" id="spFill" cx="77.5" cy="77.5" r="70"/></svg><div class="sp-inner"><div class="sp-time" id="spTime">25:00</div><div class="sp-phase" id="spPhase">HỌC TẬP</div></div></div>
         <div class="sp-right">
           <div class="sp-round" id="spRound">Vòng 1 / 4</div>
           <div class="sp-dots" id="spDots"></div>
@@ -415,156 +356,116 @@ select.inp{cursor:pointer}
             <button class="spb spb-soft" onclick="spReset()">↺ Đặt lại</button>
             <button class="spb spb-soft" onclick="spSkip()">⏭ Bỏ qua</button>
           </div>
-          <div style="font-size:.7rem;opacity:.35;margin-top:10px" id="spNote"></div>
-          <!-- Inline cfg -->
+          <div style="font-size:.7rem;opacity:.35;margin-top:8px" id="spNote"></div>
           <div class="sp-cfg-inline" id="spCfgInline">
             <div class="sp-cfg-g">
               <div class="sp-cfg-item"><label>⏱ Học (phút)</label><input type="range" id="cfgStudy" min="5" max="60" value="25" oninput="onSpCfgInput()"><div class="sp-cfg-v"><span id="cfgStudyV">25</span>p</div></div>
               <div class="sp-cfg-item"><label>☕ Nghỉ (phút)</label><input type="range" id="cfgBreak" min="1" max="30" value="5" oninput="onSpCfgInput()"><div class="sp-cfg-v"><span id="cfgBreakV">5</span>p</div></div>
               <div class="sp-cfg-item"><label>🔁 Số vòng</label><input type="range" id="cfgSess" min="2" max="8" value="4" oninput="onSpCfgInput()"><div class="sp-cfg-v"><span id="cfgSessV">4</span></div></div>
             </div>
-            <div class="sp-sound-row">
-              <label>🕐 Âm thanh tick-tack</label>
-              <button class="sound-toggle on" id="soundToggle" onclick="toggleSound()"></button>
-              <span id="soundLbl" style="font-size:.72rem;color:rgba(255,255,255,.5)">Bật</span>
-            </div>
+            <div class="sp-sound-row"><label>🕐 Âm thanh tick-tack</label><button class="sound-toggle on" id="soundToggle" onclick="toggleSound()"></button><span id="soundLbl" style="font-size:.7rem;color:rgba(255,255,255,.5)">Bật</span></div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- LEADERBOARD + CHALLENGE -->
+    <!-- Leaderboard + Challenge -->
     <div class="bottom-grid">
       <div class="card">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center">
-          🏆 Bảng xếp hạng hôm nay
-          <span style="font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:400;color:var(--ink3);margin-left:auto">phút học</span>
-        </div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center">🏆 Xếp hạng hôm nay<span style="font-family:'Outfit',sans-serif;font-size:.68rem;font-weight:400;color:var(--ink3);margin-left:auto">thời gian học</span></div>
         <div id="leaderboard"></div>
       </div>
       <div class="card">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px">
           🎯 Thử thách nhóm
-          <div style="display:flex;gap:6px;margin-left:auto">
-            <button class="btn btn-soft btn-xs" id="qrBtn" onclick="toggleQRPanel()" style="display:none">📱 QR nộp bài</button>
+          <div style="display:flex;gap:5px;margin-left:auto;flex-wrap:wrap">
+            <button class="btn btn-soft btn-xs" id="qrBtn" onclick="toggleQRPanel()" style="display:none">📱 QR</button>
             <button class="btn btn-soft btn-xs" id="chToggleBtn" onclick="toggleChCreate()">+ Tạo thử thách</button>
           </div>
         </div>
-        <div id="challengeArea"></div>
-        <!-- QR Panel -->
-        <div class="qr-panel" id="qrPanel">
-          <div style="font-size:.82rem;font-weight:600;color:var(--ink2);margin-bottom:8px">📱 Quét QR để nộp bài từ điện thoại</div>
-          <div id="qrContainer"></div>
-          <p style="font-size:.72rem;color:var(--ink3);margin-top:6px">Mở camera điện thoại → quét QR → chụp ảnh bài làm</p>
-        </div>
-        <!-- Create form -->
+        <div class="qr-panel" id="qrPanel"><div style="font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:6px">📱 Quét QR để nộp bài từ điện thoại</div><div id="qrContainer"></div><p style="font-size:.7rem;color:var(--ink3);margin-top:5px">Mở camera → quét QR → đăng nhập → nộp bài</p></div>
+        <div class="ch-card-area" id="challengeArea"></div>
         <div class="ch-create" id="chCreate">
-          <div style="font-size:.82rem;font-weight:600;color:var(--ink2);margin-bottom:10px">✏️ Tạo thử thách mới</div>
+          <div style="font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:9px" id="chCreateTitle">✏️ Tạo thử thách mới</div>
           <div class="ch-cg">
-            <div>
-              <label style="font-size:.72rem;color:var(--ink3);display:block;margin-bottom:5px">Tên thử thách</label>
-              <input class="inp" id="chName" placeholder="VD: Ôn Văn 2 tiếng" style="padding:9px 13px;font-size:.85rem">
-            </div>
-            <div>
-              <label style="font-size:.72rem;color:var(--ink3);display:block;margin-bottom:5px">Loại</label>
-              <select class="inp" id="chType" style="padding:9px 13px;font-size:.85rem" onchange="onChTypeChange()">
-                <option value="duration">Học trong X phút</option>
-                <option value="deadline">Xong trước giờ...</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:.72rem;color:var(--ink3);display:block;margin-bottom:5px" id="chValLbl">Số phút</label>
-              <input class="inp" id="chVal" type="number" min="1" placeholder="120" style="padding:9px 13px;font-size:.85rem">
-            </div>
-            <div>
-              <label style="font-size:.72rem;color:var(--ink3);display:block;margin-bottom:5px">Môn học</label>
-              <select class="inp" id="chSubj" style="padding:9px 13px;font-size:.85rem">
-                <option value="">-- Tất cả --</option>
-                <option>Văn</option><option>Toán</option><option>Anh</option>
-                <option>Sử</option><option>Địa</option><option>Hóa</option><option>Lý</option>
-              </select>
-            </div>
+            <div><label style="font-size:.7rem;color:var(--ink3);display:block;margin-bottom:4px">Tên thử thách</label><input class="inp" id="chName" placeholder="VD: Ôn Văn 2 tiếng" style="padding:9px 12px;font-size:.83rem"></div>
+            <div><label style="font-size:.7rem;color:var(--ink3);display:block;margin-bottom:4px">Loại</label><select class="inp" id="chType" style="padding:9px 12px;font-size:.83rem" onchange="onChTypeChange()"><option value="duration">Học trong X phút</option><option value="deadline">Xong trước giờ...</option></select></div>
+            <div><label style="font-size:.7rem;color:var(--ink3);display:block;margin-bottom:4px" id="chValLbl">Số phút</label><input class="inp" id="chVal" type="number" min="1" placeholder="120" style="padding:9px 12px;font-size:.83rem"></div>
+            <div><label style="font-size:.7rem;color:var(--ink3);display:block;margin-bottom:4px">Môn học</label><select class="inp" id="chSubj" style="padding:9px 12px;font-size:.83rem"><option value="">-- Tất cả --</option><option>Văn</option><option>Toán</option><option>Anh</option><option>Sử</option><option>Địa</option><option>Hóa</option><option>Lý</option></select></div>
           </div>
-          <button class="btn btn-rose btn-sm" style="width:100%" onclick="createChallenge()">🎯 Tạo ngay!</button>
+          <button class="btn btn-rose btn-sm" style="width:100%" id="chSubmitBtn" onclick="submitChallenge()">🎯 Tạo ngay!</button>
+          <button class="btn btn-ghost btn-xs" style="width:100%;margin-top:6px" id="chCancelEdit" onclick="cancelEditChallenge()" style="display:none">Huỷ chỉnh sửa</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SUMMARY MODAL -->
-<div id="sumModal">
-  <div class="sum-box">
-    <div style="font-size:2.8rem;text-align:center;margin-bottom:10px">🎉</div>
-    <div class="sum-title">Tổng kết buổi học!</div>
-    <div class="sum-sub" id="sumSub"></div>
-    <div class="sum-grid" id="sumGrid"></div>
-    <div class="sum-uploads-section">
-      <h4>🖼 Bài tập đã nộp</h4>
-      <div class="sum-imgs-grid" id="sumImgsGrid"></div>
-      <div class="sum-no-uploads" id="sumNoUploads" style="display:none">Chưa có bài nộp nào</div>
-    </div>
-    <button class="btn btn-rose" style="width:100%;margin-top:20px;padding:13px" onclick="document.getElementById('sumModal').classList.remove('open')">✨ Đóng</button>
-  </div>
-</div>
-
-<!-- FAB + SETTINGS -->
+<!-- FAB -->
 <button class="fab" onclick="toggleCfg()" title="Cài đặt">⚙️</button>
 <div class="cfg-panel" id="cfgPanel">
-  <div class="cfg-title">⚙️ Cài đặt phòng</div>
+  <div class="cfg-title">⚙️ Cài đặt</div>
   <div class="divider"></div>
-  <button class="btn btn-soft btn-sm" style="width:100%;margin-bottom:8px" onclick="showSummary()">📊 Xem tổng kết</button>
-  <button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:8px" onclick="confirmLeave()">🚪 Về trang chính</button>
+  <button class="btn btn-soft btn-sm" style="width:100%;margin-bottom:7px" onclick="openHistory()">📖 Lịch sử học nhóm</button>
+  <button class="btn btn-soft btn-sm" style="width:100%;margin-bottom:7px" onclick="showSummary()">📊 Xem tổng kết</button>
+  <button class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:7px" onclick="confirmLeave()">🚪 Về trang chính</button>
   <button class="btn btn-danger btn-sm" style="width:100%" onclick="doLogout()">🔓 Đăng xuất</button>
 </div>
 
 <script>
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // CONSTANTS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 const AVATARS=['🌸','🌷','🌼','⭐','🦋','🐱','🐰','🦊','🐻','🐼','🍓','🍀','🎀','🎵','🌙','💎','🔥','✨','🌈','🍭','🎯','💐','🌺','🌻'];
 const SLOTS=['slot1','slot2','slot3','slot4'];
 const SUBJECTS=['Văn','Toán','Anh','Sử','Địa','Hóa','Lý','Khác'];
 const SEMO={Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
 const MEDALS=['🥇','🥈','🥉','4️⃣'];
+const DB_PATH='room';
+const HIST_KEY='sr_history_v2';
+const STREAK_KEY='sr_streak_v2';
+const TODAY_KEY='sr_today_v2';
+const SESSION_KEY='studyroom_session';
 
-// ══════════════════════════════════════════════
-// FIREBASE ADAPTER
-// ══════════════════════════════════════════════
-const _s={},_l={};
-const dGet=p=>p.split('/').reduce((o,k)=>o&&o[k]!==undefined?o[k]:undefined,_s);
-const dSet=(p,v)=>{const a=p.split('/');let c=_s;for(let i=0;i<a.length-1;i++){if(!c[a[i]])c[a[i]]={};c=c[a[i]]}c[a[a.length-1]]=v};
-const dNotify=(p,v)=>{(_l[p]||[]).forEach(cb=>cb(v));const a=p.split('/');for(let i=a.length-1;i>0;i--){const pp=a.slice(0,i).join('/');(_l[pp]||[]).forEach(cb=>cb(dGet(pp)))}};
+// ══════════════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════════════
 const DB={
   async get(p){const{db,ref,get}=window._FB;const s=await get(ref(db,p));return s.exists()?s.val():null},
   async set(p,v){await window._FB.set(window._FB.ref(window._FB.db,p),v)},
   async update(p,v){await window._FB.update(window._FB.ref(window._FB.db,p),v)},
   async push(p,v){const r=await window._FB.push(window._FB.ref(window._FB.db,p),v);return r.key},
-  listen(p,cb){const u=window._FB.onValue(window._FB.ref(window._FB.db,p),s=>cb(s.exists()?s.val():null));return u},
+  listen(p,cb){return window._FB.onValue(window._FB.ref(window._FB.db,p),s=>cb(s.exists()?s.val():null))},
   async remove(p){await window._FB.remove(window._FB.ref(window._FB.db,p))},
-  setDisconnect(p,v){try{window._FB.onDisconnect(window._FB.ref(window._FB.db,p)).update(v)}catch(e){}}
+  dc(p,v){try{window._FB.onDisconnect(window._FB.ref(window._FB.db,p)).update(v)}catch(e){}}
 };
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════════
-let me=null; // {uid, username, name, avatar, slotId}
+// ══════════════════════════════════════════
+let me=null; // {uid,username,name,avatar,slotId}
 let roomSnap={};
 let spCfg={study:25,brk:5,sessMax:4};
-let spState={run:false,isStudy:true,rem:1500,sess:0,hostId:null};
+let spState={run:false,isStudy:true,rem:1500,sess:0,actorName:null};
 let spInterval=null;
-let myPomo={run:false,isStudy:true,rem:1500,sess:0,study:25,brk:5,sessMax:4};
+let myPomo={run:false,isStudy:true,rem:1500,sess:0};
 let myPomoInterval=null;
-let chInterval=null;
+let myPomoCfg={study:25,brk:5,sessMax:4};
 let soundOn=true;
 let selectedRegAvatar='🌸';
+let editingChId=null;
+let chIntervals={}; // {chId: intervalId}
+let todayStudySec=0; // total seconds studied today (solo)
+let groupStudySec=0; // group pomodoro seconds today
+let studySecInterval=null;
+let groupSecInterval=null;
+let sessionStartTime=null; // when first pomo started this session
+let qrGenerated=false;
 const unsubs=[];
 const clockAudio=document.getElementById('clockAudio');
-let myPomoCfg={study:25,brk:5,sessMax:4};
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // PETALS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 (()=>{
   const cv=document.getElementById('petalsCanvas'),cx=cv.getContext('2d');
   const rs=()=>{cv.width=innerWidth;cv.height=innerHeight};rs();addEventListener('resize',rs);
@@ -573,56 +474,35 @@ let myPomoCfg={study:25,brk:5,sessMax:4};
   const draw=()=>{cx.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.globalAlpha=p.o;cx.beginPath();cx.ellipse(0,0,p.r,p.r*1.8,0,0,Math.PI*2);cx.fillStyle=p.c;cx.fill();cx.restore();p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;if(p.y>cv.height+20){p.y=-20;p.x=Math.random()*cv.width}});requestAnimationFrame(draw)};draw();
 })();
 
-// ══════════════════════════════════════════════
-// NOTIF
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// NOTIF + MODAL + LIGHTBOX
+// ══════════════════════════════════════════
 let _nt;
 function notify(msg,ico='🌸'){clearTimeout(_nt);document.getElementById('nIco').textContent=ico;document.getElementById('nTxt').textContent=msg;const el=document.getElementById('notif1');el.classList.add('show');_nt=setTimeout(()=>el.classList.remove('show'),3800)}
-
-// ══════════════════════════════════════════════
-// CUSTOM MODAL (replace confirm/alert)
-// ══════════════════════════════════════════════
-function showModal(ico,title,msg,buttons){
+function showModal(ico,title,msg,btns){
   document.getElementById('cmIco').textContent=ico;
   document.getElementById('cmTitle').textContent=title;
   document.getElementById('cmMsg').textContent=msg;
-  document.getElementById('cmBtns').innerHTML=buttons.map(b=>
-    `<button class="btn ${b.cls||'btn-ghost'} btn-sm" onclick="${b.fn};document.getElementById('customModal').classList.remove('open')">${b.label}</button>`
-  ).join('');
+  document.getElementById('cmBtns').innerHTML=btns.map(b=>`<button class="btn ${b.cls||'btn-ghost'} btn-sm" onclick="${b.fn};document.getElementById('customModal').classList.remove('open')">${b.label}</button>`).join('');
   document.getElementById('customModal').classList.add('open');
 }
-function closeModal(){document.getElementById('customModal').classList.remove('open')}
-
-// ══════════════════════════════════════════════
-// LIGHTBOX
-// ══════════════════════════════════════════════
-function openLightbox(src,caption=''){
-  document.getElementById('lbImg').src=src;
-  document.getElementById('lbCaption').textContent=caption;
-  document.getElementById('lightbox').classList.add('open');
-}
+function openLightbox(src,cap=''){document.getElementById('lbImg').src=src;document.getElementById('lbCap').textContent=cap;document.getElementById('lightbox').classList.add('open')}
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()});
+document.querySelector('.lb-close').onclick=e=>{e.stopPropagation();closeLightbox()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeLightbox();document.getElementById('customModal').classList.remove('open')}});
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // STARTUP
-// ══════════════════════════════════════════════
-document.addEventListener('fb-ready',()=>{ checkAutoLogin(); });
-document.addEventListener('fb-failed',()=>{ notify('Lỗi kết nối Firebase!','❌'); });
-setTimeout(()=>{ if(!window._FB_READY) notify('Đang kết nối...','⏳'); },1500);
+// ══════════════════════════════════════════
+document.addEventListener('fb-ready',()=>checkAutoLogin());
+document.addEventListener('fb-failed',()=>notify('Lỗi kết nối Firebase!','❌'));
+setTimeout(()=>{if(!window._FB_READY&&!window._FB_FAILED)notify('Đang kết nối...','⏳')},1500);
+
+function todayStr(){const d=new Date();return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
 
 function checkAutoLogin(){
-  const saved=localStorage.getItem('studyroom_session');
-  if(saved){
-    try{
-      const sess=JSON.parse(saved);
-      if(sess.uid&&sess.username&&sess.name&&sess.avatar){
-        me={...sess};
-        findSlotAndEnter();
-        return;
-      }
-    }catch(e){}
-  }
+  const saved=localStorage.getItem(SESSION_KEY);
+  if(saved){try{const s=JSON.parse(saved);if(s.uid&&s.name){me={...s};findSlotAndEnter();return}}catch(e){}}
   showAuthScreen();
 }
 
@@ -631,598 +511,729 @@ function showAuthScreen(){
   renderRegAvaGrid();
 }
 
-// ══════════════════════════════════════════════
-// AUTH — LOGIN / REGISTER
-// ══════════════════════════════════════════════
-function switchTab(tab){
-  document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
-  document.getElementById('regForm').style.display=tab==='register'?'block':'none';
-  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
-  document.getElementById('tabReg').classList.toggle('active',tab==='register');
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+function switchTab(t){
+  ['lgForm','rgForm'].forEach((id,i)=>document.getElementById(id).style.display=i===(t==='l'?0:1)?'block':'none');
+  document.getElementById('tabL').classList.toggle('active',t==='l');
+  document.getElementById('tabR').classList.toggle('active',t==='r');
   document.getElementById('authErr').classList.remove('show');
 }
-
-function showAuthErr(msg){const el=document.getElementById('authErr');el.textContent=msg;el.classList.add('show')}
-
+function showAuthErr(m){const e=document.getElementById('authErr');e.textContent=m;e.classList.add('show')}
 function renderRegAvaGrid(){
-  document.getElementById('regAvaGrid').innerHTML=AVATARS.map(a=>
-    `<div class="ava-opt${a===selectedRegAvatar?' sel':''}" onclick="selRegAva('${a}')">${a}</div>`
-  ).join('');
+  document.getElementById('rgAvaGrid').innerHTML=AVATARS.map(a=>`<div class="ava-opt${a===selectedRegAvatar?' sel':''}" onclick="selRgAva('${a}')">${a}</div>`).join('');
 }
-function selRegAva(a){selectedRegAvatar=a;document.querySelectorAll('#regAvaGrid .ava-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()===a))}
+function selRgAva(a){selectedRegAvatar=a;document.querySelectorAll('#rgAvaGrid .ava-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()===a))}
 
 async function doLogin(){
-  const user=document.getElementById('lgUser').value.trim().toLowerCase();
-  const pass=document.getElementById('lgPass').value;
-  if(!user||!pass){showAuthErr('Vui lòng nhập đủ thông tin nhé!');return}
+  const u=document.getElementById('lgU').value.trim().toLowerCase(),p=document.getElementById('lgP').value;
+  if(!u||!p){showAuthErr('Nhập đủ thông tin nhé!');return}
   try{
-    const accData=await DB.get(`accounts/${user}`);
-    if(!accData){showAuthErr('Tên đăng nhập không tồn tại!');return}
-    if(accData.password!==btoa(pass)){showAuthErr('Sai mật khẩu rồi!');return}
-    me={uid:user,username:user,name:accData.name,avatar:accData.avatar};
-    localStorage.setItem('studyroom_session',JSON.stringify(me));
+    const acc=await DB.get(`accounts/${u}`);
+    if(!acc){showAuthErr('Tên đăng nhập không tồn tại!');return}
+    if(acc.password!==btoa(p)){showAuthErr('Sai mật khẩu rồi!');return}
+    me={uid:u,username:u,name:acc.name,avatar:acc.avatar};
+    localStorage.setItem(SESSION_KEY,JSON.stringify(me));
     document.getElementById('authScreen').classList.remove('active');
     findSlotAndEnter();
-  }catch(e){showAuthErr('Lỗi kết nối, thử lại nhé!')}
+  }catch(e){showAuthErr('Lỗi kết nối!')}
 }
 
 async function doRegister(){
-  const name=document.getElementById('rgName').value.trim();
-  const user=document.getElementById('rgUser').value.trim().toLowerCase();
-  const pass=document.getElementById('rgPass').value;
-  if(!name||!user||!pass){showAuthErr('Điền đầy đủ thông tin nhé!');return}
-  if(pass.length<4){showAuthErr('Mật khẩu tối thiểu 4 ký tự!');return}
-  if(!/^[a-z0-9_]+$/.test(user)){showAuthErr('Tên đăng nhập chỉ dùng chữ thường, số, _');return}
+  const name=document.getElementById('rgN').value.trim(),u=document.getElementById('rgU').value.trim().toLowerCase(),p=document.getElementById('rgP').value;
+  if(!name||!u||!p){showAuthErr('Điền đầy đủ nhé!');return}
+  if(p.length<4){showAuthErr('Mật khẩu tối thiểu 4 ký tự!');return}
+  if(!/^[a-z0-9_]+$/.test(u)){showAuthErr('Username chỉ dùng chữ thường, số, _');return}
   try{
-    const existing=await DB.get(`accounts/${user}`);
-    if(existing){showAuthErr('Tên đăng nhập đã tồn tại!');return}
-    await DB.set(`accounts/${user}`,{name,avatar:selectedRegAvatar,password:btoa(pass),createdAt:Date.now()});
-    me={uid:user,username:user,name,avatar:selectedRegAvatar};
-    localStorage.setItem('studyroom_session',JSON.stringify(me));
+    if(await DB.get(`accounts/${u}`)){showAuthErr('Username đã tồn tại!');return}
+    await DB.set(`accounts/${u}`,{name,avatar:selectedRegAvatar,password:btoa(p),createdAt:Date.now()});
+    me={uid:u,username:u,name,avatar:selectedRegAvatar};
+    localStorage.setItem(SESSION_KEY,JSON.stringify(me));
     document.getElementById('authScreen').classList.remove('active');
-    notify(`✨ Chào mừng ${name} vào phòng học!`,'🌸');
+    notify(`✨ Chào ${name} vào phòng học!`,'🌸');
     findSlotAndEnter();
-  }catch(e){showAuthErr('Lỗi kết nối, thử lại nhé!')}
+  }catch(e){showAuthErr('Lỗi kết nối!')}
 }
 
 function doLogout(){
-  showModal('🔓','Đăng xuất?','Lần sau vào phòng sẽ cần đăng nhập lại nhé!',[
+  showModal('🔓','Đăng xuất?','Lần sau vào phòng sẽ cần đăng nhập lại!',[
     {label:'Huỷ',cls:'btn-ghost',fn:''},
     {label:'Đăng xuất',cls:'btn-danger',fn:'_doLogout()'}
   ]);
 }
 async function _doLogout(){
-  if(me){
-    clearInterval(spInterval);clearInterval(myPomoInterval);clearInterval(chInterval);
-    unsubs.forEach(u=>typeof u==='function'&&u());
-    await DB.update(`room/slots/${me.slotId||'slot1'}`,{online:false}).catch(()=>{});
-    if(spState.run&&spState.hostId===me.slotId) await DB.update('room/spState',{run:false,hostId:null}).catch(()=>{});
-  }
-  localStorage.removeItem('studyroom_session');
+  await _cleanupAndLeave();
+  localStorage.removeItem(SESSION_KEY);
   location.reload();
 }
 
-// ══════════════════════════════════════════════
-// FIND EMPTY SLOT & ENTER
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// FIND SLOT & ENTER
+// ══════════════════════════════════════════
 async function findSlotAndEnter(){
-  // Check if user already has a slot
-  const slots=await DB.get('room/slots')||{};
+  const slots=await DB.get(`${DB_PATH}/slots`)||{};
   let mySlot=null;
-  // If they already have a slot from before, reclaim it
-  for(const sid of SLOTS){
-    if(slots[sid]&&slots[sid].uid===me.uid&&slots[sid].online){
-      mySlot=sid; break;
-    }
-  }
-  // Otherwise find empty slot
-  if(!mySlot){
-    for(const sid of SLOTS){
-      if(!slots[sid]||!slots[sid].online){ mySlot=sid; break; }
-    }
-  }
-  if(!mySlot){
-    notify('Phòng đầy rồi! (tối đa 4 người)','😅');
-    showAuthScreen();
-    return;
-  }
+  for(const sid of SLOTS){if(slots[sid]&&slots[sid].uid===me.uid&&slots[sid].online){mySlot=sid;break}}
+  if(!mySlot){for(const sid of SLOTS){if(!slots[sid]||!slots[sid].online){mySlot=sid;break}}}
+  if(!mySlot){notify('Phòng đầy rồi! (tối đa 4 người)','😅');showAuthScreen();return}
   me.slotId=mySlot;
-  await DB.set(`room/slots/${mySlot}`,{
-    slotId:mySlot,uid:me.uid,name:me.name,avatar:me.avatar,
-    online:true,joinedAt:Date.now(),subject:'',studyMinutes:0,uploads:[],
+  localStorage.setItem(SESSION_KEY,JSON.stringify(me));
+  await DB.set(`${DB_PATH}/slots/${mySlot}`,{
+    slotId:mySlot,uid:me.uid,name:me.name,avatar:me.avatar,online:true,
+    joinedAt:Date.now(),subject:'',studySec:0,groupStudySec:0,uploads:{},
     pomo:{run:false,isStudy:true,rem:1500,sess:0}
   });
-  DB.setDisconnect(`room/slots/${mySlot}`,{online:false,uid:me.uid});
-  const spCfgDB=await DB.get('room/spCfg');
-  if(!spCfgDB) await DB.set('room/spCfg',{study:25,brk:5,sessMax:4});
-  const spStateDB=await DB.get('room/spState');
-  if(!spStateDB) await DB.set('room/spState',{run:false,isStudy:true,rem:1500,sess:0,hostId:null});
+  DB.dc(`${DB_PATH}/slots/${mySlot}`,{online:false,uid:me.uid});
+  if(!await DB.get(`${DB_PATH}/spCfg`)) await DB.set(`${DB_PATH}/spCfg`,{study:25,brk:5,sessMax:4});
+  if(!await DB.get(`${DB_PATH}/spState`)) await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:1500,sess:0,actorName:null});
   document.getElementById('roomScreen').classList.add('active');
+  // Load today's personal study time
+  loadTodayStudyTime();
   enterRoom();
 }
 
-// ══════════════════════════════════════════════
+function loadTodayStudyTime(){
+  const td=localStorage.getItem(TODAY_KEY);
+  if(td){try{const d=JSON.parse(td);if(d.date===todayStr()){todayStudySec=d.solo||0;groupStudySec=d.group||0}}catch(e){}}
+}
+function saveTodayStudyTime(){
+  localStorage.setItem(TODAY_KEY,JSON.stringify({date:todayStr(),solo:todayStudySec,group:groupStudySec}));
+}
+function fmtTime(sec){
+  if(sec<60) return`${sec}s`;
+  const m=Math.floor(sec/60),h=Math.floor(m/60),rem=m%60;
+  return h?`${h}g ${rem}p`:`${m}p`;
+}
+
+// ══════════════════════════════════════════
 // ENTER ROOM
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function enterRoom(){
-  unsubs.push(DB.listen('room/slots',snap=>{
+  unsubs.push(DB.listen(`${DB_PATH}/slots`,snap=>{
     roomSnap.slots=snap||{};
     renderMembers();renderLeaderboard();
     document.getElementById('onlineCount').textContent=Object.values(roomSnap.slots).filter(s=>s.online).length;
+    checkRoomEmpty();
   }));
-  unsubs.push(DB.listen('room/spCfg',snap=>{
+  unsubs.push(DB.listen(`${DB_PATH}/spCfg`,snap=>{
     if(!snap)return;spCfg={...spCfg,...snap};
-    document.getElementById('cfgStudy').value=spCfg.study;
-    document.getElementById('cfgStudyV').textContent=spCfg.study;
-    document.getElementById('cfgBreak').value=spCfg.brk;
-    document.getElementById('cfgBreakV').textContent=spCfg.brk;
-    document.getElementById('cfgSess').value=spCfg.sessMax;
-    document.getElementById('cfgSessV').textContent=spCfg.sessMax;
+    document.getElementById('cfgStudy').value=spCfg.study;document.getElementById('cfgStudyV').textContent=spCfg.study;
+    document.getElementById('cfgBreak').value=spCfg.brk;document.getElementById('cfgBreakV').textContent=spCfg.brk;
+    document.getElementById('cfgSess').value=spCfg.sessMax;document.getElementById('cfgSessV').textContent=spCfg.sessMax;
   }));
-  unsubs.push(DB.listen('room/spState',snap=>{
+  unsubs.push(DB.listen(`${DB_PATH}/spState`,snap=>{
     if(!snap)return;spState={...spState,...snap};renderSpUI();
-    if(spState.run&&spState.hostId===me.slotId&&!spInterval)startSpTick();
-    if(!spState.run&&spInterval){clearInterval(spInterval);spInterval=null;stopClockSound();}
+    if(spState.run&&!spInterval)startSpTick();
+    if(!spState.run&&spInterval){clearInterval(spInterval);spInterval=null;stopGroupTimer();}
+    updateActorTag();
   }));
-  unsubs.push(DB.listen('room/challenge',snap=>{roomSnap.challenge=snap;renderChallenge()}));
-  setInterval(tickStudyTime,60000);
-  // reload my pomo from saved state
-  myPomo.rem=myPomoCfg.study*60;
-  renderMyPomoUI();
+  unsubs.push(DB.listen(`${DB_PATH}/challenges`,snap=>{roomSnap.challenges=snap||{};renderAllChallenges()}));
+  renderTodayBar();
+  renderStreak();
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// ROOM EMPTY → RESET
+// ══════════════════════════════════════════
+async function checkRoomEmpty(){
+  const online=Object.values(roomSnap.slots||{}).filter(s=>s.online);
+  if(online.length===0){
+    // Reset room state
+    await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:(spCfg.study||25)*60,sess:0,actorName:null}).catch(()=>{});
+    await DB.remove(`${DB_PATH}/challenges`).catch(()=>{});
+  }
+}
+
+// ══════════════════════════════════════════
+// TODAY STATS BAR
+// ══════════════════════════════════════════
+function renderTodayBar(){
+  document.getElementById('todayBar').innerHTML=`
+    <div class="today-stat"><div class="today-stat-ico">⏱</div><div class="today-stat-info"><div class="today-stat-n" id="soloTimeStat">${fmtTime(todayStudySec)}</div><div class="today-stat-l">Học cá nhân hôm nay</div></div></div>
+    <div class="today-stat"><div class="today-stat-ico">👥</div><div class="today-stat-info"><div class="today-stat-n" id="groupTimeStat">${fmtTime(groupStudySec)}</div><div class="today-stat-l">Học nhóm hôm nay</div></div></div>
+    <div class="today-stat"><div class="today-stat-ico">🔥</div><div class="today-stat-info"><div class="today-stat-n" id="streakStatNum">${getStreakDays()}</div><div class="today-stat-l">Ngày liên tiếp học nhóm</div></div></div>`;
+}
+function updateTodayBar(){
+  const e1=document.getElementById('soloTimeStat');
+  const e2=document.getElementById('groupTimeStat');
+  if(e1)e1.textContent=fmtTime(todayStudySec);
+  if(e2)e2.textContent=fmtTime(groupStudySec);
+}
+
+// ══════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════
+function getStreakDays(){
+  try{const s=JSON.parse(localStorage.getItem(STREAK_KEY)||'{}');return s.days||0}catch(e){return 0}
+}
+function updateStreak(){
+  const today=todayStr();
+  let streak={days:0,lastDate:'',dates:[]};
+  try{streak=JSON.parse(localStorage.getItem(STREAK_KEY)||'{}')}catch(e){}
+  if(streak.lastDate===today)return; // already counted today
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yd=`${yesterday.getFullYear()}-${yesterday.getMonth()+1}-${yesterday.getDate()}`;
+  if(streak.lastDate===yd){streak.days++;} else if(streak.lastDate!==today){streak.days=1;}
+  streak.lastDate=today;
+  if(!streak.dates)streak.dates=[];
+  if(!streak.dates.includes(today))streak.dates.push(today);
+  // keep only last 180 days
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-180);
+  streak.dates=streak.dates.filter(d=>{const[y,m,dd]=d.split('-').map(Number);return new Date(y,m-1,dd)>=cutoff});
+  localStorage.setItem(STREAK_KEY,JSON.stringify(streak));
+}
+function renderStreak(){
+  const days=getStreakDays();
+  const banner=document.getElementById('streakBanner');
+  const numEl=document.getElementById('streakStatNum');
+  if(numEl)numEl.textContent=days;
+  if(days>=2){
+    banner.style.display='flex';
+    banner.innerHTML=`<div class="streak-fire">🔥</div><div class="streak-info"><div class="streak-days">${days} ngày</div><div class="streak-label">Chuỗi học nhóm liên tiếp!</div><div class="streak-desc">${days>=7?'🏆 Tuần hoàn hảo!':days>=3?'✨ Đang cháy rồi!':'💪 Cố gắng duy trì nhé!'}</div></div><div style="font-family:\'Cormorant Garamond\',serif;font-size:2.5rem;font-weight:600;color:#e65100;opacity:.4">×${days}</div>`;
+  }else{banner.style.display='none'}
+}
+
+// ══════════════════════════════════════════
+// TIMER TRACKING
+// ══════════════════════════════════════════
+function startSoloTimer(){
+  if(studySecInterval)return;
+  if(!sessionStartTime)sessionStartTime=Date.now();
+  studySecInterval=setInterval(()=>{
+    todayStudySec++;saveTodayStudyTime();updateTodayBar();
+  },1000);
+}
+function stopSoloTimer(){clearInterval(studySecInterval);studySecInterval=null;}
+function startGroupTimer(){
+  if(groupSecInterval)return;
+  if(!sessionStartTime)sessionStartTime=Date.now();
+  groupSecInterval=setInterval(async()=>{
+    groupStudySec++;saveTodayStudyTime();updateTodayBar();
+    // also update DB for this member
+    const cur=roomSnap.slots?.[me?.slotId]?.groupStudySec||0;
+    await DB.update(`${DB_PATH}/slots/${me.slotId}`,{groupStudySec:cur+1}).catch(()=>{});
+  },1000);
+}
+function stopGroupTimer(){clearInterval(groupSecInterval);groupSecInterval=null;}
+
+// ══════════════════════════════════════════
 // RENDER MEMBERS
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function renderMembers(){
   const sl=roomSnap.slots||{};
   document.getElementById('membersGrid').innerHTML=SLOTS.map((sid,i)=>{
     const s=sl[sid],isMe=me&&sid===me.slotId;
-    if(!s||!s.online)return`<div class="mc empty">
-      <div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div>
-      <div><div class="mc-name" style="color:var(--ink3)">Vị trí ${i+1}</div><div style="font-size:.72rem;color:var(--ink3)">Trống</div></div></div>
-    </div>`;
-
-    // For my card, use local myPomo state; for others use DB state
-    const p=isMe?myPomo:(s.pomo||{run:false,isStudy:true,rem:1500,sess:0});
-    const pm=Math.floor(p.rem/60),ps=p.rem%60;
+    if(!s||!s.online)return`<div class="mc empty"><div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div><div><div class="mc-name-row" style="color:var(--ink3)">Vị trí ${i+1}</div><div style="font-size:.7rem;color:var(--ink3)">Trống</div></div></div></div>`;
+    const p=isMe?myPomo:(s.pomo||{});
+    const pm=Math.floor((p.rem||0)/60),ps=(p.rem||0)%60;
     const cfg=isMe?myPomoCfg:spCfg;
-    const circ=2*Math.PI*54; // r=54 for 120px ring
-    const total=(p.isStudy?cfg.study:cfg.brk)*60||1;
-    const off=circ*(1-Math.max(0,p.rem)/total);
-    const stroke=p.isStudy?'#ff6bae':'#a8e6cf';
-    const subj=s.subject||'',uploads=s.uploads||[];
-
+    const circ=2*Math.PI*54,total=(p.isStudy?cfg.study:cfg.brk)*60||1;
+    const off=circ*(1-Math.max(0,p.rem||0)/total),stroke=p.isStudy?'#ff6bae':'#a8e6cf';
+    const subj=s.subject||'';
+    const studySec=isMe?todayStudySec:(s.studySec||0);
+    const grpSec=isMe?groupStudySec:(s.groupStudySec||0);
     return`<div class="mc${isMe?' is-me':''}">
-      <div class="mc-top">
-        <div class="mc-ava-wrap"><div class="mc-ava">${s.avatar}</div><div class="mc-ava-dot"></div></div>
-        <div style="flex:1;min-width:0">
-          <div class="mc-name">${escHtml(s.name)}${isMe?'<span class="me-badge">Tôi</span>':''}</div>
-          <div class="mc-subj" style="min-height:22px">${isMe
-            ?`<select onchange="setSubject(this.value)"><option value="">-- Chọn môn --</option>${SUBJECTS.map(sub=>`<option value="${sub}" ${subj===sub?'selected':''}>${SEMO[sub]||'📚'} ${sub}</option>`).join('')}</select>`
-            :(subj?`<span>${SEMO[subj]||'📚'} ${escHtml(subj)}</span>`:'<span style="color:var(--ink3)">Chưa chọn môn</span>')
-          }</div>
-        </div>
-      </div>
-      ${isMe ? renderMyPomoCard() : renderOtherPomoCard(p,circ,off,stroke,pm,ps)}
+      <div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava">${s.avatar}</div><div class="mc-ava-dot"></div></div>
+      <div style="flex:1;min-width:0"><div class="mc-name-row">${esc(s.name)}${isMe?'<span class="me-badge">Tôi</span>':''}</div>
+      <div class="mc-subj">${isMe?`<select onchange="setSubject(this.value)"><option value="">-- Chọn môn --</option>${SUBJECTS.map(sub=>`<option value="${sub}" ${subj===sub?'selected':''}>${SEMO[sub]||'📚'} ${sub}</option>`).join('')}</select>`:(subj?`<span>${SEMO[subj]||'📚'} ${esc(subj)}</span>`:'<span style="color:var(--ink3)">Chưa chọn</span>')}</div>
+      </div></div>
+      ${isMe?renderMyPomo():`<div class="mc-pomo"><div class="ring-sm"><svg width="120" height="120" viewBox="0 0 120 120"><circle class="rs-bg" cx="60" cy="60" r="54"/><circle class="rs-fill" cx="60" cy="60" r="54" style="stroke:${stroke};stroke-dasharray:${circ.toFixed(1)};stroke-dashoffset:${off.toFixed(1)}"/></svg><div class="ring-sm-inner"><div class="rst">${String(pm).padStart(2,'0')}:${String(ps).padStart(2,'0')}</div><div class="rsp">${p.isStudy?'HỌC':'NGHỈ'}</div></div></div></div>`}
       <div class="mc-stats">
-        <div class="mcs"><div class="mcs-n">${s.studyMinutes||0}</div><div class="mcs-l">Phút học</div></div>
-        <div class="mcs"><div class="mcs-n">${isMe?myPomo.sess:(p.sess||0)}</div><div class="mcs-l">Pomodoro</div></div>
-        <div class="mcs"><div class="mcs-n">${uploads.length}</div><div class="mcs-l">Bài nộp</div></div>
-      </div>
-    </div>`;
+        <div class="mcs"><div class="mcs-n">${fmtTime(studySec)}</div><div class="mcs-l">Cá nhân</div></div>
+        <div class="mcs"><div class="mcs-n">${fmtTime(grpSec)}</div><div class="mcs-l">Nhóm</div></div>
+        <div class="mcs"><div class="mcs-n">${p.sess||0}</div><div class="mcs-l">Pomodoro</div></div>
+      </div></div>`;
   }).join('');
 }
 
-function renderMyPomoCard(){
+function renderMyPomo(){
   const p=myPomo,cfg=myPomoCfg;
   const pm=Math.floor(p.rem/60),ps=p.rem%60;
   const circ=2*Math.PI*54,total=(p.isStudy?cfg.study:cfg.brk)*60||1;
-  const off=circ*(1-Math.max(0,p.rem)/total);
-  const stroke=p.isStudy?'#ff6bae':'#a8e6cf';
-  return`<div class="mc-pomo">
-    <div class="mc-pomo-inner">
-      <div class="ring-wrap-sm">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="ring-bg-sm" cx="60" cy="60" r="54"/>
-          <circle class="ring-fill-sm" cx="60" cy="60" r="54"
-            style="stroke:${stroke};stroke-dasharray:${circ.toFixed(1)};stroke-dashoffset:${off.toFixed(1)};transition:stroke-dashoffset 1s linear"/>
-        </svg>
-        <div class="ring-inner-sm">
-          <div class="ring-time-sm">${String(pm).padStart(2,'0')}:${String(ps).padStart(2,'0')}</div>
-          <div class="ring-phase-sm">${p.isStudy?'HỌC TẬP':'NGHỈ NGƠI'}</div>
-          <div style="font-size:.58rem;color:var(--p4);margin-top:1px">Vòng ${p.sess+1}/${cfg.sessMax}</div>
-        </div>
-      </div>
-      <div class="mc-pomo-btns">
-        <button class="btn btn-rose btn-xs" onclick="myPomoToggle()">${p.run?'⏸ Dừng':'▶ Bắt đầu'}</button>
-        <button class="btn btn-soft btn-xs" onclick="myPomoReset()">↺</button>
-        <button class="btn btn-ghost btn-xs" onclick="toggleMyPomoCfg()">⚙</button>
-      </div>
-      <div class="mc-pomo-cfg" id="myPomoCfgPanel">
-        <div class="pomo-cfg-grid">
-          <div class="pomo-cfg-item"><label>⏱ Học (phút)</label><input type="range" id="mpStudy" min="5" max="60" value="${cfg.study}" oninput="onMyPomoCfgInput()"><div class="pomo-cfg-val"><span id="mpStudyV">${cfg.study}</span>p</div></div>
-          <div class="pomo-cfg-item"><label>☕ Nghỉ (phút)</label><input type="range" id="mpBreak" min="1" max="30" value="${cfg.brk}" oninput="onMyPomoCfgInput()"><div class="pomo-cfg-val"><span id="mpBreakV">${cfg.brk}</span>p</div></div>
-        </div>
-      </div>
+  const off=circ*(1-Math.max(0,p.rem)/total),stroke=p.isStudy?'#ff6bae':'#a8e6cf';
+  return`<div class="mc-pomo"><div class="ring-sm">
+    <svg width="120" height="120" viewBox="0 0 120 120"><circle class="rs-bg" cx="60" cy="60" r="54"/><circle class="rs-fill" cx="60" cy="60" r="54" style="stroke:${stroke};stroke-dasharray:${circ.toFixed(1)};stroke-dashoffset:${off.toFixed(1)};transition:stroke-dashoffset 1s linear"/></svg>
+    <div class="ring-sm-inner"><div class="rst">${String(pm).padStart(2,'0')}:${String(ps).padStart(2,'0')}</div><div class="rsp">${p.isStudy?'HỌC TẬP':'NGHỈ NGƠI'}</div><div class="rsv">Vòng ${p.sess+1}/${cfg.sessMax}</div></div>
+  </div>
+  <div class="mc-pomo-btns">
+    <button class="btn btn-rose btn-xs" onclick="myPomoToggle()">${p.run?'⏸ Dừng':'▶ Bắt đầu'}</button>
+    <button class="btn btn-soft btn-xs" onclick="myPomoReset()">↺</button>
+    <button class="btn btn-ghost btn-xs" onclick="toggleMyPomoCfg()">⚙</button>
+  </div>
+  <div class="mc-pomo-cfg" id="myPomoCfgPanel">
+    <div class="pc-g">
+      <div class="pc-item"><label>⏱ Học (p)</label><input type="range" id="mpS" min="5" max="60" value="${cfg.study}" oninput="onMpCfg()"><div class="pc-val"><span id="mpSV">${cfg.study}</span>p</div></div>
+      <div class="pc-item"><label>☕ Nghỉ (p)</label><input type="range" id="mpB" min="1" max="30" value="${cfg.brk}" oninput="onMpCfg()"><div class="pc-val"><span id="mpBV">${cfg.brk}</span>p</div></div>
     </div>
-  </div>`;
+  </div></div>`;
 }
 
-function renderOtherPomoCard(p,circ,off,stroke,pm,ps){
-  return`<div class="mc-pomo">
-    <div class="mc-pomo-inner">
-      <div class="ring-wrap-sm">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle class="ring-bg-sm" cx="60" cy="60" r="54"/>
-          <circle class="ring-fill-sm" cx="60" cy="60" r="54"
-            style="stroke:${stroke};stroke-dasharray:${circ.toFixed(1)};stroke-dashoffset:${off.toFixed(1)}"/>
-        </svg>
-        <div class="ring-inner-sm">
-          <div class="ring-time-sm">${String(pm).padStart(2,'0')}:${String(ps).padStart(2,'0')}</div>
-          <div class="ring-phase-sm">${p.isStudy?'HỌC TẬP':'NGHỈ NGƠI'}</div>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-// ══════════════════════════════════════════════
-// MY PERSONAL POMODORO
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// MY POMODORO
+// ══════════════════════════════════════════
 function myPomoToggle(){
+  // If group pomo is running, pause it first
+  if(spState.run){
+    notify('Pomodoro nhóm đang chạy! Dừng nhóm trước nhé.','⚠️');return;
+  }
   if(myPomo.run){
     clearInterval(myPomoInterval);myPomoInterval=null;myPomo.run=false;
-    stopClockSound();
+    stopSoloTimer();stopClockSound();
   }else{
-    myPomo.run=true;
-    myPomoInterval=setInterval(myPomoTick,1000);
-    tryPlayClock();
+    myPomo.run=true;myPomoInterval=setInterval(myPomoTick,1000);
+    startSoloTimer();tryPlayClock();
   }
   syncMyPomo();renderMembers();
 }
-
 async function myPomoTick(){
   myPomo.rem=Math.max(0,myPomo.rem-1);
   if(myPomo.rem<=0){
-    clearInterval(myPomoInterval);myPomoInterval=null;myPomo.run=false;
-    stopClockSound();
+    clearInterval(myPomoInterval);myPomoInterval=null;myPomo.run=false;stopSoloTimer();stopClockSound();
     if(myPomo.isStudy){
-      myPomo.sess++;
-      notify('🎉 Xong 1 pomodoro cá nhân! Nghỉ tí nào~','🍃');
-      const cur=roomSnap.slots?.[me.slotId]?.studyMinutes||0;
-      await DB.update(`room/slots/${me.slotId}`,{studyMinutes:cur+myPomoCfg.study});
-    }else notify('💪 Hết nghỉ! Học tiếp nào!','📖');
-    myPomo.isStudy=!myPomo.isStudy;
-    myPomo.rem=myPomo.isStudy?myPomoCfg.study*60:myPomoCfg.brk*60;
+      myPomo.sess++;notify('🎉 Xong 1 pomodoro cá nhân! Nghỉ nào~','🍃');
+      await DB.update(`${DB_PATH}/slots/${me.slotId}`,{studySec:todayStudySec}).catch(()=>{});
+    }else notify('💪 Hết nghỉ! Học tiếp!','📖');
+    myPomo.isStudy=!myPomo.isStudy;myPomo.rem=myPomo.isStudy?myPomoCfg.study*60:myPomoCfg.brk*60;
   }
   syncMyPomo();renderMembers();
 }
-
 function myPomoReset(){
   clearInterval(myPomoInterval);myPomoInterval=null;
   myPomo={run:false,isStudy:true,rem:myPomoCfg.study*60,sess:myPomo.sess};
-  stopClockSound();syncMyPomo();renderMembers();
+  stopSoloTimer();stopClockSound();syncMyPomo();renderMembers();
 }
-
-function syncMyPomo(){DB.update(`room/slots/${me.slotId}/pomo`,{run:myPomo.run,isStudy:myPomo.isStudy,rem:myPomo.rem,sess:myPomo.sess}).catch(()=>{})}
-
-function toggleMyPomoCfg(){
-  const p=document.getElementById('myPomoCfgPanel');
-  if(p)p.classList.toggle('open');
-}
-
-function onMyPomoCfgInput(){
-  const s=+document.getElementById('mpStudy').value;
-  const b=+document.getElementById('mpBreak').value;
-  document.getElementById('mpStudyV').textContent=s;
-  document.getElementById('mpBreakV').textContent=b;
+function syncMyPomo(){DB.update(`${DB_PATH}/slots/${me.slotId}/pomo`,{run:myPomo.run,isStudy:myPomo.isStudy,rem:myPomo.rem,sess:myPomo.sess}).catch(()=>{})}
+function toggleMyPomoCfg(){const p=document.getElementById('myPomoCfgPanel');if(p)p.classList.toggle('open')}
+function onMpCfg(){
+  const s=+document.getElementById('mpS').value,b=+document.getElementById('mpB').value;
+  document.getElementById('mpSV').textContent=s;document.getElementById('mpBV').textContent=b;
   myPomoCfg.study=s;myPomoCfg.brk=b;
   if(!myPomo.run){myPomo.rem=myPomo.isStudy?s*60:b*60;renderMembers();}
 }
+async function setSubject(v){await DB.update(`${DB_PATH}/slots/${me.slotId}`,{subject:v}).catch(()=>{})}
 
-function renderMyPomoUI(){renderMembers();}
-
-async function setSubject(v){await DB.update(`room/slots/${me.slotId}`,{subject:v}).catch(()=>{})}
-async function tickStudyTime(){if(myPomo.run&&myPomo.isStudy){const c=roomSnap.slots?.[me.slotId]?.studyMinutes||0;await DB.update(`room/slots/${me.slotId}`,{studyMinutes:c+1}).catch(()=>{})}}
-
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // SOUND
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function tryPlayClock(){if(soundOn)clockAudio.play().catch(()=>{})}
 function stopClockSound(){clockAudio.pause();clockAudio.currentTime=0;}
 function toggleSound(){
   soundOn=!soundOn;
-  const btn=document.getElementById('soundToggle');
-  const lbl=document.getElementById('soundLbl');
-  btn.classList.toggle('on',soundOn);
-  lbl.textContent=soundOn?'Bật':'Tắt';
-  if(!soundOn)stopClockSound();
-  else if(spState.run||myPomo.run)tryPlayClock();
+  const btn=document.getElementById('soundToggle'),lbl=document.getElementById('soundLbl');
+  btn.classList.toggle('on',soundOn);lbl.textContent=soundOn?'Bật':'Tắt';
+  if(!soundOn)stopClockSound();else if(spState.run||myPomo.run)tryPlayClock();
 }
 
-// ══════════════════════════════════════════════
-// SHARED POMODORO
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// SHARED POMODORO — ALL CAN CONTROL
+// ══════════════════════════════════════════
+function updateActorTag(){
+  const el=document.getElementById('spActor');
+  if(spState.actorName&&spState.run){el.textContent=`✏️ ${spState.actorName} đang điều khiển`;el.style.display='block';}
+  else el.style.display='none';
+}
 function toggleSpCfg(){document.getElementById('spCfgInline').classList.toggle('open')}
-
 function onSpCfgInput(){
-  const s=+document.getElementById('cfgStudy').value;
-  const b=+document.getElementById('cfgBreak').value;
-  const ss=+document.getElementById('cfgSess').value;
-  document.getElementById('cfgStudyV').textContent=s;
-  document.getElementById('cfgBreakV').textContent=b;
-  document.getElementById('cfgSessV').textContent=ss;
-  DB.set('room/spCfg',{study:s,brk:b,sessMax:ss}).catch(()=>{});
-  if(!spState.run) DB.update('room/spState',{rem:s*60}).catch(()=>{});
+  const s=+document.getElementById('cfgStudy').value,b=+document.getElementById('cfgBreak').value,ss=+document.getElementById('cfgSess').value;
+  document.getElementById('cfgStudyV').textContent=s;document.getElementById('cfgBreakV').textContent=b;document.getElementById('cfgSessV').textContent=ss;
+  DB.set(`${DB_PATH}/spCfg`,{study:s,brk:b,sessMax:ss}).catch(()=>{});
+  if(!spState.run)DB.update(`${DB_PATH}/spState`,{rem:s*60}).catch(()=>{});
 }
-
 function renderSpUI(){
-  const sp=spState;
-  const m=Math.floor(sp.rem/60),s=sp.rem%60;
+  const sp=spState,m=Math.floor(sp.rem/60),s=sp.rem%60;
   document.getElementById('spTime').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   document.getElementById('spPhase').textContent=sp.isStudy?'HỌC TẬP 📖':'NGHỈ NGƠI ☕';
   document.getElementById('spRound').textContent=`Vòng ${(sp.sess||0)+1} / ${spCfg.sessMax}`;
   document.getElementById('spBtn').textContent=sp.run?'⏸ Dừng':'▶ Bắt đầu';
-  const circ=2*Math.PI*70; // r=70
-  const total=(sp.isStudy?spCfg.study:spCfg.brk)*60||1;
+  const circ=2*Math.PI*70,total=(sp.isStudy?spCfg.study:spCfg.brk)*60||1;
   const fill=document.getElementById('spFill');
-  fill.style.strokeDasharray=circ;fill.style.strokeDashoffset=circ*(1-Math.max(0,sp.rem)/total);
-  fill.style.stroke=sp.isStudy?'#ff6bae':'#a8e6cf';
-  document.getElementById('spDots').innerHTML=Array.from({length:spCfg.sessMax},(_,i)=>
-    `<div class="sp-dot ${i<sp.sess?'done':i===sp.sess&&sp.isStudy?'now':''}"></div>`).join('');
-  const host=roomSnap.slots?.[sp.hostId];
-  document.getElementById('spHostTag').textContent=host?`Host: ${host.name}`:'';
-  document.getElementById('spNote').textContent=sp.run&&sp.hostId!==me?.slotId?'Chỉ host mới điều khiển được':'';
+  fill.style.strokeDasharray=circ;fill.style.strokeDashoffset=circ*(1-Math.max(0,sp.rem)/total);fill.style.stroke=sp.isStudy?'#ff6bae':'#a8e6cf';
+  document.getElementById('spDots').innerHTML=Array.from({length:spCfg.sessMax},(_,i)=>`<div class="sp-dot ${i<sp.sess?'done':i===sp.sess&&sp.isStudy?'now':''}"></div>`).join('');
+  document.getElementById('spNote').textContent='';
 }
-
 async function spToggle(){
-  if(spState.run&&spState.hostId!==me.slotId){notify('Chỉ host mới điều khiển Pomodoro chung!','⚠️');return}
-  if(spState.run){clearInterval(spInterval);spInterval=null;stopClockSound();await DB.update('room/spState',{run:false,hostId:null})}
-  else{await DB.update('room/spState',{run:true,hostId:me.slotId});startSpTick();tryPlayClock();}
+  if(spState.run){
+    clearInterval(spInterval);spInterval=null;stopGroupTimer();stopClockSound();
+    await DB.update(`${DB_PATH}/spState`,{run:false,actorName:me.name});
+    // Resume individual pomos (notify but don't force)
+    notify(`${me.name} đã dừng Pomodoro nhóm`,'⏸');
+  }else{
+    // Pause all individual pomos
+    if(myPomo.run)myPomoToggle();
+    await DB.update(`${DB_PATH}/spState`,{run:true,actorName:me.name});
+    startSpTick();startGroupTimer();tryPlayClock();
+    notify(`${me.name} đã bắt đầu Pomodoro nhóm`,'▶');
+    updateStreak();renderStreak();
+  }
 }
 function startSpTick(){
   clearInterval(spInterval);
   spInterval=setInterval(async()=>{
-    if(!spState.run||spState.hostId!==me.slotId){clearInterval(spInterval);spInterval=null;stopClockSound();return}
+    if(!spState.run){clearInterval(spInterval);spInterval=null;stopGroupTimer();return}
     const rem=Math.max(0,spState.rem-1);
     if(rem<=0){
-      clearInterval(spInterval);spInterval=null;stopClockSound();
+      clearInterval(spInterval);spInterval=null;stopGroupTimer();stopClockSound();
       const isStudy=!spState.isStudy,sess=spState.isStudy?(spState.sess+1)%spCfg.sessMax:spState.sess;
-      await DB.update('room/spState',{run:false,isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,hostId:null});
-      notify(spState.isStudy?'🎉 Pomodoro chung xong! Cả phòng nghỉ nào~':'💪 Nghỉ xong! Học tiếp thôi!',spState.isStudy?'🍃':'📖');
-    }else await DB.update('room/spState',{rem});
+      await DB.update(`${DB_PATH}/spState`,{run:false,isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,actorName:null});
+      notify(spState.isStudy?'🎉 Pomodoro nhóm xong! Cả phòng nghỉ~':'💪 Hết nghỉ! Học tiếp!',spState.isStudy?'🍃':'📖');
+      await DB.update(`${DB_PATH}/slots/${me.slotId}`,{groupStudySec}).catch(()=>{});
+    }else await DB.update(`${DB_PATH}/spState`,{rem}).catch(()=>{});
   },1000);
 }
 async function spReset(){
-  if(spState.run&&spState.hostId!==me.slotId){notify('Chỉ host mới đặt lại được!','⚠️');return}
-  clearInterval(spInterval);spInterval=null;stopClockSound();
-  await DB.update('room/spState',{run:false,isStudy:true,rem:spCfg.study*60,sess:0,hostId:null});
+  clearInterval(spInterval);spInterval=null;stopGroupTimer();stopClockSound();
+  await DB.update(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:spCfg.study*60,sess:0,actorName:me.name});
+  notify(`${me.name} đã đặt lại Pomodoro nhóm`,'↺');
 }
 async function spSkip(){
-  if(spState.run&&spState.hostId!==me.slotId){notify('Chỉ host mới bỏ qua được!','⚠️');return}
   const isStudy=!spState.isStudy,sess=spState.isStudy?(spState.sess+1)%spCfg.sessMax:spState.sess;
-  await DB.update('room/spState',{isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,run:false,hostId:null});
+  await DB.update(`${DB_PATH}/spState`,{isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,run:false,actorName:me.name});
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // LEADERBOARD
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function renderLeaderboard(){
-  const members=Object.values(roomSnap.slots||{}).filter(s=>s.online).sort((a,b)=>(b.studyMinutes||0)-(a.studyMinutes||0));
-  const maxM=members[0]?.studyMinutes||1;
+  const members=Object.values(roomSnap.slots||{}).filter(s=>s.online).sort((a,b)=>(b.studySec||0)+(b.groupStudySec||0)-((a.studySec||0)+(a.groupStudySec||0)));
+  const maxS=(members[0]?(members[0].studySec||0)+(members[0].groupStudySec||0):0)||1;
   document.getElementById('leaderboard').innerHTML=members.length
-    ?members.map((m,i)=>`<div class="lb-item">
-      <div class="lb-rank">${MEDALS[i]||i+1}</div>
-      <div class="lb-ava">${m.avatar}</div>
-      <div class="lb-info">
-        <div class="lb-n">${escHtml(m.name)}${m.slotId===me?.slotId?' (Tôi)':''}</div>
-        <div class="lb-bar"><div class="lb-bar-f" style="width:${Math.round(((m.studyMinutes||0)/maxM)*100)}%"></div></div>
-      </div>
-      <div class="lb-val">${m.studyMinutes||0}<span style="font-size:.62rem;opacity:.6">p</span></div>
-    </div>`).join('')
-    :'<div style="color:var(--ink3);font-size:.86rem;text-align:center;padding:20px 0">Chưa có ai học cả 😴</div>';
+    ?members.map((m,i)=>{
+      const total=(isMe(m)?(todayStudySec+groupStudySec):(m.studySec||0)+(m.groupStudySec||0));
+      return`<div class="lb-item"><div class="lb-rank">${MEDALS[i]||i+1}</div><div class="lb-ava">${m.avatar}</div><div class="lb-info"><div class="lb-n">${esc(m.name)}${isMe(m)?' (Tôi)':''}</div><div class="lb-bar"><div class="lb-bar-f" style="width:${Math.round((total/maxS)*100)}%"></div></div></div><div class="lb-val">${fmtTime(total)}</div></div>`;
+    }).join('')
+    :'<div style="color:var(--ink3);font-size:.85rem;text-align:center;padding:18px 0">Chưa có ai học cả 😴</div>';
 }
+function isMe(m){return me&&m.slotId===me.slotId}
 
-// ══════════════════════════════════════════════
-// CHALLENGE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
+// CHALLENGES (multiple, per-person submissions)
+// ══════════════════════════════════════════
 function toggleChCreate(){
+  editingChId=null;
+  document.getElementById('chCreateTitle').textContent='✏️ Tạo thử thách mới';
+  document.getElementById('chSubmitBtn').textContent='🎯 Tạo ngay!';
+  document.getElementById('chCancelEdit').style.display='none';
   const p=document.getElementById('chCreate');p.classList.toggle('open');
   document.getElementById('chToggleBtn').textContent=p.classList.contains('open')?'✕ Đóng':'+ Tạo thử thách';
 }
-function onChTypeChange(){
-  const t=document.getElementById('chType').value;
-  document.getElementById('chValLbl').textContent=t==='duration'?'Số phút':'Giờ kết thúc (0-23)';
-  document.getElementById('chVal').placeholder=t==='duration'?'120':'22';
-}
-async function createChallenge(){
+function onChTypeChange(){const t=document.getElementById('chType').value;document.getElementById('chValLbl').textContent=t==='duration'?'Số phút':'Giờ kết thúc (0-23)';document.getElementById('chVal').placeholder=t==='duration'?'120':'22'}
+async function submitChallenge(){
   const name=document.getElementById('chName').value.trim(),type=document.getElementById('chType').value;
   const val=+document.getElementById('chVal').value,subj=document.getElementById('chSubj').value;
   if(!name||!val){notify('Nhập đủ tên và thời gian nhé!','⚠️');return}
   const deadline=type==='duration'?Date.now()+val*60000:(()=>{const d=new Date();d.setHours(val,0,0,0);return d<Date.now()?d.getTime()+86400000:d.getTime()})();
-  await DB.set('room/challenge',{name,type,val,subj,deadline,createdBy:me.slotId,createdAt:Date.now(),submissions:{}});
-  notify(`🎯 Đã tạo thử thách "${name}"!`,'🌸');
-  toggleChCreate();document.getElementById('chName').value='';document.getElementById('chVal').value='';
+  const data={name,type,val,subj,deadline,createdBy:me.slotId,createdAt:Date.now(),submissions:{},stopped:false};
+  if(editingChId){await DB.update(`${DB_PATH}/challenges/${editingChId}`,{name,type,val,subj,deadline});notify('✅ Đã cập nhật thử thách!','🎯');}
+  else{await DB.push(`${DB_PATH}/challenges`,data);notify(`🎯 Đã tạo thử thách "${name}"!`,'🌸');}
+  cancelEditChallenge();
 }
+function editChallenge(chId){
+  const ch=roomSnap.challenges?.[chId];if(!ch)return;
+  editingChId=chId;
+  document.getElementById('chName').value=ch.name;
+  document.getElementById('chType').value=ch.type;
+  document.getElementById('chVal').value=ch.val;
+  document.getElementById('chSubj').value=ch.subj||'';
+  document.getElementById('chCreateTitle').textContent='✏️ Sửa thử thách';
+  document.getElementById('chSubmitBtn').textContent='💾 Lưu thay đổi';
+  document.getElementById('chCancelEdit').style.display='block';
+  document.getElementById('chCreate').classList.add('open');
+  document.getElementById('chToggleBtn').textContent='✕ Đóng';
+  onChTypeChange();
+}
+function cancelEditChallenge(){
+  editingChId=null;
+  ['chName','chVal'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('chType').value='duration';
+  document.getElementById('chSubj').value='';
+  document.getElementById('chCreate').classList.remove('open');
+  document.getElementById('chToggleBtn').textContent='+ Tạo thử thách';
+  document.getElementById('chCreateTitle').textContent='✏️ Tạo thử thách mới';
+  document.getElementById('chSubmitBtn').textContent='🎯 Tạo ngay!';
+  document.getElementById('chCancelEdit').style.display='none';
+}
+async function stopChallenge(chId){
+  showModal('⏹','Dừng thử thách?','Thử thách sẽ bị dừng và không thể nộp thêm bài.',[
+    {label:'Huỷ',cls:'btn-ghost',fn:''},
+    {label:'Dừng lại',cls:'btn-warn',fn:`_stopChallenge('${chId}')`}
+  ]);
+}
+async function _stopChallenge(chId){
+  await DB.update(`${DB_PATH}/challenges/${chId}`,{stopped:true,stoppedAt:Date.now()});
+  clearInterval(chIntervals[chId]);
+  // Show summary for this challenge
+  showCelebrationForCh(chId);
+}
+async function askDeleteCh(chId){
+  showModal('🗑','Xoá thử thách?','Toàn bộ bài nộp sẽ bị xoá!',[
+    {label:'Huỷ',cls:'btn-ghost',fn:''},
+    {label:'Xoá',cls:'btn-danger',fn:`_deleteCh('${chId}')`}
+  ]);
+}
+async function _deleteCh(chId){clearInterval(chIntervals[chId]);await DB.remove(`${DB_PATH}/challenges/${chId}`)}
 
-function renderChallenge(){
-  const ch=roomSnap.challenge,area=document.getElementById('challengeArea');
+function renderAllChallenges(){
+  const challenges=roomSnap.challenges||{};
+  const area=document.getElementById('challengeArea');
   const qrBtn=document.getElementById('qrBtn');
-  if(!ch){
-    area.innerHTML='<div style="color:var(--ink3);font-size:.86rem;text-align:center;padding:20px 0">Chưa có thử thách nào 🌙<br><small>Nhấn "+ Tạo thử thách" để bắt đầu!</small></div>';
-    if(qrBtn)qrBtn.style.display='none';
-    return;
-  }
-  if(qrBtn)qrBtn.style.display='inline-flex';
-  clearInterval(chInterval);
-  const subs=Object.values(ch.submissions||{});
-  const total=Object.values(roomSnap.slots||{}).filter(s=>s.online).length;
-  const pct=total?Math.round(subs.length/total*100):0;
-  const myS=subs.find(s=>s.slotId===me?.slotId);
-  const allDone=subs.length>=total&&total>0;
-  const cdTxt=()=>{const r=Math.max(0,ch.deadline-Date.now()),h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000),s=Math.floor((r%60000)/1000);return r<=0?'⏰ Hết giờ!':`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
-
-  // Build subs thumbnails
-  const subsHtml=subs.length?`<div style="font-size:.72rem;color:var(--ink3);margin:10px 0 6px">Bài đã nộp — nhấn để xem full:</div>
-    <div class="ch-subs-grid">${subs.map(s=>{
-      const memberAva=roomSnap.slots?.[s.slotId]?.avatar||s.avatar||'👤';
-      const imgSrc=s.imageData||'';
-      return`<div class="ch-sub-thumb" onclick="openLightbox('${imgSrc}','${escHtml(s.name||'')}')" title="${escHtml(s.name||'')}">
-        ${imgSrc?`<img src="${imgSrc}" alt="${escHtml(s.name||'')}">`:`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-size:1.5rem;padding:8px">${memberAva}<div style="font-size:.55rem;color:var(--ink3);margin-top:4px;text-align:center">${escHtml((s.fileName||'').slice(0,12))}</div></div>`}
-        <div class="ch-sub-label">${escHtml(s.name||'')}</div>
-      </div>`;
-    }).join('')}</div>`:'';
-
-  area.innerHTML=`
-    <div class="ch-name-txt">${escHtml(ch.name)}</div>
-    <div class="ch-meta">${ch.subj?`<span class="ch-badge">${ch.subj}</span>`:''}<span style="font-size:.72rem;color:var(--ink3)">${ch.type==='duration'?`Học trong ${ch.val} phút`:`Xong trước ${ch.val} giờ`}</span></div>
-    <div class="ch-cd" id="chCd">${cdTxt()}</div>
-    <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-bottom:5px"><span>Đã nộp</span><span>${subs.length} / ${total}</span></div>
-    <div class="ch-pbar"><div class="ch-pbar-f" style="width:${pct}%"></div></div>
-    ${myS
-      ?`<div class="ch-done-box">✅ <span>Đã nộp: <strong>${escHtml(myS.fileName||'bài tập')}</strong></span>${myS.imageData?`<img src="${myS.imageData}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;cursor:pointer;margin-left:auto" onclick="openLightbox('${myS.imageData}','Bài của tôi')" alt="preview">`:''}</div>`
-      :`<div class="ch-upload-zone"><input type="file" id="upInput" accept="image/*" onchange="doUpload(this)"><div style="font-size:1.6rem;margin-bottom:6px">📎</div><div style="font-size:.83rem;color:var(--ink3)">Nhấn để nộp bài (ảnh)</div><div style="font-size:.7rem;color:var(--p5);margin-top:3px;font-weight:500">Hỗ trợ chụp ảnh trực tiếp</div></div>`
+  const hasCh=Object.keys(challenges).length>0;
+  if(qrBtn)qrBtn.style.display=hasCh?'inline-flex':'none';
+  if(!hasCh){area.innerHTML='<div style="color:var(--ink3);font-size:.84rem;text-align:center;padding:18px 0">Chưa có thử thách nào 🌙<br><small>Nhấn "+ Tạo thử thách" để bắt đầu!</small></div>';return}
+  // Clear old intervals that no longer exist
+  Object.keys(chIntervals).forEach(id=>{if(!challenges[id]){clearInterval(chIntervals[id]);delete chIntervals[id]}});
+  area.innerHTML=Object.entries(challenges).map(([id,ch])=>renderOneCh(id,ch)).join('');
+  // Start countdowns
+  Object.entries(challenges).forEach(([id,ch])=>{
+    if(ch.stopped)return;
+    if(!chIntervals[id]&&ch.deadline>Date.now()){
+      chIntervals[id]=setInterval(()=>{
+        const el=document.getElementById(`chcd_${id}`);
+        if(!el)return;
+        const r=Math.max(0,(roomSnap.challenges?.[id]?.deadline||ch.deadline)-Date.now());
+        if(r<=0){
+          clearInterval(chIntervals[id]);delete chIntervals[id];
+          el.textContent='⏰ Hết giờ!';
+          // Show celebration and auto-archive
+          showCelebrationForCh(id);
+          setTimeout(()=>DB.update(`${DB_PATH}/challenges/${id}`,{stopped:true,stoppedAt:Date.now()}).catch(()=>{}),300);
+        }else{
+          const h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000),s=Math.floor((r%60000)/1000);
+          el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+      },1000);
     }
-    ${subsHtml}
-    ${allDone?`<button class="btn btn-rose btn-sm" style="width:100%;margin-top:12px" onclick="showSummary()">🎉 Xem tổng kết!</button>`:''}
-    ${me&&ch.createdBy===me.slotId?`<button class="btn btn-ghost btn-xs" style="margin-top:8px" onclick="askDeleteChallenge()">🗑 Xoá thử thách</button>`:''}`;
-
-  if(ch.deadline>Date.now()){chInterval=setInterval(()=>{const el=document.getElementById('chCd');if(el)el.textContent=cdTxt();if(ch.deadline<=Date.now()){clearInterval(chInterval);notify('⏰ Hết giờ thử thách!','🎯')}},1000)}
+  });
 }
 
-// ── IMAGE UPLOAD ──
-async function doUpload(input){
+function renderOneCh(chId,ch){
+  const subs=ch.submissions||{};
+  const online=Object.values(roomSnap.slots||{}).filter(s=>s.online);
+  const total=online.length,pct=total?Math.round(Object.keys(subs).length/total*100):0;
+  const r=Math.max(0,(ch.stopped?0:ch.deadline)-Date.now());
+  const cdTxt=ch.stopped?'⏹ Đã dừng':(r<=0?'⏰ Hết giờ!':`${String(Math.floor(r/3600000)).padStart(2,'0')}:${String(Math.floor((r%3600000)/60000)).padStart(2,'0')}:${String(Math.floor((r%60000)/1000)).padStart(2,'0')}`);
+  const isOwner=me&&ch.createdBy===me.slotId;
+  // Per-person submission columns
+  const personCols=online.map(slot=>{
+    const personSubs=Object.entries(subs).filter(([,s])=>s.slotId===slot.slotId||s.uid===slot.uid);
+    const isMyCol=slot.slotId===me?.slotId;
+    const thumbs=personSubs.map(([,s])=>s.imageData?`<img class="ch-thumb-mini" src="${s.imageData}" onclick="openLightbox('${s.imageData}','${esc(slot.name)}')" alt="${esc(slot.name)}">`:'').filter(Boolean).join('');
+    return`<div class="ch-person-col">
+      <div class="ch-person-hdr">${slot.avatar} ${esc(slot.name)}${isMyCol?'<span style="font-size:.55rem;background:var(--p2);color:var(--p6);padding:1px 5px;border-radius:8px">Tôi</span>':''}</div>
+      ${thumbs||'<div style="font-size:.65rem;color:var(--ink3);padding:6px 0">Chưa nộp</div>'}
+      ${isMyCol&&!ch.stopped?`<div class="ch-upload-zone"><input type="file" accept="image/*" onchange="doUpload(this,'${chId}')"><div style="font-size:1.2rem">📎</div><div style="font-size:.62rem;color:var(--ink3);margin-top:3px">+ Nộp bài</div></div>`:``}
+    </div>`;
+  }).join('');
+  return`<div class="ch-item${!ch.stopped?' active-ch':''}">
+    <div class="ch-item-hdr">
+      <div class="ch-item-name">${esc(ch.name)}</div>
+      ${ch.subj?`<span class="ch-badge">${ch.subj}</span>`:''}
+      ${ch.stopped?'<span style="font-size:.65rem;background:#f3f3f3;color:#888;padding:2px 8px;border-radius:12px">Đã kết thúc</span>':''}
+    </div>
+    <div class="ch-cd" id="chcd_${chId}">${cdTxt}</div>
+    <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--ink3);margin-bottom:4px"><span>${ch.type==='duration'?`Học trong ${ch.val} phút`:`Xong trước ${ch.val} giờ`}</span><span>${Object.keys(subs).length} bài nộp</span></div>
+    <div class="ch-pbar"><div class="ch-pbar-f" style="width:${pct}%"></div></div>
+    <div class="ch-person-grid">${personCols}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+      ${!ch.stopped?`<button class="btn btn-rose btn-xs" onclick="showSummary()">📊 Tổng kết</button>`:``}
+      ${isOwner&&!ch.stopped?`<button class="btn btn-warn btn-xs" onclick="stopChallenge('${chId}')">⏹ Dừng</button><button class="btn btn-ghost btn-xs" onclick="editChallenge('${chId}')">✏️ Sửa</button>`:''}
+      ${isOwner?`<button class="btn btn-danger btn-xs" onclick="askDeleteCh('${chId}')">🗑 Xoá</button>`:''}
+    </div>
+  </div>`;
+}
+
+async function doUpload(input,chId){
   const file=input.files[0];if(!file||!me)return;
-  const ch=roomSnap.challenge;if(!ch){notify('Chưa có thử thách!','⚠️');return}
-  // Convert to base64 for display
+  const ch=roomSnap.challenges?.[chId];if(!ch){notify('Thử thách không tồn tại!','⚠️');return}
   const reader=new FileReader();
-  reader.onload=async(e)=>{
+  reader.onload=async e=>{
     const imageData=e.target.result;
-    await DB.push('room/challenge/submissions',{
-      slotId:me.slotId,name:me.name,avatar:me.avatar,
+    const subKey=`${me.slotId}_${Date.now()}`;
+    await DB.update(`${DB_PATH}/challenges/${chId}/submissions/${subKey}`,{
+      slotId:me.slotId,uid:me.uid,name:me.name,avatar:me.avatar,
       fileName:file.name,imageData,uploadedAt:Date.now()
     });
-    const uploads=[...(roomSnap.slots?.[me.slotId]?.uploads||[]),
-      {fileName:file.name,imageData,uploadedAt:Date.now(),challengeName:ch.name}];
-    await DB.update(`room/slots/${me.slotId}`,{uploads});
-    notify(`📎 Đã nộp bài!`,'✅');
+    // Also save to user uploads
+    await DB.update(`${DB_PATH}/slots/${me.slotId}/uploads/${subKey}`,{
+      fileName:file.name,imageData,uploadedAt:Date.now(),challengeName:ch.name,challengeId:chId
+    });
+    notify(`📎 Đã nộp bài vào "${ch.name}"!`,'✅');
   };
   reader.readAsDataURL(file);
 }
 
-function askDeleteChallenge(){
-  showModal('🗑','Xoá thử thách?','Toàn bộ bài nộp sẽ bị xoá nhé!',[
-    {label:'Huỷ',cls:'btn-ghost',fn:''},
-    {label:'Xoá',cls:'btn-danger',fn:'_deleteChallenge()'}
-  ]);
+function showCelebrationForCh(chId){
+  const ch=roomSnap.challenges?.[chId];
+  if(!ch)return;
+  const subs=Object.values(ch.submissions||{});
+  document.getElementById('celebMsg').innerHTML=`Thử thách <strong>"${esc(ch.name)}"</strong> đã kết thúc!<br>${subs.length} bài đã được nộp từ mọi người 🌸`;
+  document.getElementById('celebModal').classList.add('open');
 }
-async function _deleteChallenge(){clearInterval(chInterval);await DB.remove('room/challenge')}
+function closeCelebAndSummary(){
+  document.getElementById('celebModal').classList.remove('open');
+  showSummary();
+}
 
-// ── QR PANEL ──
-let qrGenerated=false;
+// ══════════════════════════════════════════
+// QR PANEL
+// ══════════════════════════════════════════
 function toggleQRPanel(){
-  const panel=document.getElementById('qrPanel');
-  panel.classList.toggle('open');
-  if(panel.classList.contains('open')&&!qrGenerated){
-    generateQR();qrGenerated=true;
-  }
+  const p=document.getElementById('qrPanel');p.classList.toggle('open');
+  if(p.classList.contains('open')&&!qrGenerated){generateQR();qrGenerated=true;}
 }
 function generateQR(){
-  const container=document.getElementById('qrContainer');
-  container.innerHTML='';
-  const url=`${location.origin}${location.pathname.replace('study-room.html','')}qr-submit.html?room=main`;
-  try{
-    new QRCode(container,{text:url,width:160,height:160,colorDark:'#2a0f1e',colorLight:'#fff8fb'});
-  }catch(e){
-    container.innerHTML=`<div style="font-size:.78rem;color:var(--ink3);padding:12px;background:var(--p0);border-radius:10px;word-break:break-all">${url}</div>`;
-  }
+  const c=document.getElementById('qrContainer');c.innerHTML='';
+  const base=location.origin+location.pathname.replace('study-room.html','');
+  // Pass current user's session so QR submit knows who it is
+  const sess=encodeURIComponent(localStorage.getItem(SESSION_KEY)||'');
+  const url=`${base}qr-submit.html?sess=${sess}`;
+  try{new QRCode(c,{text:url,width:150,height:150,colorDark:'#2a0f1e',colorLight:'#fff8fb'})}
+  catch(e){c.innerHTML=`<div style="font-size:.72rem;color:var(--ink3);padding:10px;word-break:break-all">${url}</div>`}
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 // SUMMARY
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function showSummary(){
   document.getElementById('cfgPanel').classList.remove('open');
-  const members=Object.values(roomSnap.slots||{}).filter(s=>s.online).sort((a,b)=>(b.studyMinutes||0)-(a.studyMinutes||0));
+  const members=Object.values(roomSnap.slots||{}).filter(s=>s.online).sort((a,b)=>(b.studySec||0)+(b.groupStudySec||0)-((a.studySec||0)+(a.groupStudySec||0)));
   const now=new Date();
-  document.getElementById('sumSub').textContent=`Ngày ${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()} · ${members.length} người tham gia`;
-  document.getElementById('sumGrid').innerHTML=members.map((m,i)=>`
-    <div class="sum-card">
-      <div class="sum-ava">${MEDALS[i]||'🌸'} ${m.avatar}</div>
-      <div class="sum-n">${escHtml(m.name)}${m.slotId===me?.slotId?' 🌸':''}</div>
-      <div class="sum-num">${m.studyMinutes||0}</div><div class="sum-lbl">Phút học</div>
-      <div class="sum-num" style="margin-top:8px">${m.pomo?.sess||0}</div><div class="sum-lbl">Pomodoro</div>
-      ${m.subject?`<div class="sum-subj">${SEMO[m.subject]||'📚'} ${escHtml(m.subject)}</div>`:''}
-    </div>`).join('');
-
-  // Collect all image uploads
-  const allImgs=[];
-  members.forEach(m=>{
-    (m.uploads||[]).forEach(u=>{
-      if(u.imageData) allImgs.push({...u,mName:m.name,mAva:m.avatar});
-    });
-  });
-  // Also collect from challenge submissions
-  const subs=Object.values(roomSnap.challenge?.submissions||{});
-  subs.forEach(s=>{if(s.imageData&&!allImgs.find(i=>i.imageData===s.imageData)) allImgs.push({imageData:s.imageData,mName:s.name,mAva:s.avatar,fileName:s.fileName,challengeName:roomSnap.challenge?.name})});
-
-  const noUp=document.getElementById('sumNoUploads');
-  const grid=document.getElementById('sumImgsGrid');
-  if(allImgs.length){
-    noUp.style.display='none';
-    grid.innerHTML=allImgs.map(u=>`<div class="sum-img-item" onclick="openLightbox('${u.imageData}','${escHtml(u.mName||'')} — ${escHtml(u.challengeName||'bài tập')}')">
-      <img src="${u.imageData}" alt="${escHtml(u.mName||'')}">
-      <div class="sum-img-label">${u.mAva||'👤'} ${escHtml(u.mName||'')}</div>
-    </div>`).join('');
-  }else{
-    noUp.style.display='block';grid.innerHTML='';
-  }
-
+  document.getElementById('sumSub').textContent=`${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()} · ${members.length} người tham gia`;
+  document.getElementById('sumMembers').innerHTML=members.map((m,i)=>{
+    const total=isMe(m)?(todayStudySec+groupStudySec):(m.studySec||0)+(m.groupStudySec||0);
+    return`<div class="sum-card"><div style="font-size:1.8rem">${MEDALS[i]||'🌸'} ${m.avatar}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;margin:6px 0 10px">${esc(m.name)}${isMe(m)?' 🌸':''}</div>
+      <div class="sum-num">${fmtTime(total)}</div><div class="sum-lbl">Học hôm nay</div>
+      <div class="sum-num" style="margin-top:6px">${m.pomo?.sess||0}</div><div class="sum-lbl">Pomodoro</div>
+      ${m.subject?`<div class="sum-subj">${SEMO[m.subject]||'📚'} ${esc(m.subject)}</div>`:''}
+    </div>`;
+  }).join('');
+  // Per-challenge summaries
+  const challenges=roomSnap.challenges||{};
+  const chHtml=Object.entries(challenges).map(([chId,ch])=>{
+    const subs=Object.values(ch.submissions||{});
+    const imgs=subs.filter(s=>s.imageData);
+    return`<div class="sum-ch-section"><div class="sum-ch-title">🎯 ${esc(ch.name)} ${ch.stopped?'(Đã kết thúc)':''}</div>
+      ${imgs.length?`<div class="sum-imgs-grid">${imgs.map(s=>`<div class="sum-img-item" onclick="openLightbox('${s.imageData}','${esc(s.name||'')}')"><img src="${s.imageData}" alt="${esc(s.name||'')}"><div class="sum-img-label">${s.avatar||'👤'} ${esc(s.name||'')}</div></div>`).join('')}</div>`
+      :'<div style="font-size:.82rem;color:var(--ink3);padding:8px 0">Chưa có bài nộp nào</div>'}
+    </div>`;
+  }).join('');
+  document.getElementById('sumChallenges').innerHTML=chHtml||'<div style="font-size:.82rem;color:var(--ink3);padding:10px 0 0">Chưa có thử thách nào trong buổi học này</div>';
   document.getElementById('sumModal').classList.add('open');
-  saveHistory(members,allImgs);
+  saveSessionToHistory(members);
 }
 
-function saveHistory(members,uploads){
-  const h=JSON.parse(localStorage.getItem('study_history')||'[]');
-  h.unshift({
-    date:Date.now(),
-    members:members.map(m=>({name:m.name,avatar:m.avatar,studyMinutes:m.studyMinutes||0,pomo:m.pomo?.sess||0,subject:m.subject||''})),
-    uploads:uploads.map(u=>({fileName:u.fileName,imageData:u.imageData||null,mName:u.mName,mAva:u.mAva,challengeName:u.challengeName||null})),
-    challenge:roomSnap.challenge?.name||null
-  });
-  localStorage.setItem('study_history',JSON.stringify(h.slice(0,30)));
+// ══════════════════════════════════════════
+// HISTORY
+// ══════════════════════════════════════════
+function saveSessionToHistory(members){
+  const history=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
+  const now=Date.now();
+  const sessionEnd=now;
+  const sessionStart=sessionStartTime||now;
+  const challenges=Object.values(roomSnap.challenges||{}).map(ch=>({
+    name:ch.name,type:ch.type,val:ch.val,subj:ch.subj,
+    submissions:Object.values(ch.submissions||{}).map(s=>({name:s.name,avatar:s.avatar,imageData:s.imageData||null,fileName:s.fileName}))
+  }));
+  // Check if there's already a session today that hasn't ended (within 4 hours)
+  const last=history[0];
+  const idx=last&&last.date===todayStr()&&(now-last.endTime)<4*3600*1000?0:-1;
+  const entry={
+    date:todayStr(),startTime:sessionStart,endTime:sessionEnd,
+    members:members.map(m=>({name:m.name,avatar:m.avatar,studySec:isMe(m)?(todayStudySec):(m.studySec||0),groupStudySec:isMe(m)?groupStudySec:(m.groupStudySec||0),pomo:m.pomo?.sess||0,subject:m.subject||''})),
+    challenges,totalStudySec:members.reduce((s,m)=>(s+(isMe(m)?todayStudySec+groupStudySec:(m.studySec||0)+(m.groupStudySec||0))),0)
+  };
+  if(idx===0){history[0]=entry}else{history.unshift(entry)}
+  // Prune > 180 days
+  const cutoff=Date.now()-180*86400000;
+  const pruned=history.filter(h=>new Date(h.date).getTime()>cutoff);
+  localStorage.setItem(HIST_KEY,JSON.stringify(pruned));
+  // Also keep in study_history for index.html compatibility
+  const legacyHist=JSON.parse(localStorage.getItem('study_history')||'[]');
+  legacyHist.unshift({date:now,members:entry.members.map(m=>({...m,studyMinutes:Math.floor((m.studySec||0)/60)})),uploads:challenges.flatMap(ch=>ch.submissions.map(s=>({...s,challengeName:ch.name}))),challenge:challenges[0]?.name||null});
+  localStorage.setItem('study_history',JSON.stringify(legacyHist.slice(0,30)));
 }
 
-// ══════════════════════════════════════════════
+function openHistory(){
+  document.getElementById('cfgPanel').classList.remove('open');
+  document.getElementById('histModal').classList.add('open');
+  renderHistory();
+}
+function renderHistory(filterDate=null){
+  const history=JSON.parse(localStorage.getItem(HIST_KEY)||'[]');
+  // Build date filter buttons
+  const dates=[...new Set(history.map(h=>h.date))].slice(0,14);
+  const today=todayStr();
+  const activeFd=filterDate||(dates.includes(today)?today:dates[0]);
+  document.getElementById('histFilterBar').innerHTML=`
+    <span style="font-size:.72rem;color:var(--ink3);font-weight:500">Lọc:</span>
+    <button class="hist-date-btn${!activeFd?' active':''}" onclick="renderHistory(null)">Hôm nay</button>
+    ${dates.map(d=>`<button class="hist-date-btn${d===activeFd?' active':''}" onclick="renderHistory('${d}')">${d}</button>`).join('')}`;
+  const filtered=activeFd?history.filter(h=>h.date===activeFd):history.filter(h=>h.date===today);
+  if(!filtered.length){
+    document.getElementById('histList').innerHTML='<div style="text-align:center;color:var(--ink3);padding:24px 0;font-size:.88rem">Chưa có buổi học nào cho ngày này 🌙</div>';
+    return;
+  }
+  document.getElementById('histList').innerHTML=filtered.map((h,i)=>{
+    const start=h.startTime?new Date(h.startTime):null;
+    const end=h.endTime?new Date(h.endTime):null;
+    const timeRange=start&&end?`${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')} → ${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`:'';
+    const totalSec=h.totalStudySec||h.members.reduce((s,m)=>s+(m.studySec||m.studyMinutes*60||0),0);
+    const sessionId=`sess_${h.date}_${i}`;
+    return`<div class="hist-session${h.date===today&&i===0?' today':''}">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;flex:1">${i===0&&h.date===today?'⭐ ':''}Buổi học ${h.date} ${timeRange?'· '+timeRange:''}</div>
+        ${h.challenges?.length?`<span style="font-size:.65rem;background:var(--p1);color:var(--p5);padding:2px 8px;border-radius:18px;border:1px solid var(--p2)">🎯 ${h.challenges.length} thử thách</span>`:''}
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        ${h.members.map(m=>`<span style="font-size:1.2rem">${m.avatar||'👤'}</span>`).join('')}
+        <span style="font-size:.75rem;color:var(--ink3);margin-left:4px">${h.members.length} người · ${fmtTime(totalSec)}</span>
+      </div>
+      <div style="display:flex;gap:7px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn btn-soft btn-xs" onclick="toggleHistDetail('${sessionId}')">📋 Xem chi tiết</button>
+      </div>
+      <div class="hist-detail" id="${sessionId}">
+        <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
+          ${h.members.map(m=>`<div style="background:white;border:1.5px solid var(--p2);border-radius:10px;padding:8px 11px;text-align:center;min-width:84px">
+            <div style="font-size:1.3rem">${m.avatar||'👤'}</div>
+            <div style="font-weight:600;font-size:.8rem">${esc(m.name)}</div>
+            <div style="color:var(--p5);font-family:'Cormorant Garamond',serif;font-size:1rem">${fmtTime(m.studySec||m.studyMinutes*60||0)}</div>
+            ${m.subject?`<div style="font-size:.62rem;color:var(--ink3)">${esc(m.subject)}</div>`:''}
+          </div>`).join('')}
+        </div>
+        ${h.challenges?.length?h.challenges.map(ch=>`<div style="margin-bottom:8px"><div style="font-size:.78rem;font-weight:600;color:var(--ink2);margin-bottom:6px">🎯 ${esc(ch.name)}</div>
+          ${ch.submissions?.filter(s=>s.imageData).length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:6px">${ch.submissions.filter(s=>s.imageData).map(s=>`<div style="position:relative;border-radius:9px;overflow:hidden;border:1.5px solid var(--p2);aspect-ratio:1;cursor:pointer" onclick="openLightbox('${s.imageData}','${esc(s.name||'')}')"><img src="${s.imageData}" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(42,15,30,.65);color:#fff;font-size:.55rem;padding:2px 4px;text-align:center">${s.avatar||'👤'} ${esc(s.name||'')}</div></div>`).join('')}</div>`:'<div style="font-size:.75rem;color:var(--ink3)">Không có bài nộp</div>'}
+        </div>`).join(''):''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleHistDetail(id){const el=document.getElementById(id);if(el)el.classList.toggle('open')}
+
+// ══════════════════════════════════════════
 // SETTINGS + LEAVE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════
 function toggleCfg(){document.getElementById('cfgPanel').classList.toggle('open')}
-document.addEventListener('click',e=>{
-  const p=document.getElementById('cfgPanel'),f=document.querySelector('.fab');
-  if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==f)p.classList.remove('open');
-});
-
+document.addEventListener('click',e=>{const p=document.getElementById('cfgPanel'),f=document.querySelector('.fab');if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==f)p.classList.remove('open')});
 function confirmLeave(){
-  showModal('🌸','Về trang chính?','Tiến độ của bạn sẽ được lưu. Tài khoản vẫn đăng nhập nhé!',[
+  showModal('🌸','Về trang chính?','Tiến độ sẽ được lưu. Tài khoản vẫn đăng nhập!',[
     {label:'Ở lại',cls:'btn-ghost',fn:''},
     {label:'Về trang chính',cls:'btn-rose',fn:'_doLeave()'}
   ]);
 }
-async function _doLeave(){
-  clearInterval(spInterval);clearInterval(myPomoInterval);clearInterval(chInterval);
+async function _cleanupAndLeave(){
+  clearInterval(spInterval);clearInterval(myPomoInterval);stopSoloTimer();stopGroupTimer();stopClockSound();
+  Object.values(chIntervals).forEach(clearInterval);
   unsubs.forEach(u=>typeof u==='function'&&u());
-  stopClockSound();
-  if(me){await DB.update(`room/slots/${me.slotId}`,{online:false}).catch(()=>{})}
-  if(spState.run&&spState.hostId===me?.slotId) await DB.update('room/spState',{run:false,hostId:null}).catch(()=>{});
-  window.location.href='index.html';
+  if(me){
+    await DB.update(`${DB_PATH}/slots/${me.slotId}`,{online:false,studySec:todayStudySec,groupStudySec}).catch(()=>{});
+    if(spState.run)await DB.update(`${DB_PATH}/spState`,{run:false,actorName:null}).catch(()=>{});
+  }
 }
-
-window.addEventListener('beforeunload',()=>{
-  if(me) DB.update(`room/slots/${me.slotId}`,{online:false}).catch(()=>{});
-});
+async function _doLeave(){await _cleanupAndLeave();window.location.href='index.html'}
+window.addEventListener('beforeunload',()=>{if(me){DB.update(`${DB_PATH}/slots/${me.slotId}`,{online:false}).catch(()=>{})}});
 </script>
 </body>
 </html>
