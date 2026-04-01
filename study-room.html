@@ -307,6 +307,7 @@ select.inp{cursor:pointer}
     <div class="room-hdr">
       <button class="room-back" onclick="confirmLeave()">← Về trang chính</button>
       <div class="room-title">Phòng học <em>cùng Mi</em> 🌸</div>
+      <div id="roomGreeting" style="font-family:'Outfit',sans-serif;font-size:.8rem;color:var(--ink3);display:none"></div>
       <div class="online-pill"><div class="online-dot"></div><span id="onlineCount">0</span> người online</div>
     </div>
     <!-- Today stats -->
@@ -393,10 +394,12 @@ select.inp{cursor:pointer}
 // CONSTANTS
 // ══════════════════════════════════════════
 const AVATARS=['🌸','🌷','🌼','⭐','🦋','🐱','🐰','🦊','🐻','🐼','🍓','🍀','🎀','🎵','🌙','💎','🔥','✨','🌈','🍭','🎯','💐','🌺','🌻'];
-const SLOTS=['slot1','slot2','slot3','slot4'];
+// Dynamic slots - supports unlimited people
+const MAX_SLOTS=20;
+const SLOTS=Array.from({length:MAX_SLOTS},(_,i)=>`slot${i+1}`);
 const SUBJECTS=['Văn','Toán','Anh','Sử','Địa','Hóa','Lý','Khác'];
 const SEMO={Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
-const MEDALS=['🥇','🥈','🥉','4️⃣'];
+const MEDALS=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
 const DB_PATH='room';
 const HIST_KEY='sr_history_v2';
 const STREAK_KEY='sr_streak_v2';
@@ -623,7 +626,7 @@ async function findSlotAndEnter(){
     }
   }
   if(!mySlot){
-    notify('Phòng đầy rồi! (tối đa 4 người)','😅');
+    notify('Lỗi tìm vị trí! Thử lại nhé.','😅');
     showAuthScreen();
     return;
   }
@@ -638,6 +641,9 @@ async function findSlotAndEnter(){
   if(!await DB.get(`${DB_PATH}/spCfg`)) await DB.set(`${DB_PATH}/spCfg`,{study:25,brk:5,sessMax:4});
   if(!await DB.get(`${DB_PATH}/spState`)) await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:1500,sess:0,actorName:null,startTime:null});
   document.getElementById('roomScreen').classList.add('active');
+  // Show greeting
+  const greetEl=document.getElementById('roomGreeting');
+  if(greetEl){greetEl.style.display='block';greetEl.innerHTML=`${me.avatar||'🌸'} Xin chào, <strong>${escapeHtml(me.name)}</strong>! 💕`;}
   loadTodayStudyTime();
   enterRoom();
 }
@@ -1008,9 +1014,13 @@ async function setSubject(v){await DB.update(`${DB_PATH}/slots/${me.slotId}`,{su
 // ══════════════════════════════════════════
 function renderMembers(){
   const sl=roomSnap.slots||{};
-  document.getElementById('membersGrid').innerHTML=SLOTS.map((sid,i)=>{
+  const onlineSlots=SLOTS.filter(sid=>sl[sid]&&sl[sid].online);
+  const emptyCount=Math.max(0, onlineSlots.length===0?2:1); // show 1-2 empty slots
+  const displaySlots=[...onlineSlots,...SLOTS.filter(sid=>!sl[sid]||!sl[sid].online).slice(0,emptyCount)];
+  
+  document.getElementById('membersGrid').innerHTML=displaySlots.map((sid,i)=>{
     const s=sl[sid],isMe=me&&sid===me.slotId;
-    if(!s||!s.online) return `<div class="mc empty"><div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div><div><div class="mc-name-row" style="color:var(--ink3)">Vị trí ${i+1}</div><div style="font-size:.7rem;color:var(--ink3)">Trống</div></div></div></div>`;
+    if(!s||!s.online) return `<div class="mc empty"><div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div><div><div class="mc-name-row" style="color:var(--ink3)">Vị trí trống</div><div style="font-size:.7rem;color:var(--ink3)">Đang chờ...</div></div></div></div>`;
     const p=isMe?myPomo:(s.pomo||{});
     const pm=Math.floor((p.rem||0)/60),ps=(p.rem||0)%60;
     const cfg=isMe?myPomoCfg:spCfg;

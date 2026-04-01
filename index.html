@@ -11,7 +11,67 @@
 <link rel="shortcut icon" href="android-chrome-512x512.png" type="image/x-icon">
 <link rel="shortcut icon" href="apple-touch-icon.png" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import{getDatabase,ref,set,get,update}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const cfg={apiKey:"AIzaSyC7FRkytqmcRGq0Th1Sg3Mt6gy96LJctRQ",authDomain:"study-planner-01.firebaseapp.com",databaseURL:"https://study-planner-01-default-rtdb.firebaseio.com",projectId:"study-planner-01",storageBucket:"study-planner-01.firebasestorage.app",messagingSenderId:"540883054890",appId:"1:540883054890:web:6c0ea1847ecff80465ae53"};
+try{const app=initializeApp(cfg);const db=getDatabase(app);window._FB={db,ref,set,get,update};window._FB_READY=true;document.dispatchEvent(new Event('fb-ready'));}catch(e){window._FB_READY=false;}
+</script>
 <style>
+/* ── AUTH OVERLAY ── */
+#authOverlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,rgba(255,232,243,0.97),rgba(255,248,251,0.97));backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .4s,visibility .4s}
+#authOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.auth-wrap-idx{width:100%;max-width:460px;animation:authPop .6s cubic-bezier(0.16,1,0.3,1) both}
+@keyframes authPop{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:none}}
+.auth-brand-idx{text-align:center;margin-bottom:28px}
+.auth-brand-script{font-family:'Sacramento',cursive;font-size:2rem;color:var(--rose)}
+.auth-brand-h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:300;line-height:1.05;margin:4px 0 6px}
+.auth-brand-h1 em{color:var(--p5);font-style:italic}
+.auth-brand-sub{font-size:.82rem;color:var(--ink3)}
+.auth-card-idx{background:rgba(255,255,255,.92);backdrop-filter:blur(24px);border-radius:28px;border:1px solid rgba(255,200,224,.6);box-shadow:0 24px 80px rgba(200,50,120,.18);padding:32px 30px}
+.auth-tabs-idx{display:flex;background:var(--p0);border-radius:14px;padding:4px;margin-bottom:22px}
+.auth-tab-idx{flex:1;padding:9px;border:none;background:none;border-radius:11px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:500;color:var(--ink3);transition:all .2s}
+.auth-tab-idx.active{background:#fff;color:var(--p5);box-shadow:0 2px 8px rgba(200,50,120,.1)}
+.auth-field-idx{margin-bottom:13px}
+.auth-field-idx label{font-size:.72rem;color:var(--ink3);font-weight:600;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.auth-ava-grid-idx{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:4px}
+.ava-opt-idx{aspect-ratio:1;background:var(--p1);border:2px solid var(--p2);border-radius:10px;font-size:1.35rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.ava-opt-idx:hover{border-color:var(--p4);transform:scale(1.1)}
+.ava-opt-idx.sel{border-color:var(--p5);background:linear-gradient(135deg,#fff0f8,#fff);box-shadow:0 0 0 3px rgba(240,80,160,.18)}
+.auth-err-idx{font-size:.78rem;color:#e53935;background:#fff5f5;border:1px solid #ffcdd2;border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none}
+.auth-err-idx.show{display:block}
+.auth-guest-link{text-align:center;font-size:.74rem;color:var(--ink3);margin-top:14px}
+.auth-guest-link a{color:var(--p5);text-decoration:none;font-weight:500}
+.auth-guest-link a:hover{text-decoration:underline}
+/* ── ACCOUNT WIDGET ── */
+.acct-btn{position:fixed;top:18px;right:18px;z-index:1000;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border:1.5px solid rgba(255,200,224,.5);border-radius:50px;padding:8px 16px 8px 10px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.82rem;font-weight:500;color:var(--ink);box-shadow:0 4px 16px rgba(200,50,120,.12);transition:all .2s}
+.acct-btn:hover{background:var(--p1);border-color:var(--p3);transform:translateY(-1px)}
+.acct-btn-ava{font-size:1.25rem;line-height:1}
+.acct-btn-name{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct-panel{position:fixed;top:62px;right:18px;z-index:1001;width:320px;background:#fff;border-radius:24px;border:1px solid rgba(255,200,224,.5);box-shadow:0 20px 60px rgba(200,50,120,.18);padding:24px;display:none;animation:authPop .3s both}
+.acct-panel.open{display:block}
+.acct-avatar-big{width:64px;height:64px;border-radius:50%;background:var(--p1);border:3px solid var(--p3);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 8px}
+.acct-name-big{text-align:center;font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--ink);margin-bottom:2px}
+.acct-nick-big{text-align:center;font-size:.78rem;color:var(--ink3);margin-bottom:16px}
+.acct-section{border-top:1px solid var(--p1);padding-top:14px;margin-top:4px}
+.acct-section-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);font-weight:600;margin-bottom:10px}
+.acct-dates-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.acct-date-chip{font-size:.7rem;padding:4px 10px;border-radius:20px;background:var(--p1);color:var(--p5);border:1px solid var(--p2);font-weight:500}
+.acct-date-chip.today{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;border-color:transparent}
+.acct-edit-section{background:var(--p0);border-radius:14px;padding:14px;border:1px solid var(--p1);display:none;margin-top:12px}
+.acct-edit-section.open{display:block}
+.acct-field{margin-bottom:10px}
+.acct-field label{font-size:.7rem;color:var(--ink3);font-weight:600;display:block;margin-bottom:4px}
+.acct-ava-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:4px}
+.acct-ava-opt{aspect-ratio:1;background:var(--p1);border:2px solid var(--p2);border-radius:8px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.acct-ava-opt:hover{border-color:var(--p4)}
+.acct-ava-opt.sel{border-color:var(--p5);background:#fff0f8}
+.acct-btn-row{display:flex;gap:8px;margin-top:10px}
+/* ── GREETING PILL ── */
+.greeting-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.75);backdrop-filter:blur(12px);border:1px solid var(--p2);border-radius:50px;padding:8px 18px;font-size:.85rem;color:var(--ink);box-shadow:var(--shadow2);margin-top:12px}
+.greeting-pill .gp-ava{font-size:1.2rem}
+.greeting-pill .gp-txt{font-weight:500}
+.greeting-pill .gp-txt em{color:var(--p5);font-style:normal}
 :root {
   --p0:#fff8fb;
   --p1:#ffe8f3;
@@ -821,6 +881,73 @@ select.inp{cursor:pointer}
 <div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div><div class="bg-blob b3"></div></div>
 <canvas id="petalsCanvas"></canvas>
 
+<!-- AUTH OVERLAY -->
+<div id="authOverlay">
+  <div class="auth-wrap-idx">
+    <div class="auth-brand-idx">
+      <div class="auth-brand-script">chào mừng đến nơi học của mình 💌</div>
+      <h1 class="auth-brand-h1">Mi's Study <em>Space</em></h1>
+      <p class="auth-brand-sub">Đăng nhập để lưu tiến độ học tập của bạn ✨</p>
+    </div>
+    <div class="auth-card-idx">
+      <div class="auth-tabs-idx">
+        <button class="auth-tab-idx active" id="idxTabL" onclick="idxSwitchTab('l')">🌸 Đăng nhập</button>
+        <button class="auth-tab-idx" id="idxTabR" onclick="idxSwitchTab('r')">✨ Đăng ký</button>
+      </div>
+      <div class="auth-err-idx" id="idxAuthErr"></div>
+      <!-- LOGIN FORM -->
+      <div id="idxLgForm">
+        <div class="auth-field-idx"><label>Tên đăng nhập</label><input class="inp" id="idxLgU" placeholder="username..." autocomplete="username"></div>
+        <div class="auth-field-idx"><label>Mật khẩu</label><input class="inp" id="idxLgP" type="password" placeholder="Mật khẩu..." onkeydown="if(event.key==='Enter')idxDoLogin()"></div>
+        <button class="btn btn-rose" style="width:100%;padding:13px;font-size:.92rem;margin-top:6px" onclick="idxDoLogin()">🌸 Đăng nhập</button>
+      </div>
+      <!-- REGISTER FORM -->
+      <div id="idxRgForm" style="display:none">
+        <div class="auth-field-idx"><label>Chọn avatar</label><div class="auth-ava-grid-idx" id="idxRgAvaGrid"></div></div>
+        <div class="auth-field-idx"><label>Tên hiển thị (nickname)</label><input class="inp" id="idxRgN" placeholder="Tên của bạn..." maxlength="16"></div>
+        <div class="auth-field-idx"><label>Tên đăng nhập</label><input class="inp" id="idxRgU" placeholder="username (chữ thường, số, _)..." maxlength="20" autocomplete="username"></div>
+        <div class="auth-field-idx"><label>Mật khẩu (tối thiểu 4 ký tự)</label><input class="inp" id="idxRgP" type="password" placeholder="Mật khẩu..." onkeydown="if(event.key==='Enter')idxDoRegister()"></div>
+        <button class="btn btn-rose" style="width:100%;padding:13px;font-size:.92rem;margin-top:6px" onclick="idxDoRegister()">✨ Tạo tài khoản</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT BUTTON (top right) -->
+<div class="acct-btn" id="acctBtn" style="display:none" onclick="toggleAcctPanel()">
+  <span class="acct-btn-ava" id="acctBtnAva">🌸</span>
+  <span class="acct-btn-name" id="acctBtnName">Account</span>
+</div>
+
+<!-- ACCOUNT PANEL -->
+<div class="acct-panel" id="acctPanel">
+  <div class="acct-avatar-big" id="acctAvaDisp">🌸</div>
+  <div class="acct-name-big" id="acctNameDisp">Tên</div>
+  <div class="acct-nick-big" id="acctNickDisp">@username</div>
+  
+  <div class="acct-section">
+    <div class="acct-section-title">📅 Ngày học nhóm</div>
+    <div class="acct-dates-grid" id="acctDatesGrid">
+      <span style="font-size:.78rem;color:var(--ink3)">Chưa có buổi học nào</span>
+    </div>
+  </div>
+  
+  <div class="acct-section" style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-soft btn-sm" style="flex:1" onclick="toggleAcctEdit()">✏️ Sửa tài khoản</button>
+    <button class="btn btn-ghost btn-sm" style="flex:1;color:#e53935;border-color:#ffcdd2" onclick="idxDoLogout()">🔓 Đăng xuất</button>
+  </div>
+
+  <div class="acct-edit-section" id="acctEditSection">
+    <div class="acct-field"><label>Avatar mới</label><div class="acct-ava-grid" id="acctEditAvaGrid"></div></div>
+    <div class="acct-field"><label>Tên hiển thị</label><input class="inp" id="acctEditName" placeholder="Tên mới..."></div>
+    <div class="acct-field"><label>Mật khẩu mới (bỏ trống nếu không đổi)</label><input class="inp" id="acctEditPw" type="password" placeholder="Mật khẩu mới..."></div>
+    <div class="acct-btn-row">
+      <button class="btn btn-rose btn-sm" style="flex:1" onclick="saveAcctEdit()">💾 Lưu</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleAcctEdit()">✕</button>
+    </div>
+  </div>
+</div>
+
 <div class="notif-wrap"><div class="notif" id="notif1"><span class="nico" id="n1i">🌸</span><span id="n1t"></span></div></div>
 
 <!-- Clock audio -->
@@ -836,6 +963,10 @@ select.inp{cursor:pointer}
     <h1 class="hero-h1">Mi's Study <em>Space</em></h1>
     <span class="hero-flowers">🌸 🌷 💕 🌷 🌸</span>
     <div class="hero-date" id="heroDate"></div>
+    <div id="greetingPill" style="display:none" class="greeting-pill">
+      <span class="gp-ava" id="greetingAva">🌸</span>
+      <span class="gp-txt">Xin chào, <em id="greetingName">bạn</em>! Chúc học tốt nhé 💕</span>
+    </div>
     <div class="hero-actions">
       <a href="study-room.html" class="hero-room-btn">
         <span class="hero-room-glow"></span>
@@ -1672,12 +1803,184 @@ function chkNotif(){
 }
 
 // ─── INIT ───
-function init(){
+// ─── AUTH ───
+const IDX_SESSION_KEY='studyroom_session';
+const IDX_AVATARS=['🌸','🌷','🌼','⭐','🦋','🐱','🐰','🦊','🐻','🐼','🍓','🍀','🎀','🎵','🌙','💎','🔥','✨','🌈','🍭','🎯','💐','🌺','🌻'];
+let idxSelectedAva='🌸';
+let idxCurrentUser=null;
+let idxEditAva=null;
+
+const IDXDB={
+  async get(p){if(!window._FB_READY)return null;const{db,ref,get}=window._FB;const s=await get(ref(db,p));return s.exists()?s.val():null},
+  async set(p,v){if(!window._FB_READY)return;await window._FB.set(window._FB.ref(window._FB.db,p),v)},
+  async update(p,v){if(!window._FB_READY)return;await window._FB.update(window._FB.ref(window._FB.db,p),v)}
+};
+
+function idxShowErr(m){const e=document.getElementById('idxAuthErr');e.textContent=m;e.classList.add('show')}
+function idxHideErr(){document.getElementById('idxAuthErr').classList.remove('show')}
+
+function idxSwitchTab(t){
+  document.getElementById('idxLgForm').style.display=t==='l'?'block':'none';
+  document.getElementById('idxRgForm').style.display=t==='r'?'block':'none';
+  document.getElementById('idxTabL').classList.toggle('active',t==='l');
+  document.getElementById('idxTabR').classList.toggle('active',t==='r');
+  idxHideErr();
+}
+
+function idxRenderAvaGrid(){
+  document.getElementById('idxRgAvaGrid').innerHTML=IDX_AVATARS.map(a=>`<div class="ava-opt-idx${a===idxSelectedAva?' sel':''}" onclick="idxSelAva('${a}')">${a}</div>`).join('');
+}
+
+function idxSelAva(a){
+  idxSelectedAva=a;
+  document.querySelectorAll('#idxRgAvaGrid .ava-opt-idx').forEach(el=>el.classList.toggle('sel',el.textContent.trim()===a));
+}
+
+async function idxDoLogin(){
+  const u=document.getElementById('idxLgU').value.trim().toLowerCase(),p=document.getElementById('idxLgP').value;
+  if(!u||!p){idxShowErr('Nhập đủ thông tin nhé!');return;}
+  try{
+    const acc=await IDXDB.get(`accounts/${u}`);
+    if(!acc){idxShowErr('Tên đăng nhập không tồn tại!');return;}
+    if(acc.password!==btoa(p)){idxShowErr('Sai mật khẩu rồi em ơi!');return;}
+    idxCurrentUser={uid:u,username:u,name:acc.name,avatar:acc.avatar};
+    localStorage.setItem(IDX_SESSION_KEY,JSON.stringify(idxCurrentUser));
+    document.getElementById('authOverlay').classList.add('hidden');
+    idxShowUser();
+    notify(`🌸 Chào ${acc.name}! Học tốt nhé!`,'✨');
+  }catch(e){idxShowErr('Lỗi kết nối, thử lại nhé!');}
+}
+
+async function idxDoRegister(){
+  const name=document.getElementById('idxRgN').value.trim(),u=document.getElementById('idxRgU').value.trim().toLowerCase(),p=document.getElementById('idxRgP').value;
+  if(!name||!u||!p){idxShowErr('Điền đầy đủ thông tin nhé!');return;}
+  if(p.length<4){idxShowErr('Mật khẩu tối thiểu 4 ký tự!');return;}
+  if(!/^[a-z0-9_]+$/.test(u)){idxShowErr('Username chỉ dùng chữ thường, số, dấu _');return;}
+  try{
+    if(await IDXDB.get(`accounts/${u}`)){idxShowErr('Username đã tồn tại rồi!');return;}
+    await IDXDB.set(`accounts/${u}`,{name,avatar:idxSelectedAva,password:btoa(p),createdAt:Date.now()});
+    idxCurrentUser={uid:u,username:u,name,avatar:idxSelectedAva};
+    localStorage.setItem(IDX_SESSION_KEY,JSON.stringify(idxCurrentUser));
+    document.getElementById('authOverlay').classList.add('hidden');
+    idxShowUser();
+    notify(`✨ Chào mừng ${name} đến với Mi's Study Space!`,'🌸');
+  }catch(e){idxShowErr('Lỗi kết nối!');}
+}
+
+function idxDoLogout(){
+  localStorage.removeItem(IDX_SESSION_KEY);
+  idxCurrentUser=null;
+  document.getElementById('acctBtn').style.display='none';
+  document.getElementById('acctPanel').classList.remove('open');
+  document.getElementById('greetingPill').style.display='none';
+  document.getElementById('authOverlay').classList.remove('hidden');
+  idxRenderAvaGrid();
+}
+
+function idxShowUser(){
+  if(!idxCurrentUser)return;
+  document.getElementById('acctBtn').style.display='flex';
+  document.getElementById('acctBtnAva').textContent=idxCurrentUser.avatar||'🌸';
+  document.getElementById('acctBtnName').textContent=idxCurrentUser.name;
+  // Greeting
+  document.getElementById('greetingPill').style.display='inline-flex';
+  document.getElementById('greetingAva').textContent=idxCurrentUser.avatar||'🌸';
+  document.getElementById('greetingName').textContent=idxCurrentUser.name;
+  // Account panel
+  document.getElementById('acctAvaDisp').textContent=idxCurrentUser.avatar||'🌸';
+  document.getElementById('acctNameDisp').textContent=idxCurrentUser.name;
+  document.getElementById('acctNickDisp').textContent='@'+idxCurrentUser.username;
+  idxRenderAcctDates();
+  idxRenderEditAvaGrid();
+  document.getElementById('acctEditName').value=idxCurrentUser.name;
+}
+
+function idxRenderAcctDates(){
+  const grid=document.getElementById('acctDatesGrid');
+  let dates=[];
+  try{
+    const hist=JSON.parse(localStorage.getItem('sr_history_v2')||'[]');
+    dates=[...new Set(hist.map(h=>h.date))].sort((a,b)=>b.localeCompare(a)).slice(0,20);
+  }catch(e){}
+  const today=new Date();
+  const todayS=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  if(!dates.length){grid.innerHTML='<span style="font-size:.78rem;color:var(--ink3)">Chưa có buổi học nhóm nào</span>';return;}
+  grid.innerHTML=dates.map(d=>`<span class="acct-date-chip${d===todayS?' today':''}">${d===todayS?'⭐ ':'📅 '}${d}</span>`).join('');
+}
+
+function toggleAcctPanel(){
+  const p=document.getElementById('acctPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open'))idxRenderAcctDates();
+}
+
+function toggleAcctEdit(){
+  document.getElementById('acctEditSection').classList.toggle('open');
+}
+
+function idxRenderEditAvaGrid(){
+  idxEditAva=idxCurrentUser?.avatar||'🌸';
+  document.getElementById('acctEditAvaGrid').innerHTML=IDX_AVATARS.map(a=>`<div class="acct-ava-opt${a===idxEditAva?' sel':''}" onclick="idxSelEditAva('${a}')">${a}</div>`).join('');
+}
+
+function idxSelEditAva(a){
+  idxEditAva=a;
+  document.querySelectorAll('#acctEditAvaGrid .acct-ava-opt').forEach(el=>el.classList.toggle('sel',el.textContent.trim()===a));
+}
+
+async function saveAcctEdit(){
+  if(!idxCurrentUser)return;
+  const newName=document.getElementById('acctEditName').value.trim();
+  const newPw=document.getElementById('acctEditPw').value;
+  if(!newName){notify('Nhập tên nhé!','⚠️');return;}
+  try{
+    const upd={name:newName,avatar:idxEditAva};
+    if(newPw){if(newPw.length<4){notify('Mật khẩu tối thiểu 4 ký tự!','⚠️');return;}upd.password=btoa(newPw);}
+    await IDXDB.update(`accounts/${idxCurrentUser.uid}`,upd);
+    idxCurrentUser={...idxCurrentUser,name:newName,avatar:idxEditAva};
+    localStorage.setItem(IDX_SESSION_KEY,JSON.stringify(idxCurrentUser));
+    idxShowUser();
+    toggleAcctEdit();
+    notify('✅ Đã lưu thay đổi!','🌸');
+  }catch(e){notify('Lỗi lưu thay đổi!','❌');}
+}
+
+// Close panel when clicking outside
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('acctPanel');
+  const btn=document.getElementById('acctBtn');
+  if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&!btn.contains(e.target)){
+    panel.classList.remove('open');
+  }
+});
+
+function idxCheckSession(){
+  idxRenderAvaGrid();
+  try{
+    const saved=localStorage.getItem(IDX_SESSION_KEY);
+    if(saved){
+      const s=JSON.parse(saved);
+      if(s.uid&&s.name){
+        idxCurrentUser=s;
+        document.getElementById('authOverlay').classList.add('hidden');
+        idxShowUser();
+        return;
+      }
+    }
+  }catch(e){}
+  // No session - show overlay (wait for Firebase)
+  document.getElementById('authOverlay').classList.remove('hidden');
+}
+
+document.addEventListener('fb-ready',()=>{});
+document.addEventListener('DOMContentLoaded',()=>idxCheckSession());
+
+
   renderHero();restoreMood();qI=Math.floor(Math.random()*QUOTES.length);rQuote();pomoReset(true);rExams();seedT();rTasks();rSlots();rTT();rMusic();rStats();
   updateSoundUI();
   setInterval(rClock,1000);setInterval(()=>{rSlots();rTT();chkNotif()},20000);setInterval(rExams,60000);setInterval(rStats,60000);rClock();
   let ld=new Date().getDate();setInterval(()=>{if(new Date().getDate()!==ld){ld=new Date().getDate();renderHero();seedT();rTasks();rSlots();rTT();notify('🌅 Ngày mới! Danh sách làm mới rồi 💕','🌸')}},30000);
-}
+
 
 document.addEventListener('DOMContentLoaded',init);
 </script>
