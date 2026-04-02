@@ -40,6 +40,11 @@ try{const app=initializeApp(cfg);const db=getDatabase(app);window._FB={db,ref,se
 .ao-ava.on{border-color:var(--p5);background:#fff0f8;box-shadow:0 0 0 3px rgba(240,80,160,.18)}
 .ao-err{font-size:.78rem;color:#e53935;background:#fff5f5;border:1px solid #ffcdd2;border-radius:10px;padding:9px 12px;margin-bottom:12px;display:none}
 .ao-err.show{display:block}
+
+/* ══ LOGOUT MODAL ══ */
+.logout-overlay { position:fixed; inset:0; z-index:10005; background:rgba(255,248,251,0.85); backdrop-filter:blur(12px); display:none; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.3s ease; }
+.logout-card { background:#fff; border-radius:28px; padding:32px; width:100%; max-width:360px; text-align:center; border:1px solid var(--p2); box-shadow:var(--shadow); }
+
 /* ══ ACCOUNT BUTTON ══ */
 #acctBtn{position:fixed;top:16px;right:16px;z-index:1000;display:none;align-items:center;gap:8px;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border:1.5px solid rgba(255,200,224,.6);border-radius:50px;padding:7px 14px 7px 9px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.8rem;font-weight:500;color:var(--ink);box-shadow:0 4px 16px rgba(200,50,120,.12);transition:all .2s}
 #acctBtn:hover{background:var(--p1);border-color:var(--p3);transform:translateY(-1px)}
@@ -881,7 +886,18 @@ select.inp{cursor:pointer}
 <div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div><div class="bg-blob b3"></div></div>
 <canvas id="petalsCanvas"></canvas>
 
-<!-- ══ AUTH OVERLAY ══ -->
+<div id="logoutModal" class="logout-overlay">
+  <div class="logout-card">
+    <div style="font-size:3rem; margin-bottom:10px">🌸</div>
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; margin-bottom:10px">Tạm biệt nhé?</h3>
+    <p style="font-size:0.9rem; color:var(--ink3); margin-bottom:24px">Hệ thống sẽ tạm ngừng đồng bộ cho đến khi bạn quay lại.</p>
+    <div style="display:flex; gap:12px; justify-content:center">
+      <button class="btn btn-ghost" onclick="closeLogoutModal()">Ở lại học tiếp</button>
+      <button class="btn btn-rose" onclick="confirmLogout()">Đăng xuất</button>
+    </div>
+  </div>
+</div>
+
 <div id="authOverlay">
   <div class="ao-wrap">
     <div class="ao-brand">
@@ -895,13 +911,11 @@ select.inp{cursor:pointer}
         <button class="ao-tab" id="aoTabR" onclick="aoSwitch('r')">✨ Đăng ký</button>
       </div>
       <div class="ao-err" id="aoErr"></div>
-      <!-- Login -->
       <div id="aoLg">
         <div class="ao-field"><label>Tên đăng nhập</label><input class="inp" id="aoLgU" placeholder="username..." autocomplete="username"></div>
         <div class="ao-field"><label>Mật khẩu</label><input class="inp" id="aoLgP" type="password" placeholder="Mật khẩu..." onkeydown="if(event.key==='Enter')aoLogin()"></div>
         <button class="btn btn-rose" style="width:100%;padding:12px;font-size:.92rem" onclick="aoLogin()">🌸 Đăng nhập</button>
       </div>
-      <!-- Register -->
       <div id="aoRg" style="display:none">
         <div class="ao-field"><label>Chọn avatar</label><div class="ao-ava-grid" id="aoAvaGrid"></div></div>
         <div class="ao-field"><label>Nickname (tên hiển thị)</label><input class="inp" id="aoRgN" placeholder="Tên của bạn..." maxlength="16"></div>
@@ -913,7 +927,6 @@ select.inp{cursor:pointer}
   </div>
 </div>
 
-<!-- ══ ACCOUNT BUTTON (fixed top-right) ══ -->
 <div id="acctBtn" onclick="toggleAcctPanel()">
   <span class="ab-ava" id="abAva">🌸</span>
   <div>
@@ -922,7 +935,6 @@ select.inp{cursor:pointer}
   </div>
 </div>
 
-<!-- ══ ACCOUNT PANEL ══ -->
 <div id="acctPanel">
   <div class="ap-header">
     <div class="ap-ava" id="apAva">🌸</div>
@@ -930,12 +942,10 @@ select.inp{cursor:pointer}
     <div class="ap-user" id="apUser">@username</div>
   </div>
   <div class="ap-body">
-    <!-- Group study dates -->
     <div class="ap-section">
       <div class="ap-sec-title">📅 Ngày đã học nhóm</div>
       <div class="ap-dates" id="apDates"><span style="font-size:.76rem;color:var(--ink3)">Chưa có buổi học nào</span></div>
     </div>
-    <!-- Edit form -->
     <div class="ap-edit" id="apEdit">
       <div class="ap-field"><label>Avatar mới</label><div class="ao-ava-grid" id="apEditAvaGrid"></div></div>
       <div class="ap-field"><label>Nickname mới</label><input class="ap-inp" id="apEditName" placeholder="Tên mới..."></div>
@@ -945,7 +955,6 @@ select.inp{cursor:pointer}
         <button class="btn btn-ghost btn-sm" onclick="toggleApEdit()">✕</button>
       </div>
     </div>
-    <!-- Actions -->
     <div class="ap-actions">
       <button class="btn btn-soft btn-sm" style="flex:1" onclick="toggleApEdit()">✏️ Cài đặt cá nhân</button>
       <button class="btn btn-ghost btn-sm" style="flex:1;color:#e53935;border-color:#ffcdd2" onclick="aoLogout()">🔓 Đăng xuất</button>
@@ -955,14 +964,12 @@ select.inp{cursor:pointer}
 
 <div class="notif-wrap"><div class="notif" id="notif1"><span class="nico" id="n1i">🌸</span><span id="n1t"></span></div></div>
 
-<!-- Clock audio -->
 <audio id="clockAudio" loop preload="auto">
   <source src="clock.mp3" type="audio/mpeg">
 </audio>
 
 <div class="page">
 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-eye">Dành riêng cho em bé Trà My 💌</div>
     <h1 class="hero-h1">Mi's Study <em>Space</em></h1>
@@ -993,7 +1000,6 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- HISTORY MODAL -->
   <div id="histModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(42,15,30,0.78);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px">
     <div class="hist-modal-content">
       <div class="hist-modal-header">
@@ -1005,7 +1011,6 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- MOOD BAR -->
   <div class="mood-bar">
     <span class="mood-lbl">Hôm nay em bé cảm thấy thế nào ạ?</span>
     <div class="mood-emojis">
@@ -1019,7 +1024,6 @@ select.inp{cursor:pointer}
     <span class="mood-txt" id="moodTxt"></span>
   </div>
 
-  <!-- STATS -->
   <div class="stats-row">
     <div class="stat-c d1"><div class="stat-num" id="sSt">0</div><div class="stat-lbl">Ngày liên tiếp 🔥</div></div>
     <div class="stat-c d2"><div class="stat-num" id="sTd">0</div><div class="stat-lbl">Nhiệm vụ xong ✅</div></div>
@@ -1027,14 +1031,12 @@ select.inp{cursor:pointer}
     <div class="stat-c d4"><div class="stat-num" id="sEx">—</div><div class="stat-lbl">Ngày đến kỳ thi gần nhất 📅</div></div>
   </div>
 
-  <!-- QUOTE -->
   <div class="q-banner mb">
     <div class="q-text" id="qTxt"></div>
     <div class="q-src" id="qSrc"></div>
     <div class="q-dots" id="qDots"></div>
   </div>
 
-  <!-- EXAM COUNTDOWN -->
   <div class="card mb d1">
     <div class="exam-hdr">
       <div class="exam-hdr-t">🎯 Đếm ngược ngày thi</div>
@@ -1055,7 +1057,6 @@ select.inp{cursor:pointer}
     <div class="exam-wrap" id="eWrap"></div>
   </div>
 
-  <!-- POMODORO + CLOCK -->
   <div class="g2">
     <div class="card d2">
       <div class="clabel"><span class="lico">🍅</span> Pomodoro Timer<span class="cact" onclick="togglePCfg()">⚙ Cài đặt</span></div>
@@ -1094,7 +1095,6 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- TASKS + TODAY SCHEDULE -->
   <div class="g2">
     <div class="card d3">
       <div class="clabel"><span class="lico">✅</span> Nhiệm vụ hôm nay</div>
@@ -1111,7 +1111,6 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- DAILY GOALS -->
   <div class="card d4 mb" id="goalsCard">
     <div class="clabel">
       <span class="lico">🎯</span> Mục tiêu hôm nay
@@ -1135,7 +1134,6 @@ select.inp{cursor:pointer}
     <div id="idxGoalList"></div>
   </div>
 
-  <!-- TIMETABLE FULL WIDTH -->
   <div class="card d4 mb">
     <div class="clabel">
       <span class="lico">📋</span> Thời khoá biểu tuần
@@ -1144,7 +1142,6 @@ select.inp{cursor:pointer}
     <div class="div"></div>
     <div class="tt-wrap"><table class="tt" id="ttTbl"></table></div>
     <div class="tt-legend" id="ttLegend"></div>
-    <!-- TIMETABLE EDITOR -->
     <div class="tt-editor" id="ttEditor">
       <div class="tt-editor-title">✏️ Chỉnh sửa thời khoá biểu</div>
       <div id="slotEditorList"></div>
@@ -1154,7 +1151,6 @@ select.inp{cursor:pointer}
     </div>
   </div>
 
-  <!-- MUSIC FULL WIDTH -->
   <div class="music-card d4 mb">
     <div class="mc-title">🎵 Focus Vibes</div>
     <div class="viz off" id="vizEl">
@@ -1204,18 +1200,17 @@ const tk=()=>{const d=new Date();return `${d.getFullYear()}_${d.getMonth()}_${d.
 
 // Keys được sync lên Firebase theo uid (dữ liệu quan trọng, không phụ thuộc thiết bị)
 const CLOUD_KEYS=['exams_v2','timetable_v1','sr_goals_v1','sr_streak_v2','sr_history_v2'];
-// Keys chỉ lưu local (tasks theo ngày, pomodoro count theo ngày — gắn với thiết bị đang học)
-// tasks_YYYY_M_D  |  pomo_YYYY_M_D  → local only
 
 function _uid(){try{return JSON.parse(localStorage.getItem('studyroom_session'))?.uid||null}catch{return null}}
 
-// Đọc: local trước, Firebase là nguồn chính cho CLOUD_KEYS
+// Đọc: local trước, Firebase là nguồn chính
 const LS={
   g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},
   s:(k,v)=>{
     localStorage.setItem(k,JSON.stringify(v));
-    // Nếu là key cần sync và đã đăng nhập → ghi lên Firebase
-    if(CLOUD_KEYS.includes(k)){
+    const syncKeys = [...CLOUD_KEYS];
+    // Cho phép sync cả các key động theo ngày để tự động đồng bộ Tasks, Pomo, và cập nhật Streak
+    if(syncKeys.includes(k) || k.startsWith('tasks_') || k.startsWith('pomo_') || k.startsWith('mood_')){
       const uid=_uid();
       if(uid&&window._FB_READY){
         try{
@@ -1235,19 +1230,18 @@ async function syncFromCloud(uid){
     const snap=await get(ref(db,`userData/${uid}`));
     if(!snap.exists())return;
     const data=snap.val();
-    for(const k of CLOUD_KEYS){
-      if(data[k]!==undefined){
-        localStorage.setItem(k,JSON.stringify(data[k]));
-      }
+    
+    // Lấy TOÀN BỘ data từ Firebase (bao gồm cả task, pomo các ngày) đè xuống LocalStorage
+    for(const k in data){
+      localStorage.setItem(k,JSON.stringify(data[k]));
     }
-    // Goals are stored per-uid key locally
-    if(data['sr_goals_v1']!==undefined){
-      localStorage.setItem(`sr_goals_v1_${uid}`,JSON.stringify(data['sr_goals_v1']));
-    }
+    
     // Refresh UI sau khi sync
     ttData=loadTT();
     rExams();rTasks();rSlots();rTT();renderIdxGoals();rStats();
-    notify('✅ Đã đồng bộ dữ liệu của bạn!','☁️');
+    document.getElementById('sPo').textContent=LS.g('pomo_'+tk())||0; // Update pomo counter
+    restoreMood(); // Update mood
+    notify('✅ Đã đồng bộ toàn bộ dữ liệu của bạn!','☁️');
   }catch(e){console.warn('Sync error:',e);}
 }
 
@@ -1897,7 +1891,6 @@ function idxSaveGoals(goals){
   const key=idxGoalsKey();
   const val={date:new Date().toDateString(),goals};
   localStorage.setItem(key,JSON.stringify(val));
-  // Sync to cloud
   const uid=_uid();
   if(uid&&window._FB_READY){
     try{const{db,ref,set}=window._FB;set(ref(db,`userData/${uid}/${IDX_GOALS_KEY}`),val).catch(()=>{});}catch{}
@@ -1929,10 +1922,10 @@ function renderIdxGoals(){
   const el=document.getElementById('idxGoalList');
   if(!el)return;
   if(!goals.length){el.innerHTML='<p style="font-size:.82rem;color:var(--ink3);padding:10px 0;text-align:center">Chưa có mục tiêu. Đặt mục tiêu để có thêm động lực học nhé! 💕</p>';return;}
-  const pomoCount=LS.g('pomo_count_'+tk())||0;
+  const pomoCount=LS.g('pomo_'+tk())||0;
   el.innerHTML=goals.map(g=>{
     let pct=0;
-    if(g.type==='time'&&g.target>0){/* Would need study time tracking */pct=g.done?100:0;}
+    if(g.type==='time'&&g.target>0){pct=g.done?100:0;}
     else if(g.type==='pomo'&&g.target>0)pct=Math.min(100,Math.round(pomoCount/g.target*100));
     else if(g.type==='free')pct=g.done?100:0;
     const done=pct>=100||g.done;
@@ -2017,16 +2010,19 @@ async function aoRegister(){
   notify(`✨ Chào mừng ${name} đến với Mi's Study Space!`,'🌸');
 }
 
+// Hàm Logout đã được sửa lại dùng Modal
 function aoLogout(){
-  if(!confirm('Đăng xuất tài khoản?'))return;
-  localStorage.removeItem(AO_SESSION);
-  aoUser=null;
-  document.getElementById('acctBtn').style.display='none';
   document.getElementById('acctPanel').classList.remove('open');
-  document.getElementById('greetingPill').style.display='none';
-  document.getElementById('authOverlay').classList.remove('hidden');
-  aoErrClear();
-  aoRenderAvaGrid();
+  document.getElementById('logoutModal').style.display='flex';
+}
+
+function closeLogoutModal(){
+  document.getElementById('logoutModal').style.display='none';
+}
+
+function confirmLogout(){
+  localStorage.removeItem(AO_SESSION);
+  location.reload(); // Tải lại trang để reset trạng thái sạch sẽ
 }
 
 function aoShowUser(){
@@ -2117,7 +2113,6 @@ function aoCheckSession(){
       return;
     }
   }catch{}
-  // No session — show overlay
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
