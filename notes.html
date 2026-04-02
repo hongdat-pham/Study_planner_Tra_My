@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📝 Ghi chú nhanh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+:root{--p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--rose:#ff6bae;--ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;--shadow:0 8px 32px rgba(200,50,120,.12);--r:20px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;overflow-x:hidden}
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.2;animation:blob 18s ease-in-out infinite alternate}
+.b1{width:500px;height:500px;background:#ffc0e0;top:-100px;left:-100px}
+.b2{width:350px;height:350px;background:#c8e6ff;bottom:-60px;right:-60px;animation-delay:-7s}
+@keyframes blob{from{transform:translate(0,0)}to{transform:translate(25px,20px) scale(1.06)}}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:28px 20px 72px}
+/* NAV */
+.nav{display:flex;align-items:center;gap:14px;margin-bottom:28px;flex-wrap:wrap}
+.nav-back{font-size:.82rem;background:rgba(255,255,255,.8);border:1.5px solid var(--p2);border-radius:50px;padding:8px 18px;cursor:pointer;color:var(--ink3);text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(12px)}
+.nav-back:hover{background:var(--p1);color:var(--p5)}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;flex:1}
+.nav-title em{color:var(--p5);font-style:italic}
+/* CONTROLS */
+.ctrl-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:180px;position:relative}
+.search-wrap input{width:100%;padding:10px 16px 10px 38px;border-radius:50px;border:1.5px solid var(--p2);background:rgba(255,255,255,.9);font-family:'Outfit',sans-serif;font-size:.86rem;color:var(--ink);outline:none;transition:all .2s}
+.search-wrap input:focus{border-color:var(--p4);box-shadow:0 0 0 3px rgba(255,128,188,.12)}
+.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none}
+.tag-filter{display:flex;gap:6px;flex-wrap:wrap}
+.tag-btn{padding:6px 14px;border-radius:50px;border:1.5px solid var(--p2);background:rgba(255,255,255,.8);font-size:.78rem;cursor:pointer;color:var(--ink3);transition:all .2s;font-family:'Outfit',sans-serif}
+.tag-btn.on{background:var(--p5);color:#fff;border-color:var(--p5)}
+.tag-btn:hover:not(.on){background:var(--p1);color:var(--p5)}
+/* NOTE GRID */
+.notes-grid{columns:3;gap:14px;margin-bottom:20px}
+@media(max-width:800px){.notes-grid{columns:2}}
+@media(max-width:500px){.notes-grid{columns:1}}
+.note-card{break-inside:avoid;margin-bottom:14px;border-radius:var(--r);padding:18px;cursor:pointer;transition:all .22s;position:relative;border:1.5px solid transparent;animation:noteIn .35s both}
+@keyframes noteIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.note-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(200,50,120,.18)}
+.note-card.c0{background:rgba(255,255,255,.92);border-color:rgba(255,200,224,.4)}
+.note-card.c1{background:linear-gradient(135deg,#fff8e1,#fffde7);border-color:#ffe082}
+.note-card.c2{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-color:#a5d6a7}
+.note-card.c3{background:linear-gradient(135deg,#e3f2fd,#e8eaf6);border-color:#90caf9}
+.note-card.c4{background:linear-gradient(135deg,#fce4ec,#f3e5f5);border-color:#f48fb1}
+.note-card.c5{background:linear-gradient(135deg,#e0f7fa,#e0f2f1);border-color:#80deea}
+.note-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:8px;line-height:1.3;word-break:break-word}
+.note-body{font-size:.83rem;color:var(--ink2);line-height:1.65;word-break:break-word;white-space:pre-wrap;max-height:200px;overflow:hidden;position:relative}
+.note-body.expanded{max-height:none}
+.note-body-fade{position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,inherit)}
+.note-footer{display:flex;align-items:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.note-tag{font-size:.65rem;padding:2px 9px;border-radius:20px;font-weight:600}
+.note-date{font-size:.65rem;color:var(--ink3);margin-left:auto}
+.note-del{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;font-size:.95rem;color:rgba(150,80,100,.3);transition:color .2s;padding:2px}
+.note-del:hover{color:#e53935}
+/* ADD FORM */
+.add-card{background:rgba(255,255,255,.92);border-radius:var(--r);padding:22px;border:1.5px solid rgba(255,200,224,.4);box-shadow:var(--shadow);margin-bottom:20px}
+.add-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:14px;color:var(--ink)}
+.add-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.inp{padding:10px 14px;border-radius:12px;border:1.5px solid var(--p2);background:rgba(255,255,255,.9);font-family:'Outfit',sans-serif;font-size:.86rem;color:var(--ink);outline:none;transition:all .2s;width:100%}
+.inp:focus{border-color:var(--p4);box-shadow:0 0 0 3px rgba(255,128,188,.12)}
+.inp-title{font-weight:600}
+textarea.inp{resize:vertical;min-height:90px;line-height:1.65}
+.color-pick{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.color-pick label{font-size:.72rem;color:var(--ink3);font-weight:500}
+.cp-opt{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .18s;flex-shrink:0}
+.cp-opt.sel{border-color:var(--ink);transform:scale(1.25)}
+.cp-0{background:#fff8fb}.cp-1{background:#ffe082}.cp-2{background:#a5d6a7}.cp-3{background:#90caf9}.cp-4{background:#f48fb1}.cp-5{background:#80deea}
+.tags-pick{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tags-pick label{font-size:.72rem;color:var(--ink3);font-weight:500}
+.tp-opt{padding:4px 11px;border-radius:50px;border:1.5px solid var(--p2);background:transparent;font-size:.74rem;cursor:pointer;transition:all .18s;font-family:'Outfit',sans-serif;color:var(--ink3)}
+.tp-opt.sel{background:var(--p5);color:#fff;border-color:var(--p5)}
+.btn{font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:500;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.btn-rose{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;box-shadow:0 4px 14px rgba(240,80,160,.28)}
+.btn-rose:hover{transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink3);border:1.5px solid #e8d0dc}
+.btn-ghost:hover{background:var(--p1);color:var(--p5)}
+.empty-notes{text-align:center;padding:48px 24px;color:var(--ink3);font-size:.9rem}
+.empty-notes .eico{font-size:2.8rem;margin-bottom:10px}
+/* MODAL */
+#noteModal{display:none;position:fixed;inset:0;z-index:8000;background:rgba(42,15,30,.8);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px}
+#noteModal.open{display:flex}
+.nm-box{background:#fff;border-radius:28px;padding:30px;max-width:540px;width:100%;animation:pop .3s both;box-shadow:0 24px 80px rgba(200,50,120,.25)}
+@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+.nm-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;margin-bottom:8px;word-break:break-word}
+.nm-body{font-size:.88rem;color:var(--ink2);line-height:1.75;white-space:pre-wrap;word-break:break-word;max-height:50vh;overflow-y:auto;margin-bottom:16px}
+.nm-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div></div>
+<div class="page">
+  <div class="nav">
+    <a href="index.html" class="nav-back">← Trang chính</a>
+    <h1 class="nav-title">Ghi chú <em>nhanh</em> 📝</h1>
+  </div>
+
+  <!-- ADD FORM -->
+  <div class="add-card">
+    <div class="add-title">✏️ Thêm ghi chú mới</div>
+    <input class="inp inp-title" id="addTitle" placeholder="Tiêu đề (tuỳ chọn)..." style="margin-bottom:10px">
+    <textarea class="inp" id="addBody" placeholder="Nội dung ghi chú... công thức, từ vựng, ý tưởng 💡" style="margin-bottom:12px"></textarea>
+    <div class="add-row" style="align-items:center;gap:16px">
+      <div class="color-pick">
+        <label>Màu:</label>
+        <div class="cp-opt cp-0 sel" data-c="0" onclick="selColor(this)"></div>
+        <div class="cp-opt cp-1" data-c="1" onclick="selColor(this)"></div>
+        <div class="cp-opt cp-2" data-c="2" onclick="selColor(this)"></div>
+        <div class="cp-opt cp-3" data-c="3" onclick="selColor(this)"></div>
+        <div class="cp-opt cp-4" data-c="4" onclick="selColor(this)"></div>
+        <div class="cp-opt cp-5" data-c="5" onclick="selColor(this)"></div>
+      </div>
+      <div class="tags-pick" id="tagsPick">
+        <label>Tag:</label>
+        <button class="tp-opt" data-t="📐 Toán" onclick="toggleTag(this)">📐 Toán</button>
+        <button class="tp-opt" data-t="✍️ Văn" onclick="toggleTag(this)">✍️ Văn</button>
+        <button class="tp-opt" data-t="🇬🇧 Anh" onclick="toggleTag(this)">🇬🇧 Anh</button>
+        <button class="tp-opt" data-t="💡 Ý tưởng" onclick="toggleTag(this)">💡 Ý tưởng</button>
+        <button class="tp-opt" data-t="📌 Quan trọng" onclick="toggleTag(this)">📌 Quan trọng</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-rose" onclick="addNote()">💾 Lưu ghi chú</button>
+      <button class="btn btn-ghost" onclick="clearForm()">✕ Xoá</button>
+    </div>
+  </div>
+
+  <!-- SEARCH + FILTER -->
+  <div class="ctrl-row">
+    <div class="search-wrap"><span class="search-ico">🔍</span><input id="searchInp" placeholder="Tìm ghi chú..." oninput="renderNotes()"></div>
+    <div class="tag-filter" id="tagFilter"></div>
+  </div>
+
+  <!-- NOTES GRID -->
+  <div class="notes-grid" id="notesGrid"></div>
+  <div class="empty-notes" id="emptyNotes" style="display:none"><div class="eico">📝</div><p>Chưa có ghi chú nào.<br>Thêm cái đầu tiên nào! 🌸</p></div>
+</div>
+
+<!-- NOTE MODAL -->
+<div id="noteModal" onclick="e=>e.target===this&&closeModal()">
+  <div class="nm-box">
+    <div class="nm-title" id="nmTitle"></div>
+    <div class="nm-body" id="nmBody"></div>
+    <div class="nm-footer">
+      <div id="nmTags"></div>
+      <span style="font-size:.7rem;color:var(--ink3);margin-left:auto" id="nmDate"></span>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal()">Đóng</button>
+      <button class="btn btn-rose" style="flex:1" id="nmEditBtn">✏️ Sửa</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const NOTES_KEY='mi_notes_v1';
+const TAG_COLORS={'📐 Toán':'#1565c0','✍️ Văn':'#c62828','🇬🇧 Anh':'#2e7d32','💡 Ý tưởng':'#f57f17','📌 Quan trọng':'#ad1457'};
+let selectedColor=0;
+let selectedTags=[];
+let filterTag=null;
+let viewingId=null;
+
+function loadNotes(){try{return JSON.parse(localStorage.getItem(NOTES_KEY)||'[]')}catch{return []}}
+function saveNotes(n){localStorage.setItem(NOTES_KEY,JSON.stringify(n))}
+
+function selColor(el){
+  document.querySelectorAll('.cp-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedColor=+el.dataset.c;
+}
+
+function toggleTag(el){
+  const t=el.dataset.t;
+  const idx=selectedTags.indexOf(t);
+  if(idx>=0){selectedTags.splice(idx,1);el.classList.remove('sel')}
+  else{selectedTags.push(t);el.classList.add('sel')}
+}
+
+function addNote(){
+  const title=document.getElementById('addTitle').value.trim();
+  const body=document.getElementById('addBody').value.trim();
+  if(!body&&!title){alert('Nhập nội dung ghi chú nhé!');return;}
+  const notes=loadNotes();
+  notes.unshift({id:Date.now(),title,body,color:selectedColor,tags:[...selectedTags],date:new Date().toLocaleDateString('vi')});
+  saveNotes(notes);
+  clearForm();
+  renderNotes();
+  renderTagFilter();
+}
+
+function clearForm(){
+  document.getElementById('addTitle').value='';
+  document.getElementById('addBody').value='';
+  selectedColor=0;
+  selectedTags=[];
+  document.querySelectorAll('.cp-opt').forEach((e,i)=>e.classList.toggle('sel',i===0));
+  document.querySelectorAll('.tp-opt').forEach(e=>e.classList.remove('sel'));
+}
+
+function deleteNote(id,e){
+  e.stopPropagation();
+  if(!confirm('Xoá ghi chú này?'))return;
+  const notes=loadNotes().filter(n=>n.id!==id);
+  saveNotes(notes);
+  renderNotes();
+  renderTagFilter();
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function renderNotes(){
+  const notes=loadNotes();
+  const q=document.getElementById('searchInp').value.toLowerCase();
+  const filtered=notes.filter(n=>{
+    const matchQ=!q||(n.title+n.body).toLowerCase().includes(q);
+    const matchTag=!filterTag||n.tags.includes(filterTag);
+    return matchQ&&matchTag;
+  });
+  const grid=document.getElementById('notesGrid');
+  const empty=document.getElementById('emptyNotes');
+  if(!filtered.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=filtered.map((n,i)=>{
+    const tagHtml=n.tags.map(t=>`<span class="note-tag" style="background:${TAG_COLORS[t]||'#9a5070'}22;color:${TAG_COLORS[t]||'#9a5070'}">${t}</span>`).join('');
+    return `<div class="note-card c${n.color}" style="animation-delay:${i*0.04}s" onclick="openNote(${n.id})">
+      <button class="note-del" onclick="deleteNote(${n.id},event)">✕</button>
+      ${n.title?`<div class="note-title">${esc(n.title)}</div>`:''}
+      <div class="note-body">${esc(n.body)}</div>
+      <div class="note-footer">${tagHtml}<span class="note-date">${n.date}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderTagFilter(){
+  const notes=loadNotes();
+  const allTags=[...new Set(notes.flatMap(n=>n.tags))];
+  const el=document.getElementById('tagFilter');
+  el.innerHTML=`<button class="tag-btn${!filterTag?' on':''}" onclick="setFilterTag(null,this)">Tất cả</button>`
+    +allTags.map(t=>`<button class="tag-btn${filterTag===t?' on':''}" onclick="setFilterTag('${t}',this)">${t}</button>`).join('');
+}
+
+function setFilterTag(t,btn){
+  filterTag=t;
+  document.querySelectorAll('.tag-btn').forEach(e=>e.classList.remove('on'));
+  btn.classList.add('on');
+  renderNotes();
+}
+
+function openNote(id){
+  const notes=loadNotes();
+  const n=notes.find(n=>n.id===id);
+  if(!n)return;
+  viewingId=id;
+  document.getElementById('nmTitle').textContent=n.title||'(không tiêu đề)';
+  document.getElementById('nmBody').textContent=n.body;
+  document.getElementById('nmDate').textContent=n.date;
+  document.getElementById('nmTags').innerHTML=n.tags.map(t=>`<span class="note-tag" style="background:${TAG_COLORS[t]||'#9a5070'}22;color:${TAG_COLORS[t]||'#9a5070'}">${t}</span>`).join('');
+  document.getElementById('noteModal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('noteModal').classList.remove('open')}
+document.getElementById('noteModal').onclick=e=>{if(e.target===document.getElementById('noteModal'))closeModal()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+document.addEventListener('DOMContentLoaded',()=>{renderNotes();renderTagFilter()});
+</script>
+</body>
+</html>

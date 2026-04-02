@@ -194,6 +194,33 @@ select.inp{cursor:pointer}
 .lb-bar{height:4px;background:var(--p1);border-radius:10px;margin-top:3px;overflow:hidden}
 .lb-bar-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--p3),var(--p5));transition:width .8s ease}
 .lb-val{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--p5);font-weight:600}
+/* CHAT */
+.chat-msg{display:flex;gap:8px;align-items:flex-end;animation:slideIn .25s both}
+.chat-msg.mine{flex-direction:row-reverse}
+.chat-bubble{max-width:72%;padding:8px 13px;border-radius:16px;font-size:.82rem;line-height:1.55;word-break:break-word}
+.chat-msg:not(.mine) .chat-bubble{background:var(--p1);border-bottom-left-radius:4px;color:var(--ink)}
+.chat-msg.mine .chat-bubble{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;border-bottom-right-radius:4px}
+.chat-msg.reaction-msg .chat-bubble{background:transparent;font-size:1.8rem;padding:2px 0;box-shadow:none}
+.chat-ava{width:28px;height:28px;border-radius:50%;background:var(--p1);border:1.5px solid var(--p2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.chat-name{font-size:.6rem;color:var(--ink3);margin-bottom:2px}
+.chat-meta{display:flex;flex-direction:column}
+.chat-time{font-size:.58rem;color:var(--ink3);margin-top:3px;opacity:.7}
+/* GOALS */
+.goal-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--p0);border:1.5px solid var(--p2);margin-bottom:8px;transition:all .2s}
+.goal-item.done{opacity:.6;border-color:var(--mint2)}
+.goal-prog-wrap{flex:1}
+.goal-label{font-size:.82rem;font-weight:500;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.goal-bar-bg{height:6px;background:var(--p1);border-radius:10px;overflow:hidden}
+.goal-bar-f{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--p3),var(--p5));transition:width .6s ease}
+.goal-bar-f.done-bar{background:linear-gradient(90deg,#a8e6cf,#4caf50)}
+.goal-pct{font-size:.7rem;color:var(--p5);font-weight:600;margin-top:3px}
+.goal-del{background:none;border:none;cursor:pointer;color:#e0c0cc;font-size:.85rem;transition:color .2s;padding:2px 5px;flex-shrink:0}
+.goal-del:hover{color:#e53935}
+/* REACTION FLOAT */
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}80%{opacity:.8;transform:translateY(-120px) scale(1.4)}100%{opacity:0;transform:translateY(-160px) scale(.8)}}
+.reaction-float{position:fixed;bottom:80px;right:30px;font-size:2.5rem;animation:floatUp 1.6s ease-out forwards;pointer-events:none;z-index:5000}
+#chatMessages::-webkit-scrollbar{width:3px}
+#chatMessages::-webkit-scrollbar-thumb{background:var(--p2);border-radius:3px}
 .ch-card-area{margin-bottom:10px}
 .ch-item{background:var(--p0);border:1.5px solid var(--p2);border-radius:16px;padding:16px;margin-bottom:10px;position:relative}
 .ch-item.active-ch{border-color:var(--p4);background:linear-gradient(135deg,#fff0f8,var(--p0))}
@@ -307,7 +334,6 @@ select.inp{cursor:pointer}
     <div class="room-hdr">
       <button class="room-back" onclick="confirmLeave()">← Về trang chính</button>
       <div class="room-title">Phòng học <em>cùng Mi</em> 🌸</div>
-      <div id="roomGreeting" style="font-family:'Outfit',sans-serif;font-size:.8rem;color:var(--ink3);display:none"></div>
       <div class="online-pill"><div class="online-dot"></div><span id="onlineCount">0</span> người online</div>
     </div>
     <!-- Today stats -->
@@ -346,6 +372,43 @@ select.inp{cursor:pointer}
         </div>
       </div>
     </div>
+    <!-- GOALS + CHAT ROW -->
+    <div class="bottom-grid" style="margin-bottom:16px">
+      <!-- GOALS -->
+      <div class="card">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:7px">🎯 Mục tiêu hôm nay<button class="btn btn-soft btn-xs" style="margin-left:auto" onclick="toggleGoalForm()">+ Đặt mục tiêu</button></div>
+        <div id="goalForm" style="display:none;margin-bottom:12px">
+          <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+            <input class="inp" id="goalInp" placeholder="VD: Học 3 tiếng hôm nay..." style="flex:1;padding:9px 13px;font-size:.83rem" onkeydown="if(event.key==='Enter')addGoal()">
+            <select class="inp" id="goalType" style="width:140px;padding:9px 11px;font-size:.82rem">
+              <option value="time">⏱ Thời gian</option>
+              <option value="pomo">🍅 Pomodoro</option>
+              <option value="free">✅ Tự do</option>
+            </select>
+            <input class="inp" id="goalTarget" type="number" min="1" placeholder="Số" style="width:80px;padding:9px 11px;font-size:.83rem" title="Số phút hoặc số vòng Pomodoro">
+          </div>
+          <button class="btn btn-rose btn-sm" style="width:100%" onclick="addGoal()">🎯 Thêm mục tiêu</button>
+        </div>
+        <div id="goalList"></div>
+      </div>
+      <!-- CHAT -->
+      <div class="card" style="display:flex;flex-direction:column">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:7px">💬 Trò chuyện nhóm
+          <div id="chatReactions" style="display:flex;gap:5px;margin-left:auto;flex-wrap:wrap">
+            <button class="btn btn-soft btn-xs" onclick="sendReaction('🎉')">🎉</button>
+            <button class="btn btn-soft btn-xs" onclick="sendReaction('💪')">💪</button>
+            <button class="btn btn-soft btn-xs" onclick="sendReaction('☕')">☕</button>
+            <button class="btn btn-soft btn-xs" onclick="sendReaction('🔥')">🔥</button>
+          </div>
+        </div>
+        <div id="chatMessages" style="flex:1;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;margin-bottom:10px;padding-right:4px"></div>
+        <div style="display:flex;gap:7px">
+          <input class="inp" id="chatInp" placeholder="Nhắn gì đó... 💕" style="flex:1;padding:9px 13px;font-size:.83rem" onkeydown="if(event.key==='Enter')sendChat()" maxlength="150">
+          <button class="btn btn-rose" style="padding:9px 16px" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Leaderboard + Challenge -->
     <div class="bottom-grid">
       <div class="card">
@@ -394,9 +457,8 @@ select.inp{cursor:pointer}
 // CONSTANTS
 // ══════════════════════════════════════════
 const AVATARS=['🌸','🌷','🌼','⭐','🦋','🐱','🐰','🦊','🐻','🐼','🍓','🍀','🎀','🎵','🌙','💎','🔥','✨','🌈','🍭','🎯','💐','🌺','🌻'];
-// Dynamic slots - supports unlimited people
-const MAX_SLOTS=20;
-const SLOTS=Array.from({length:MAX_SLOTS},(_,i)=>`slot${i+1}`);
+const MAX_MEMBERS=30;
+const SLOTS=Array.from({length:MAX_MEMBERS},(_,i)=>`slot${i+1}`);
 const SUBJECTS=['Văn','Toán','Anh','Sử','Địa','Hóa','Lý','Khác'];
 const SEMO={Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
 const MEDALS=['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
@@ -626,7 +688,7 @@ async function findSlotAndEnter(){
     }
   }
   if(!mySlot){
-    notify('Lỗi tìm vị trí! Thử lại nhé.','😅');
+    notify('Lỗi kết nối, thử lại nhé!','😅');
     showAuthScreen();
     return;
   }
@@ -641,9 +703,6 @@ async function findSlotAndEnter(){
   if(!await DB.get(`${DB_PATH}/spCfg`)) await DB.set(`${DB_PATH}/spCfg`,{study:25,brk:5,sessMax:4});
   if(!await DB.get(`${DB_PATH}/spState`)) await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:1500,sess:0,actorName:null,startTime:null});
   document.getElementById('roomScreen').classList.add('active');
-  // Show greeting
-  const greetEl=document.getElementById('roomGreeting');
-  if(greetEl){greetEl.style.display='block';greetEl.innerHTML=`${me.avatar||'🌸'} Xin chào, <strong>${escapeHtml(me.name)}</strong>! 💕`;}
   loadTodayStudyTime();
   enterRoom();
 }
@@ -708,6 +767,9 @@ function enterRoom(){
   }));
   renderTodayBar();
   renderStreak();
+  initChat();
+  renderGoals();
+  setInterval(renderGoals,15000);
 }
 
 async function checkRoomEmpty(onlineCount){
@@ -1014,13 +1076,15 @@ async function setSubject(v){await DB.update(`${DB_PATH}/slots/${me.slotId}`,{su
 // ══════════════════════════════════════════
 function renderMembers(){
   const sl=roomSnap.slots||{};
+  // Only show online members + 1 empty placeholder
   const onlineSlots=SLOTS.filter(sid=>sl[sid]&&sl[sid].online);
-  const emptyCount=Math.max(0, onlineSlots.length===0?2:1); // show 1-2 empty slots
-  const displaySlots=[...onlineSlots,...SLOTS.filter(sid=>!sl[sid]||!sl[sid].online).slice(0,emptyCount)];
-  
-  document.getElementById('membersGrid').innerHTML=displaySlots.map((sid,i)=>{
+  // Find one free slot to show as placeholder
+  const freeSlot=SLOTS.find(sid=>!sl[sid]||!sl[sid].online);
+  const displaySlots=[...onlineSlots,...(freeSlot?[freeSlot]:[])];
+
+  document.getElementById('membersGrid').innerHTML=displaySlots.map((sid)=>{
     const s=sl[sid],isMe=me&&sid===me.slotId;
-    if(!s||!s.online) return `<div class="mc empty"><div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div><div><div class="mc-name-row" style="color:var(--ink3)">Vị trí trống</div><div style="font-size:.7rem;color:var(--ink3)">Đang chờ...</div></div></div></div>`;
+    if(!s||!s.online) return `<div class="mc empty"><div class="mc-top"><div class="mc-ava-wrap"><div class="mc-ava" style="opacity:.4">🪑</div></div><div><div class="mc-name-row" style="color:var(--ink3)">Đang chờ...</div><div style="font-size:.7rem;color:var(--ink3)">Mời bạn bè vào học chung 🌸</div></div></div></div>`;
     const p=isMe?myPomo:(s.pomo||{});
     const pm=Math.floor((p.rem||0)/60),ps=(p.rem||0)%60;
     const cfg=isMe?myPomoCfg:spCfg;
@@ -1503,6 +1567,143 @@ function renderHistory(filterDate=null){
 function toggleHistDetail(id){
   const el = document.getElementById(id);
   if(el) el.classList.toggle('open');
+}
+
+// ══════════════════════════════════════════
+// CHAT
+// ══════════════════════════════════════════
+function sendChat(){
+  const inp=document.getElementById('chatInp');
+  const msg=inp.value.trim();
+  if(!msg||!me)return;
+  inp.value='';
+  DB.push(`${DB_PATH}/chat`,{
+    uid:me.uid,name:me.name,avatar:me.avatar,
+    msg,ts:Date.now(),isReaction:false
+  }).catch(()=>{});
+}
+
+function sendReaction(emoji){
+  if(!me)return;
+  DB.push(`${DB_PATH}/chat`,{
+    uid:me.uid,name:me.name,avatar:me.avatar,
+    msg:emoji,ts:Date.now(),isReaction:true
+  }).catch(()=>{});
+  // float animation
+  const el=document.createElement('div');
+  el.className='reaction-float';
+  el.textContent=emoji;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1700);
+}
+
+function renderChat(messages){
+  const el=document.getElementById('chatMessages');
+  if(!el)return;
+  const isAtBottom=el.scrollHeight-el.clientHeight<=el.scrollTop+60;
+  const msgs=Object.values(messages||{}).sort((a,b)=>a.ts-b.ts).slice(-60);
+  el.innerHTML=msgs.map(m=>{
+    const isMine=me&&m.uid===me.uid;
+    const time=new Date(m.ts).toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="chat-msg${isMine?' mine':''}${m.isReaction?' reaction-msg':''}">
+      ${!isMine?`<div class="chat-ava">${m.avatar||'👤'}</div>`:''}
+      <div class="chat-meta">
+        ${!isMine&&!m.isReaction?`<div class="chat-name">${escapeHtml(m.name)}</div>`:''}
+        <div class="chat-bubble">${m.isReaction?m.msg:escapeHtml(m.msg)}</div>
+        <div class="chat-time">${time}</div>
+      </div>
+    </div>`;
+  }).join('');
+  if(isAtBottom)el.scrollTop=el.scrollHeight;
+}
+
+function initChat(){
+  unsubs.push(DB.listen(`${DB_PATH}/chat`,snap=>{
+    renderChat(snap||{});
+    // Show reaction float for others
+    if(!snap)return;
+    const msgs=Object.values(snap).sort((a,b)=>a.ts-b.ts);
+    const last=msgs[msgs.length-1];
+    if(last&&last.isReaction&&last.uid!==me?.uid&&Date.now()-last.ts<3000){
+      const el=document.createElement('div');
+      el.className='reaction-float';el.textContent=last.msg;
+      el.style.right=(30+Math.random()*120)+'px';
+      document.body.appendChild(el);setTimeout(()=>el.remove(),1700);
+    }
+  }));
+  // Clean old messages (keep last 80)
+  setTimeout(async()=>{
+    const snap=await DB.get(`${DB_PATH}/chat`);
+    if(!snap)return;
+    const entries=Object.entries(snap).sort((a,b)=>a[1].ts-b[1].ts);
+    if(entries.length>80){
+      for(const[k]of entries.slice(0,entries.length-80)){
+        await DB.remove(`${DB_PATH}/chat/${k}`).catch(()=>{});
+      }
+    }
+  },5000);
+}
+
+// ══════════════════════════════════════════
+// GOALS
+// ══════════════════════════════════════════
+const GOALS_KEY='sr_goals_v1';
+
+function loadGoals(){try{const d=JSON.parse(localStorage.getItem(GOALS_KEY)||'{}');const t=new Date().toDateString();return d.date===t?d.goals:[];}catch{return []}}
+function saveGoals(goals){localStorage.setItem(GOALS_KEY,JSON.stringify({date:new Date().toDateString(),goals}))}
+
+function toggleGoalForm(){
+  const f=document.getElementById('goalForm');
+  f.style.display=f.style.display==='none'?'block':'none';
+}
+
+function addGoal(){
+  const label=document.getElementById('goalInp').value.trim();
+  const type=document.getElementById('goalType').value;
+  const target=+document.getElementById('goalTarget').value||0;
+  if(!label)return;
+  const goals=loadGoals();
+  goals.push({id:Date.now(),label,type,target,done:false});
+  saveGoals(goals);
+  document.getElementById('goalInp').value='';
+  document.getElementById('goalTarget').value='';
+  document.getElementById('goalForm').style.display='none';
+  renderGoals();
+}
+
+function deleteGoal(id){
+  const goals=loadGoals().filter(g=>g.id!==id);
+  saveGoals(goals);renderGoals();
+}
+
+function renderGoals(){
+  const goals=loadGoals();
+  const el=document.getElementById('goalList');
+  if(!goals.length){el.innerHTML='<p style="font-size:.8rem;color:var(--ink3);text-align:center;padding:16px 0">Chưa đặt mục tiêu nào. Thêm mục tiêu để có động lực học! 💪</p>';return;}
+  el.innerHTML=goals.map(g=>{
+    let pct=0;
+    if(g.type==='time'&&g.target>0)pct=Math.min(100,Math.round(todayStudySec/60/g.target*100));
+    else if(g.type==='pomo'&&g.target>0)pct=Math.min(100,Math.round((myPomo.sess||0)/g.target*100));
+    else if(g.type==='free')pct=g.done?100:0;
+    const done=pct>=100;
+    const barClass=done?'goal-bar-f done-bar':'goal-bar-f';
+    const checkBtn=g.type==='free'?`<button class="btn btn-soft btn-xs" onclick="toggleGoalDone(${g.id})">${g.done?'↩':'✓'}</button>`:'';
+    return `<div class="goal-item${done?' done':''}">
+      <div class="goal-prog-wrap">
+        <div class="goal-label">${done?'✅':'🎯'} ${escapeHtml(g.label)} ${checkBtn}</div>
+        <div class="goal-bar-bg"><div class="${barClass}" style="width:${pct}%"></div></div>
+        <div class="goal-pct">${pct}%${g.target&&g.type!=='free'?' · '+g.target+(g.type==='time'?' phút':' vòng'):''}${done?' 🎉':''}</div>
+      </div>
+      <button class="goal-del" onclick="deleteGoal(${g.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleGoalDone(id){
+  const goals=loadGoals();
+  const g=goals.find(g=>g.id===id);
+  if(g){g.done=!g.done;if(g.done)notify('🎉 Mục tiêu hoàn thành!','✅');}
+  saveGoals(goals);renderGoals();
 }
 
 // ══════════════════════════════════════════

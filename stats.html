@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📊 Thống kê học tập</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--p6:#c8307a;--rose:#ff6bae;--ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;--shadow:0 8px 32px rgba(200,50,120,.12);--r:20px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;overflow-x:hidden}
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.22;animation:blob 16s ease-in-out infinite alternate}
+.b1{width:600px;height:600px;background:#ffc0e0;top:-200px;right:-120px}
+.b2{width:400px;height:400px;background:#d0d8ff;bottom:-80px;left:-80px;animation-delay:-6s}
+@keyframes blob{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,20px) scale(1.08)}}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:28px 20px 72px}
+/* NAV */
+.nav{display:flex;align-items:center;gap:14px;margin-bottom:32px;flex-wrap:wrap}
+.nav-back{font-family:'Outfit',sans-serif;font-size:.82rem;background:rgba(255,255,255,.8);border:1.5px solid var(--p2);border-radius:50px;padding:8px 18px;cursor:pointer;color:var(--ink3);text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(12px)}
+.nav-back:hover{background:var(--p1);color:var(--p5)}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;flex:1}
+.nav-title em{color:var(--p5);font-style:italic}
+/* PERIOD TABS */
+.period-tabs{display:flex;background:rgba(255,255,255,.7);backdrop-filter:blur(16px);border-radius:50px;padding:4px;border:1px solid var(--p2);margin-bottom:24px;width:fit-content}
+.ptab{padding:8px 20px;border:none;background:none;border-radius:50px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:.83rem;font-weight:500;color:var(--ink3);transition:all .2s}
+.ptab.on{background:linear-gradient(135deg,var(--rose),var(--p5));color:#fff;box-shadow:0 4px 14px rgba(240,80,160,.3)}
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:700px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.sc{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-radius:var(--r);padding:20px 16px;text-align:center;border:1px solid rgba(255,200,224,.4);box-shadow:var(--shadow);animation:up .5s both}
+.sc:nth-child(2){animation-delay:.07s}.sc:nth-child(3){animation-delay:.14s}.sc:nth-child(4){animation-delay:.21s}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.sc-ico{font-size:1.6rem;margin-bottom:6px}
+.sc-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--p5);line-height:1}
+.sc-lbl{font-size:.68rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-top:4px;font-weight:500}
+.sc-sub{font-size:.72rem;color:var(--p4);margin-top:3px}
+/* CHART CARDS */
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:800px){.chart-grid{grid-template-columns:1fr}}
+.card{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-radius:var(--r);padding:22px;border:1px solid rgba(255,200,224,.4);box-shadow:var(--shadow);animation:up .5s .1s both}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:7px;color:var(--ink)}
+.card-title .sub{font-family:'Outfit',sans-serif;font-size:.7rem;font-weight:400;color:var(--ink3);margin-left:auto}
+.chart-wrap{position:relative;height:200px}
+.chart-wrap-tall{position:relative;height:260px}
+/* SUBJECT BARS */
+.subj-list{display:flex;flex-direction:column;gap:10px}
+.subj-row{display:flex;align-items:center;gap:10px}
+.subj-ico{font-size:1.2rem;width:24px;text-align:center;flex-shrink:0}
+.subj-name{font-size:.8rem;font-weight:500;min-width:48px;color:var(--ink2)}
+.subj-bar-wrap{flex:1;height:8px;background:var(--p1);border-radius:10px;overflow:hidden}
+.subj-bar{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--p3),var(--p5));transition:width 1s ease}
+.subj-time{font-size:.75rem;color:var(--p5);font-weight:600;min-width:40px;text-align:right}
+/* STREAK CALENDAR */
+.cal-wrap{display:flex;flex-direction:column;gap:4px}
+.cal-row{display:flex;gap:3px;align-items:center}
+.cal-day-lbl{font-size:.6rem;color:var(--ink3);width:20px;text-align:right;flex-shrink:0}
+.cal-cells{display:flex;gap:3px;flex:1}
+.cal-cell{width:14px;height:14px;border-radius:3px;background:var(--p1);transition:all .2s;cursor:default;flex-shrink:0}
+.cal-cell.s1{background:#ffd0e8}.cal-cell.s2{background:#ff9dc8}.cal-cell.s3{background:var(--p5)}
+.cal-cell:hover{transform:scale(1.3);z-index:2}
+.cal-month-row{display:flex;gap:3px;padding-left:24px;margin-bottom:2px}
+.cal-month-lbl{font-size:.55rem;color:var(--ink3);flex:1;text-align:center}
+/* BEST DAY */
+.best-day{background:linear-gradient(135deg,#fff0f8,var(--p1));border-radius:14px;padding:14px;border:1px solid var(--p2);margin-top:12px}
+.best-day-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:var(--ink3);font-weight:600;margin-bottom:6px}
+.best-day-val{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--p5)}
+.best-day-sub{font-size:.72rem;color:var(--ink3);margin-top:2px}
+/* EMPTY */
+.empty-state{text-align:center;padding:48px 20px;color:var(--ink3)}
+.empty-state .eico{font-size:3rem;margin-bottom:10px}
+.empty-state p{font-size:.88rem}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div></div>
+<div class="page">
+  <div class="nav">
+    <a href="index.html" class="nav-back">← Trang chính</a>
+    <h1 class="nav-title">Thống kê <em>học tập</em> 📊</h1>
+    <div class="period-tabs">
+      <button class="ptab on" onclick="setPeriod('week',this)">7 ngày</button>
+      <button class="ptab" onclick="setPeriod('month',this)">30 ngày</button>
+      <button class="ptab" onclick="setPeriod('all',this)">Tất cả</button>
+    </div>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="stat-grid" id="statGrid"></div>
+
+  <!-- MAIN CHARTS -->
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title">📅 Giờ học mỗi ngày <span class="sub" id="chartRangeLabel"></span></div>
+      <div class="chart-wrap-tall"><canvas id="dailyChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📚 Môn học</div>
+      <div class="subj-list" id="subjList"></div>
+      <div class="best-day" id="bestDayBox" style="display:none">
+        <div class="best-day-title">🏆 Ngày học nhiều nhất</div>
+        <div class="best-day-val" id="bestDayVal"></div>
+        <div class="best-day-sub" id="bestDaySub"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STREAK CALENDAR + SESSION CHART -->
+  <div class="chart-grid">
+    <div class="card">
+      <div class="card-title">🔥 Chuỗi học nhóm (12 tuần qua)</div>
+      <div id="calWrap"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🍅 Pomodoro mỗi buổi <span class="sub">học nhóm</span></div>
+      <div class="chart-wrap"><canvas id="pomoChart"></canvas></div>
+    </div>
+  </div>
+
+  <div id="emptyMsg" style="display:none" class="card">
+    <div class="empty-state">
+      <div class="eico">📊</div>
+      <p>Chưa có dữ liệu học tập nào.<br>Hãy bắt đầu học và quay lại xem thống kê nhé! 🌸</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const HIST_KEY='sr_history_v2';
+const STREAK_KEY='sr_streak_v2';
+const SEMO={Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
+const SUBJ_COLORS={'Văn':'#c62828','Toán':'#1565c0','Anh':'#2e7d32','Sử':'#4527a0','Địa':'#00695c','Hóa:':'#e65100','Lý':'#6a1b9a','Khác':'#37474f'};
+let period='week';
+let dailyChartInst=null, pomoChartInst=null;
+
+function loadHistory(){
+  try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch{return []}
+}
+
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
+
+function filterByPeriod(history,p){
+  const now=Date.now();
+  const cutoffs={week:7*86400000,month:30*86400000,all:Infinity};
+  const cutoff=cutoffs[p]||cutoffs.week;
+  return history.filter(h=>{
+    const[y,m,d]=h.date.split('-').map(Number);
+    return now-new Date(y,m-1,d).getTime()<=cutoff;
+  });
+}
+
+function fmtH(sec){
+  if(!sec)return '0p';
+  const m=Math.floor(sec/60);
+  const h=Math.floor(m/60);
+  return h?`${h}g${m%60?m%60+'p':''}`:m+'p';
+}
+
+function setPeriod(p,btn){
+  period=p;
+  document.querySelectorAll('.ptab').forEach(el=>el.classList.remove('on'));
+  btn.classList.add('on');
+  renderAll();
+}
+
+function renderAll(){
+  const history=loadHistory();
+  const filtered=filterByPeriod(history,period);
+  if(!history.length){
+    document.getElementById('emptyMsg').style.display='block';
+    document.getElementById('statGrid').style.display='none';
+    return;
+  }
+  document.getElementById('emptyMsg').style.display='none';
+  document.getElementById('statGrid').style.display='grid';
+  renderStatCards(filtered,history);
+  renderDailyChart(filtered);
+  renderSubjectList(filtered);
+  renderCalendar();
+  renderPomoChart(filtered);
+}
+
+function renderStatCards(filtered,all){
+  const totalSec=filtered.reduce((s,h)=>s+(h.totalStudySec||0),0);
+  const sessions=filtered.length;
+  const streak=getStreak();
+  const avgSec=sessions?Math.round(totalSec/sessions):0;
+  const allTotal=all.reduce((s,h)=>s+(h.totalStudySec||0),0);
+
+  document.getElementById('statGrid').innerHTML=`
+    <div class="sc"><div class="sc-ico">⏱</div><div class="sc-num">${fmtH(totalSec)}</div><div class="sc-lbl">Tổng giờ học</div><div class="sc-sub">kỳ này</div></div>
+    <div class="sc"><div class="sc-ico">📅</div><div class="sc-num">${sessions}</div><div class="sc-lbl">Buổi học nhóm</div><div class="sc-sub">đã tham gia</div></div>
+    <div class="sc"><div class="sc-ico">🔥</div><div class="sc-num">${streak}</div><div class="sc-lbl">Ngày liên tiếp</div><div class="sc-sub">chuỗi hiện tại</div></div>
+    <div class="sc"><div class="sc-ico">⏳</div><div class="sc-num">${fmtH(avgSec)}</div><div class="sc-lbl">Trung bình/buổi</div><div class="sc-sub">${fmtH(allTotal)} tích lũy</div></div>
+  `;
+}
+
+function renderDailyChart(filtered){
+  const label=document.getElementById('chartRangeLabel');
+  const days=period==='week'?7:period==='month'?30:Math.max(14,filtered.length);
+  label.textContent=`${days} ngày gần nhất`;
+
+  // Build date map
+  const map={};
+  filtered.forEach(h=>map[h.date]=(map[h.date]||0)+(h.totalStudySec||0));
+
+  const labels=[],data=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    const dayNames=['CN','T2','T3','T4','T5','T6','T7'];
+    labels.push(i===0?'Hôm nay':dayNames[d.getDay()]+` ${d.getDate()}/${d.getMonth()+1}`);
+    data.push(Math.round((map[key]||0)/60));
+  }
+
+  if(dailyChartInst)dailyChartInst.destroy();
+  dailyChartInst=new Chart(document.getElementById('dailyChart'),{
+    type:'bar',
+    data:{labels,datasets:[{
+      label:'Phút học',data,
+      backgroundColor:data.map(v=>v>0?'rgba(240,80,160,.7)':'rgba(255,200,224,.4)'),
+      borderColor:data.map(v=>v>0?'#f050a0':'#ffd0e8'),
+      borderWidth:1.5,borderRadius:6,borderSkipped:false
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} phút`}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,200,224,.2)'},ticks:{color:'#9a5070',font:{size:10},callback:v=>v+'p'}},x:{grid:{display:false},ticks:{color:'#9a5070',font:{size:9},maxRotation:45}}}}
+  });
+}
+
+function renderSubjectList(filtered){
+  const subjMap={};
+  filtered.forEach(h=>(h.members||[]).forEach(m=>{if(m.subject)subjMap[m.subject]=(subjMap[m.subject]||0)+(m.totalStudySec||0)}));
+  const sorted=Object.entries(subjMap).sort((a,b)=>b[1]-a[1]);
+  const max=sorted[0]?.[1]||1;
+  const el=document.getElementById('subjList');
+  if(!sorted.length){el.innerHTML='<p style="font-size:.8rem;color:var(--ink3);text-align:center;padding:20px 0">Chưa có dữ liệu môn học</p>';return;}
+  el.innerHTML=sorted.map(([s,sec])=>`
+    <div class="subj-row">
+      <span class="subj-ico">${SEMO[s]||'📚'}</span>
+      <span class="subj-name">${s}</span>
+      <div class="subj-bar-wrap"><div class="subj-bar" style="width:${Math.round(sec/max*100)}%"></div></div>
+      <span class="subj-time">${fmtH(sec)}</span>
+    </div>`).join('');
+
+  // Best day
+  const dayMap={};
+  filtered.forEach(h=>{dayMap[h.date]=(dayMap[h.date]||0)+(h.totalStudySec||0)});
+  const best=Object.entries(dayMap).sort((a,b)=>b[1]-a[1])[0];
+  if(best){
+    document.getElementById('bestDayBox').style.display='block';
+    document.getElementById('bestDayVal').textContent=fmtH(best[1]);
+    document.getElementById('bestDaySub').textContent=best[0];
+  }
+}
+
+function getStreak(){
+  try{const s=JSON.parse(localStorage.getItem(STREAK_KEY)||'{}');return s.days||0}catch{return 0}
+}
+
+function renderCalendar(){
+  const history=loadHistory();
+  const dateSet=new Set(history.map(h=>h.date));
+  const today=new Date();
+  const days=84; // 12 weeks
+  const weeks=12;
+  const dayLabels=['CN','T2','T3','T4','T5','T6','T7'];
+
+  // Build 7-row grid (rows=day of week, cols=weeks)
+  const grid=Array.from({length:7},()=>Array(weeks).fill(null));
+  for(let i=0;i<days;i++){
+    const d=new Date(today);d.setDate(d.getDate()-(days-1-i));
+    const key=`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    const w=Math.floor(i/7),dow=d.getDay();
+    // find col
+    const col=Math.floor(i/7);
+    grid[dow][col]={key,hasData:dateSet.has(key),date:d};
+  }
+
+  // Month labels
+  const monthNames=['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+  let monthRow='<div class="cal-month-row">';
+  let lastMonth=-1;
+  for(let c=0;c<weeks;c++){
+    let shown=false;
+    for(let r=0;r<7;r++){
+      if(grid[r][c]&&grid[r][c].date){
+        const m=grid[r][c].date.getMonth();
+        if(m!==lastMonth){monthRow+=`<span class="cal-month-lbl">${monthNames[m]}</span>`;lastMonth=m;shown=true;break}
+      }
+    }
+    if(!shown)monthRow+='<span class="cal-month-lbl"></span>';
+  }
+  monthRow+='</div>';
+
+  let html=monthRow;
+  for(let r=0;r<7;r++){
+    html+=`<div class="cal-row"><span class="cal-day-lbl">${r===1||r===3||r===5?dayLabels[r]:''}</span><div class="cal-cells">`;
+    for(let c=0;c<weeks;c++){
+      const cell=grid[r][c];
+      if(!cell){html+='<div class="cal-cell"></div>';continue;}
+      const cls=cell.hasData?'cal-cell s3':'cal-cell';
+      const title=cell.hasData?`📅 Đã học: ${cell.key}`:`Không học: ${cell.key}`;
+      html+=`<div class="${cls}" title="${title}"></div>`;
+    }
+    html+='</div></div>';
+  }
+  document.getElementById('calWrap').innerHTML=html;
+}
+
+function renderPomoChart(filtered){
+  const labels=[],data=[];
+  filtered.slice(-10).forEach(h=>{
+    const pomo=(h.members||[]).reduce((s,m)=>s+(m.pomo||0),0);
+    labels.push(h.date.slice(5));
+    data.push(pomo);
+  });
+  if(pomoChartInst)pomoChartInst.destroy();
+  pomoChartInst=new Chart(document.getElementById('pomoChart'),{
+    type:'line',
+    data:{labels,datasets:[{label:'Pomodoro',data,borderColor:'#f050a0',backgroundColor:'rgba(240,80,160,.12)',fill:true,tension:.4,pointBackgroundColor:'#f050a0',pointRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,200,224,.2)'},ticks:{color:'#9a5070',font:{size:10}}},x:{grid:{display:false},ticks:{color:'#9a5070',font:{size:9}}}}}
+  });
+}
+
+document.addEventListener('DOMContentLoaded',renderAll);
+</script>
+</body>
+</html>

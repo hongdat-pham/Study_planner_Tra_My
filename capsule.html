@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📸 Time Capsule</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+:root{--p0:#fff8fb;--p1:#ffe8f3;--p2:#ffd0e8;--p3:#ffadd4;--p4:#ff80bc;--p5:#f050a0;--p6:#c8307a;--rose:#ff6bae;--ink:#2a0f1e;--ink2:#5a2040;--ink3:#9a5070;--shadow:0 8px 32px rgba(200,50,120,.12);--r:22px;--gold:#d4a843;--gold2:#f5d78e}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--p0);color:var(--ink);min-height:100vh;overflow-x:hidden}
+.bg-layer{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.bg-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.2;animation:blob 18s ease-in-out infinite alternate}
+.b1{width:550px;height:550px;background:#ffd0a0;top:-150px;right:-100px}
+.b2{width:400px;height:400px;background:#d0c0ff;bottom:-80px;left:-80px;animation-delay:-8s}
+@keyframes blob{from{transform:translate(0,0)}to{transform:translate(30px,25px) scale(1.07)}}
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:28px 20px 72px}
+/* NAV */
+.nav{display:flex;align-items:center;gap:14px;margin-bottom:32px;flex-wrap:wrap}
+.nav-back{font-size:.82rem;background:rgba(255,255,255,.8);border:1.5px solid var(--p2);border-radius:50px;padding:8px 18px;cursor:pointer;color:var(--ink3);text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;backdrop-filter:blur(12px)}
+.nav-back:hover{background:var(--p1);color:var(--p5)}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;flex:1}
+.nav-title em{color:var(--gold);font-style:italic}
+/* HERO BANNER */
+.hero-banner{background:linear-gradient(135deg,#1a0a0a 0%,#2d1a0a 40%,#1a0a20 100%);border-radius:var(--r);padding:36px 40px;margin-bottom:28px;color:#fff;text-align:center;position:relative;overflow:hidden}
+.hero-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 30%,rgba(212,168,67,.15),transparent 60%)}
+.hb-script{font-family:'Sacramento',cursive;font-size:1.6rem;color:var(--gold2);margin-bottom:6px;position:relative;z-index:1}
+.hb-h1{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:300;margin-bottom:8px;position:relative;z-index:1}
+.hb-h1 em{color:var(--gold2);font-style:italic}
+.hb-sub{font-size:.85rem;opacity:.65;position:relative;z-index:1;line-height:1.6}
+.hb-stars{font-size:1.4rem;letter-spacing:8px;margin:14px 0 0;position:relative;z-index:1}
+/* CREATE CAPSULE */
+.create-card{background:rgba(255,255,255,.9);border-radius:var(--r);padding:26px;border:1.5px solid rgba(255,200,224,.5);box-shadow:var(--shadow);margin-bottom:28px}
+.create-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:580px){.form-grid{grid-template-columns:1fr}}
+.field label{font-size:.7rem;color:var(--ink3);font-weight:600;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.inp{width:100%;padding:10px 14px;border-radius:12px;border:1.5px solid var(--p2);background:rgba(255,255,255,.9);font-family:'Outfit',sans-serif;font-size:.86rem;color:var(--ink);outline:none;transition:all .2s}
+.inp:focus{border-color:var(--p4);box-shadow:0 0 0 3px rgba(255,128,188,.12)}
+textarea.inp{resize:vertical;min-height:80px;line-height:1.65}
+.open-date-note{font-size:.76rem;color:var(--ink3);margin-top:6px;font-style:italic}
+/* MOOD PICKER */
+.mood-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.mood-opt{font-size:1.5rem;padding:7px;border-radius:12px;border:2px solid transparent;cursor:pointer;transition:all .18s;background:var(--p0)}
+.mood-opt:hover{transform:scale(1.2)}
+.mood-opt.sel{border-color:var(--p5);background:var(--p1);transform:scale(1.15)}
+/* STATS PREVIEW */
+.stats-preview{background:linear-gradient(135deg,var(--p1),var(--p0));border-radius:14px;padding:14px;border:1px solid var(--p2);margin-bottom:14px}
+.sp-title{font-size:.72rem;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.sp-row{display:flex;gap:10px;flex-wrap:wrap}
+.sp-item{background:white;border-radius:10px;padding:8px 13px;font-size:.78rem;border:1px solid var(--p2);text-align:center;min-width:80px}
+.sp-num{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--p5);font-weight:600;line-height:1}
+.sp-lbl{font-size:.6rem;color:var(--ink3);margin-top:2px}
+.btn{font-family:'Outfit',sans-serif;font-size:.86rem;font-weight:500;padding:10px 22px;border-radius:50px;border:none;cursor:pointer;transition:all .2s}
+.btn-gold{background:linear-gradient(135deg,#e8b84b,var(--gold));color:#fff;box-shadow:0 4px 14px rgba(212,168,67,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(212,168,67,.45)}
+.btn-ghost{background:transparent;color:var(--ink3);border:1.5px solid #e8d0dc}
+.btn-ghost:hover{background:var(--p1);color:var(--p5)}
+/* CAPSULE LIST */
+.section-hdr{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--ink)}
+.caps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:28px}
+.cap-card{border-radius:var(--r);padding:22px;border:2px solid;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;animation:capIn .4s both}
+@keyframes capIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.cap-card.locked{background:linear-gradient(135deg,#1a0a0a,#2a1a0a);border-color:#4a3010;color:#fff}
+.cap-card.locked:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.cap-card.unlocked{background:linear-gradient(135deg,#fff8e8,#fffde8);border-color:var(--gold)}
+.cap-card.unlocked:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(212,168,67,.3)}
+.cap-lock-ico{font-size:2.2rem;margin-bottom:10px}
+.cap-week{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;margin-bottom:4px}
+.cap-week em{color:var(--gold2);font-style:italic}
+.cap-date{font-size:.75rem;opacity:.6;margin-bottom:12px}
+.cap-countdown{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--gold2);margin-bottom:6px}
+.cap-cd-lbl{font-size:.7rem;opacity:.5;text-transform:uppercase;letter-spacing:.6px}
+.cap-mood-preview{font-size:1.8rem;position:absolute;top:14px;right:16px;opacity:.5}
+.unlocked .cap-preview{font-size:.82rem;opacity:.8;line-height:1.6;margin-top:8px}
+.cap-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.cap-tag{font-size:.65rem;padding:2px 9px;border-radius:20px;background:rgba(212,168,67,.2);color:var(--gold);border:1px solid rgba(212,168,67,.3);font-weight:600}
+.unlocked .cap-tag{background:rgba(212,168,67,.15);color:#7a5a10}
+/* OPEN MODAL */
+#openModal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(10,5,20,.92);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:20px}
+#openModal.show{display:flex}
+.om-box{background:linear-gradient(160deg,#fff8e8,#fffde8);border-radius:28px;padding:36px 32px;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;animation:popGold .5s cubic-bezier(0.16,1,0.3,1) both;box-shadow:0 30px 100px rgba(212,168,67,.35),0 0 0 2px var(--gold);position:relative}
+@keyframes popGold{from{opacity:0;transform:scale(.88) translateY(30px)}to{opacity:1;transform:none}}
+.om-confetti{font-size:2.5rem;text-align:center;margin-bottom:8px;animation:bounce .6s both}
+@keyframes bounce{0%{transform:translateY(-20px);opacity:0}60%{transform:translateY(5px)}100%{transform:none;opacity:1}}
+.om-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;text-align:center;margin-bottom:4px;color:var(--ink)}
+.om-title em{color:var(--gold);font-style:italic}
+.om-date{text-align:center;font-size:.8rem;color:var(--ink3);margin-bottom:22px}
+.om-section{margin-bottom:18px;padding:16px;background:rgba(255,255,255,.65);border-radius:16px;border:1px solid rgba(212,168,67,.25)}
+.om-section-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);font-weight:700;margin-bottom:10px}
+.om-mood{font-size:2.5rem;text-align:center;margin-bottom:6px}
+.om-text{font-size:.9rem;color:var(--ink2);line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.om-stat-row{display:flex;gap:10px;flex-wrap:wrap}
+.om-stat{flex:1;min-width:80px;background:white;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid rgba(212,168,67,.2)}
+.om-stat-n{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--p5);line-height:1}
+.om-stat-l{font-size:.6rem;color:var(--ink3);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+.om-close{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.6);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1rem;color:var(--ink3);transition:all .2s;display:flex;align-items:center;justify-content:center}
+.om-close:hover{background:var(--p1);color:var(--p5)}
+.empty-caps{text-align:center;padding:40px;color:var(--ink3)}
+.empty-caps .eico{font-size:3rem;margin-bottom:10px}
+</style>
+</head>
+<body>
+<div class="bg-layer"><div class="bg-blob b1"></div><div class="bg-blob b2"></div></div>
+<div class="page">
+  <div class="nav">
+    <a href="index.html" class="nav-back">← Trang chính</a>
+    <h1 class="nav-title">Time <em>Capsule</em> ✨</h1>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <div class="hb-script">những kỷ niệm học tập của mình</div>
+    <h1 class="hb-h1">Nhật ký <em>học tập</em> theo tuần</h1>
+    <p class="hb-sub">Ghi lại hành trình học tập của bạn.<br>Mở capsule sau vài tuần/tháng để nhìn lại con đường đã đi 🌸</p>
+    <div class="hb-stars">⭐ 🌸 ✨ 🌸 ⭐</div>
+  </div>
+
+  <!-- CREATE CAPSULE -->
+  <div class="create-card">
+    <div class="create-title">📦 Tạo capsule tuần này</div>
+    <div class="stats-preview" id="statsPreview">
+      <div class="sp-title">📊 Dữ liệu tự động từ tuần này</div>
+      <div class="sp-row" id="spRow"><span style="font-size:.8rem;color:var(--ink3)">Đang tải...</span></div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Tiêu đề tuần (tuỳ chọn)</label>
+        <input class="inp" id="capTitle" placeholder="VD: Tuần ôn thi HK2...">
+      </div>
+      <div class="field">
+        <label>Mở capsule sau</label>
+        <select class="inp" id="capUnlock">
+          <option value="7">1 tuần</option>
+          <option value="14">2 tuần</option>
+          <option value="30" selected>1 tháng</option>
+          <option value="90">3 tháng</option>
+          <option value="180">6 tháng</option>
+          <option value="365">1 năm</option>
+        </select>
+        <p class="open-date-note" id="openDateNote"></p>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Tâm trạng tuần này</label>
+      <div class="mood-row" id="moodRow">
+        <div class="mood-opt" data-m="😊" onclick="selMood(this)">😊</div>
+        <div class="mood-opt" data-m="⚡" onclick="selMood(this)">⚡</div>
+        <div class="mood-opt" data-m="😌" onclick="selMood(this)">😌</div>
+        <div class="mood-opt" data-m="😴" onclick="selMood(this)">😴</div>
+        <div class="mood-opt" data-m="😤" onclick="selMood(this)">😤</div>
+        <div class="mood-opt" data-m="🥰" onclick="selMood(this)">🥰</div>
+        <div class="mood-opt" data-m="💪" onclick="selMood(this)">💪</div>
+        <div class="mood-opt" data-m="😢" onclick="selMood(this)">😢</div>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Điều đáng nhớ nhất tuần này</label>
+      <textarea class="inp" id="capMemo" placeholder="Ghi lại khoảnh khắc đáng nhớ, thành tích, bài học... 💕" rows="3"></textarea>
+    </div>
+    <div class="field" style="margin-bottom:14px">
+      <label>Ước mơ / mục tiêu cho tương lai</label>
+      <textarea class="inp" id="capDream" placeholder="Tôi muốn... khi mở capsule này ra, tôi sẽ..." rows="2"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-gold" onclick="createCapsule()">📦 Niêm phong capsule</button>
+      <button class="btn btn-ghost" onclick="clearCapForm()">✕ Xoá</button>
+    </div>
+  </div>
+
+  <!-- UNLOCKED -->
+  <div id="unlockedSection" style="display:none">
+    <div class="section-hdr">🔓 Capsule đã mở được</div>
+    <div class="caps-grid" id="unlockedGrid"></div>
+  </div>
+
+  <!-- LOCKED -->
+  <div id="lockedSection" style="display:none">
+    <div class="section-hdr">🔒 Capsule đang chờ mở</div>
+    <div class="caps-grid" id="lockedGrid"></div>
+  </div>
+
+  <div id="emptyMsg" style="display:none" class="empty-caps">
+    <div class="eico">📦</div>
+    <p>Chưa có capsule nào. Tạo capsule đầu tiên để lưu kỷ niệm tuần học nhé! 🌸</p>
+  </div>
+</div>
+
+<!-- OPEN MODAL -->
+<div id="openModal" onclick="e=>{if(e.target===document.getElementById('openModal'))closeOM()}">
+  <div class="om-box">
+    <button class="om-close" onclick="closeOM()">✕</button>
+    <div class="om-confetti" id="omConfetti">🎉</div>
+    <h2 class="om-title" id="omTitle">Capsule <em>đã mở!</em></h2>
+    <div class="om-date" id="omDate"></div>
+    <div id="omContent"></div>
+    <button class="btn btn-gold" style="width:100%;margin-top:6px;padding:12px" onclick="closeOM()">✨ Tuyệt vời!</button>
+  </div>
+</div>
+
+<script>
+const CAP_KEY='mi_capsules_v1';
+const HIST_KEY='sr_history_v2';
+const STREAK_KEY='sr_streak_v2';
+let selectedMood='😊';
+
+function loadCapsules(){try{return JSON.parse(localStorage.getItem(CAP_KEY)||'[]')}catch{return []}}
+function saveCapsules(c){localStorage.setItem(CAP_KEY,JSON.stringify(c))}
+
+function loadHistory(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch{return []}}
+
+function selMood(el){
+  document.querySelectorAll('.mood-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedMood=el.dataset.m;
+}
+
+function fmtH(sec){
+  if(!sec)return '0p';
+  const m=Math.floor(sec/60),h=Math.floor(m/60);
+  return h?`${h}g${m%60?m%60+'p':''}`:m+'p';
+}
+
+function getWeekStats(){
+  const history=loadHistory();
+  const now=Date.now();
+  const week7=history.filter(h=>{
+    const[y,m,d]=h.date.split('-').map(Number);
+    return now-new Date(y,m-1,d).getTime()<=7*86400000;
+  });
+  const totalSec=week7.reduce((s,h)=>s+(h.totalStudySec||0),0);
+  const sessions=week7.length;
+  const streak=getStreak();
+  const pomo=week7.reduce((s,h)=>s+(h.members||[]).reduce((ss,m)=>ss+(m.pomo||0),0),0);
+  return{totalSec,sessions,streak,pomo};
+}
+
+function getStreak(){try{return JSON.parse(localStorage.getItem(STREAK_KEY)||'{}').days||0}catch{return 0}}
+
+function renderStatsPreview(){
+  const s=getWeekStats();
+  document.getElementById('spRow').innerHTML=`
+    <div class="sp-item"><div class="sp-num">${fmtH(s.totalSec)}</div><div class="sp-lbl">Học tuần này</div></div>
+    <div class="sp-item"><div class="sp-num">${s.sessions}</div><div class="sp-lbl">Buổi nhóm</div></div>
+    <div class="sp-item"><div class="sp-num">${s.streak}</div><div class="sp-lbl">Streak 🔥</div></div>
+    <div class="sp-item"><div class="sp-num">${s.pomo}</div><div class="sp-lbl">Pomodoro 🍅</div></div>
+  `;
+  const days=+document.getElementById('capUnlock').value||30;
+  const d=new Date();d.setDate(d.getDate()+days);
+  document.getElementById('openDateNote').textContent=`Mở vào: ${d.toLocaleDateString('vi',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}`;
+}
+
+document.getElementById('capUnlock').onchange=()=>{
+  const days=+document.getElementById('capUnlock').value||30;
+  const d=new Date();d.setDate(d.getDate()+days);
+  document.getElementById('openDateNote').textContent=`Mở vào: ${d.toLocaleDateString('vi',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}`;
+};
+
+function createCapsule(){
+  const days=+document.getElementById('capUnlock').value||30;
+  const stats=getWeekStats();
+  const cap={
+    id:Date.now(),
+    title:document.getElementById('capTitle').value.trim()||`Tuần ${new Date().toLocaleDateString('vi')}`,
+    mood:selectedMood,
+    memo:document.getElementById('capMemo').value.trim(),
+    dream:document.getElementById('capDream').value.trim(),
+    stats,
+    createdAt:Date.now(),
+    openAt:Date.now()+days*86400000,
+    createdDate:new Date().toLocaleDateString('vi',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
+  };
+  const caps=loadCapsules();
+  caps.unshift(cap);
+  saveCapsules(caps);
+  clearCapForm();
+  renderCapsules();
+  // Celebration
+  const banner=document.createElement('div');
+  banner.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#1a0a0a,#2a1a0a);color:#f5d78e;padding:28px 40px;border-radius:22px;text-align:center;z-index:9999;font-family:Cormorant Garamond,serif;font-size:1.4rem;box-shadow:0 20px 60px rgba(0,0,0,.6);border:2px solid #4a3010;animation:popGold .5s both';
+  banner.innerHTML=`<div style="font-size:2.5rem;margin-bottom:8px">📦</div>Capsule đã được niêm phong!<br><span style="font-size:.9rem;opacity:.7;font-family:Outfit,sans-serif">Mở sau ${days} ngày nữa 🌸</span>`;
+  document.body.appendChild(banner);
+  setTimeout(()=>banner.remove(),2800);
+}
+
+function clearCapForm(){
+  document.getElementById('capTitle').value='';
+  document.getElementById('capMemo').value='';
+  document.getElementById('capDream').value='';
+  document.querySelectorAll('.mood-opt').forEach((e,i)=>e.classList.toggle('sel',i===0));
+  selectedMood='😊';
+}
+
+function renderCapsules(){
+  const caps=loadCapsules();
+  const now=Date.now();
+  const locked=caps.filter(c=>c.openAt>now);
+  const unlocked=caps.filter(c=>c.openAt<=now);
+
+  if(!caps.length){document.getElementById('emptyMsg').style.display='block';document.getElementById('lockedSection').style.display='none';document.getElementById('unlockedSection').style.display='none';return;}
+  document.getElementById('emptyMsg').style.display='none';
+
+  // UNLOCKED
+  const unSec=document.getElementById('unlockedSection');
+  if(unlocked.length){
+    unSec.style.display='block';
+    document.getElementById('unlockedGrid').innerHTML=unlocked.map((c,i)=>`
+      <div class="cap-card unlocked" style="animation-delay:${i*.06}s" onclick="openCapsule(${c.id})">
+        <div class="cap-mood-preview">${c.mood}</div>
+        <div class="cap-lock-ico">🔓</div>
+        <div class="cap-week">${c.title||'Capsule học tập'}</div>
+        <div class="cap-date">Tạo ngày ${c.createdDate}</div>
+        <div class="unlocked cap-preview">${c.memo?c.memo.slice(0,80)+(c.memo.length>80?'...':''):'Nhấn để xem nội dung 💌'}</div>
+        <div class="cap-tags"><span class="cap-tag">🔓 Đã mở</span><span class="cap-tag">⏱ ${fmtH(c.stats?.totalSec)}</span></div>
+      </div>`).join('');
+  }else unSec.style.display='none';
+
+  // LOCKED
+  const lkSec=document.getElementById('lockedSection');
+  if(locked.length){
+    lkSec.style.display='block';
+    document.getElementById('lockedGrid').innerHTML=locked.map((c,i)=>{
+      const ms=c.openAt-now;
+      const d=Math.ceil(ms/86400000);
+      const h=Math.ceil(ms/3600000);
+      const display=d>1?`${d} ngày`:h>1?`${h} giờ`:'Sắp mở!';
+      return `<div class="cap-card locked" style="animation-delay:${i*.06}s" onclick="tryOpenLocked(${c.id})">
+        <div class="cap-mood-preview" style="opacity:.3">${c.mood}</div>
+        <div class="cap-lock-ico">🔒</div>
+        <div class="cap-week" style="opacity:.8">${c.title||'Capsule học tập'}</div>
+        <div class="cap-date" style="opacity:.5">Tạo ${c.createdDate}</div>
+        <div class="cap-countdown">${display}</div>
+        <div class="cap-cd-lbl">cho đến khi mở được</div>
+        <div class="cap-tags" style="margin-top:10px"><span class="cap-tag">🔒 Đang chờ</span><span class="cap-tag">📅 Mở ${new Date(c.openAt).toLocaleDateString('vi')}</span></div>
+      </div>`;
+    }).join('');
+  }else lkSec.style.display='none';
+}
+
+function tryOpenLocked(id){
+  const c=loadCapsules().find(c=>c.id===id);
+  if(!c||c.openAt>Date.now()){
+    const d=Math.ceil((c.openAt-Date.now())/86400000);
+    alert(`Capsule này còn ${d} ngày nữa mới mở được! Hãy kiên nhẫn 🌸`);
+  }
+}
+
+function openCapsule(id){
+  const c=loadCapsules().find(c=>c.id===id);
+  if(!c)return;
+  if(c.openAt>Date.now()){tryOpenLocked(id);return;}
+  document.getElementById('omConfetti').textContent='🎉🌸🎉';
+  document.getElementById('omTitle').innerHTML=`Capsule <em>${c.title||'học tập'}</em>`;
+  document.getElementById('omDate').textContent=`Được tạo: ${c.createdDate}`;
+  const s=c.stats||{};
+  document.getElementById('omContent').innerHTML=`
+    <div class="om-section">
+      <div class="om-section-title">💭 Tâm trạng lúc đó</div>
+      <div class="om-mood">${c.mood}</div>
+    </div>
+    ${c.memo?`<div class="om-section"><div class="om-section-title">✍️ Điều đáng nhớ</div><div class="om-text">${c.memo}</div></div>`:''}
+    ${c.dream?`<div class="om-section"><div class="om-section-title">🌟 Ước mơ lúc đó</div><div class="om-text">${c.dream}</div></div>`:''}
+    <div class="om-section">
+      <div class="om-section-title">📊 Thành tích tuần đó</div>
+      <div class="om-stat-row">
+        <div class="om-stat"><div class="om-stat-n">${fmtH(s.totalSec)}</div><div class="om-stat-l">Tổng học</div></div>
+        <div class="om-stat"><div class="om-stat-n">${s.sessions||0}</div><div class="om-stat-l">Buổi nhóm</div></div>
+        <div class="om-stat"><div class="om-stat-n">${s.streak||0}🔥</div><div class="om-stat-l">Streak</div></div>
+        <div class="om-stat"><div class="om-stat-n">${s.pomo||0}🍅</div><div class="om-stat-l">Pomodoro</div></div>
+      </div>
+    </div>`;
+  document.getElementById('openModal').classList.add('show');
+}
+
+function closeOM(){document.getElementById('openModal').classList.remove('show')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeOM()});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  renderStatsPreview();
+  renderCapsules();
+  // default mood select
+  document.querySelector('.mood-opt').classList.add('sel');
+});
+</script>
+</body>
+</html>
