@@ -885,7 +885,7 @@ select.inp{cursor:pointer}
 <div id="authOverlay">
   <div class="ao-wrap">
     <div class="ao-brand">
-      <span class="ao-script">chào mừng đến không gian học của My 💌</span>
+      <span class="ao-script">chào mừng đến không gian học của mình 💌</span>
       <h1 class="ao-h1">Mi's Study <em>Space</em></h1>
       <p class="ao-sub">Đăng nhập để lưu tiến độ học tập ✨</p>
     </div>
@@ -970,7 +970,7 @@ select.inp{cursor:pointer}
     <div class="hero-date" id="heroDate"></div>
     <div id="greetingPill">
       <span id="gpAva">🌸</span>
-      <span>Xin chào, <em id="gpName">bạn</em>! Chúc cậu học thật tốt nè 💕</span>
+      <span>Xin chào, <em id="gpName">bạn</em>! Chúc học thật tốt nhé 💕</span>
     </div>
     <div class="hero-actions">
       <a href="study-room.html" class="hero-room-btn">
@@ -1007,7 +1007,7 @@ select.inp{cursor:pointer}
 
   <!-- MOOD BAR -->
   <div class="mood-bar">
-    <span class="mood-lbl">Hôm nay em bé cảm thấy thế nào ạaa?</span>
+    <span class="mood-lbl">Hôm nay em bé cảm thấy thế nào ạ?</span>
     <div class="mood-emojis">
       <button class="mood-btn" data-m="Vui vẻ 🌟" onclick="setMood(this)">😊</button>
       <button class="mood-btn" data-m="Có năng lượng ⚡" onclick="setMood(this)">⚡</button>
@@ -1200,8 +1200,56 @@ const MUSIC=[
 // ─── HELPERS ───
 const nm=()=>{const d=new Date();return d.getHours()*60+d.getMinutes()};
 const fmM=m=>{if(m<=0)return'0p';const h=Math.floor(m/60),mn=m%60;return h?`${h}h ${mn}p`:`${mn} phút`};
-const LS={g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},s:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
 const tk=()=>{const d=new Date();return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`};
+
+// Keys được sync lên Firebase theo uid (dữ liệu quan trọng, không phụ thuộc thiết bị)
+const CLOUD_KEYS=['exams_v2','timetable_v1','sr_goals_v1','sr_streak_v2','sr_history_v2'];
+// Keys chỉ lưu local (tasks theo ngày, pomodoro count theo ngày — gắn với thiết bị đang học)
+// tasks_YYYY_M_D  |  pomo_YYYY_M_D  → local only
+
+function _uid(){try{return JSON.parse(localStorage.getItem('studyroom_session'))?.uid||null}catch{return null}}
+
+// Đọc: local trước, Firebase là nguồn chính cho CLOUD_KEYS
+const LS={
+  g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},
+  s:(k,v)=>{
+    localStorage.setItem(k,JSON.stringify(v));
+    // Nếu là key cần sync và đã đăng nhập → ghi lên Firebase
+    if(CLOUD_KEYS.includes(k)){
+      const uid=_uid();
+      if(uid&&window._FB_READY){
+        try{
+          const{db,ref,set}=window._FB;
+          set(ref(db,`userData/${uid}/${k}`),v).catch(()=>{});
+        }catch{}
+      }
+    }
+  }
+};
+
+// Load dữ liệu cloud về local khi đăng nhập xong
+async function syncFromCloud(uid){
+  if(!window._FB_READY||!uid)return;
+  try{
+    const{db,ref,get}=window._FB;
+    const snap=await get(ref(db,`userData/${uid}`));
+    if(!snap.exists())return;
+    const data=snap.val();
+    for(const k of CLOUD_KEYS){
+      if(data[k]!==undefined){
+        localStorage.setItem(k,JSON.stringify(data[k]));
+      }
+    }
+    // Goals are stored per-uid key locally
+    if(data['sr_goals_v1']!==undefined){
+      localStorage.setItem(`sr_goals_v1_${uid}`,JSON.stringify(data['sr_goals_v1']));
+    }
+    // Refresh UI sau khi sync
+    ttData=loadTT();
+    rExams();rTasks();rSlots();rTT();renderIdxGoals();rStats();
+    notify('✅ Đã đồng bộ dữ liệu của bạn!','☁️');
+  }catch(e){console.warn('Sync error:',e);}
+}
 
 function escapeHtml(str) {
   if(!str) return '';
@@ -1341,11 +1389,11 @@ function pomoToggle(){
         clearInterval(pSt.itv);pSt.run=false;
         stopClock();
         if(pSt.isS){
-          notify('🎉 Hết giờ học! Nghỉ ngơi tí nhaaaaa~','🍃');
+          notify('🎉 Hết giờ học! Nghỉ ngơi tí nhé em~','🍃');
           LS.s('pomo_'+tk(),(LS.g('pomo_'+tk())||0)+1);
           pSt.sess=(pSt.sess+1)%pCfg.sess;pSt.isS=false;pSt.rem=pCfg.brk*60;
         } else {
-          notify('💪 Nghỉ xong rồi! Học tiếp nàooo!','📖');
+          notify('💪 Nghỉ xong rồi! Học tiếp nào!','📖');
           pSt.isS=true;pSt.rem=pCfg.study*60;
         }
         document.getElementById('pBtn').textContent='▶ Bắt đầu';
@@ -1843,8 +1891,18 @@ function chkNotif(){
 // ─── INIT ───
 // ─── DAILY GOALS (index) ───
 const IDX_GOALS_KEY='sr_goals_v1';
-function idxLoadGoals(){try{const d=JSON.parse(localStorage.getItem(IDX_GOALS_KEY)||'{}');const t=new Date().toDateString();return d.date===t?d.goals:[];}catch{return []}}
-function idxSaveGoals(goals){localStorage.setItem(IDX_GOALS_KEY,JSON.stringify({date:new Date().toDateString(),goals}))}
+function idxGoalsKey(){const uid=_uid();return uid?`sr_goals_v1_${uid}`:'sr_goals_v1'}
+function idxLoadGoals(){try{const d=JSON.parse(localStorage.getItem(idxGoalsKey())||'{}');const t=new Date().toDateString();return d.date===t?d.goals:[];}catch{return []}}
+function idxSaveGoals(goals){
+  const key=idxGoalsKey();
+  const val={date:new Date().toDateString(),goals};
+  localStorage.setItem(key,JSON.stringify(val));
+  // Sync to cloud
+  const uid=_uid();
+  if(uid&&window._FB_READY){
+    try{const{db,ref,set}=window._FB;set(ref(db,`userData/${uid}/${IDX_GOALS_KEY}`),val).catch(()=>{});}catch{}
+  }
+}
 function toggleIdxGoalForm(){const f=document.getElementById('idxGoalForm');f.style.display=f.style.display==='none'?'block':'none';}
 function addIdxGoal(){
   const label=document.getElementById('idxGoalInp').value.trim();
@@ -1938,6 +1996,7 @@ async function aoLogin(){
   localStorage.setItem(AO_SESSION,JSON.stringify(aoUser));
   document.getElementById('authOverlay').classList.add('hidden');
   aoShowUser();
+  syncFromCloud(u);
   notify(`🌸 Chào ${acc.name}! Học tốt nhé!`,'✨');
 }
 
@@ -1954,6 +2013,7 @@ async function aoRegister(){
   localStorage.setItem(AO_SESSION,JSON.stringify(aoUser));
   document.getElementById('authOverlay').classList.add('hidden');
   aoShowUser();
+  syncFromCloud(u);
   notify(`✨ Chào mừng ${name} đến với Mi's Study Space!`,'🌸');
 }
 
@@ -2052,6 +2112,8 @@ function aoCheckSession(){
       aoUser=s;
       document.getElementById('authOverlay').classList.add('hidden');
       aoShowUser();
+      // Sync cloud data in background after page loads
+      setTimeout(()=>syncFromCloud(s.uid),800);
       return;
     }
   }catch{}
