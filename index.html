@@ -856,6 +856,75 @@ select.inp{cursor:pointer}
   gap: 10px;
 }
 
+.admin-btn {
+  position: fixed;
+  top: 16px;
+  right: 180px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #c2185b, #e91e63);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 16px rgba(194, 24, 91, 0.3);
+}
+
+#adminPanel {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  background: rgba(42,15,30,0.85);
+  backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-content {
+  background: white;
+  border-radius: 24px;
+  width: 95%;
+  max-width: 860px;
+  max-height: 92vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.admin-header {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--p5), var(--rose));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--p1);
+  gap: 12px;
+}
+
+.user-row:hover {
+  background: var(--p0);
+}
+
+.user-row:last-child { border-bottom: none; }
+
+.admin-actions button {
+  margin-left: 6px;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
 @keyframes pop {
   0% {
     opacity: 0;
@@ -1036,7 +1105,25 @@ select.inp{cursor:pointer}
     <div class="q-src" id="qSrc"></div>
     <div class="q-dots" id="qDots"></div>
   </div>
+  <button class="admin-btn" id="adminBtn" onclick="openAdminPanel()">
+  👑 Quản lý người dùng
+</button>
 
+<!-- Admin Panel -->
+<div id="adminPanel">
+  <div class="admin-content">
+    <div class="admin-header">
+      <h2 style="margin:0; font-size:1.5rem;">👑 Quản lý Tài khoản</h2>
+      <button onclick="closeAdminPanel()" style="background:none;border:none;color:white;font-size:1.8rem;cursor:pointer;">✕</button>
+    </div>
+    <div style="padding:20px; max-height:70vh; overflow-y:auto;" id="userList">
+      <!-- Danh sách người dùng sẽ được render bằng JS -->
+    </div>
+    <div style="padding:16px; border-top:1px solid var(--p2); text-align:right;">
+      <button class="btn btn-rose" onclick="addNewUser()">+ Thêm người dùng mới</button>
+    </div>
+  </div>
+</div>
   <div class="card mb d1">
     <div class="exam-hdr">
       <div class="exam-hdr-t">🎯 Đếm ngược ngày thi</div>
@@ -1164,7 +1251,11 @@ select.inp{cursor:pointer}
 </div>
 
 <script>
-// ─── SUBJECTS ───
+// ====================== ADMIN CONFIG ======================
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "admin123";
+
+// ====================== SUBJECTS & CONSTANTS ======================
 const ALL_SUBJECTS = ['Văn','Toán','Anh','Sử','Địa','Hóa','Lý'];
 const SEMO = {Văn:'✍️',Toán:'📐',Anh:'🇬🇧',Sử:'📜',Địa:'🌏',Hóa:'🧪',Lý:'⚡',Khác:'📚'};
 const SCLS = {Anh:'sa',Sử:'ss',Văn:'sv',Địa:'sdg',Toán:'smt',Hóa:'sho',Lý:'sly',Khác:'sto'};
@@ -1172,12 +1263,11 @@ const SCLS2 = {Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 
 const TCLS = {Anh:'ta',Sử:'ts',Văn:'tv',Địa:'td',Toán:'tly',Hóa:'tho',Lý:'tly',Khác:'to'};
 const ECLS = {Anh:'spill2 sa',Sử:'spill2 ss',Văn:'spill2 sv',Địa:'spill2 sdg',Toán:'spill2 smt',Hóa:'spill2 sho',Lý:'spill2 sly',Khác:'spill2 sto'};
 
-// ─── DATE HELPERS ───
-const DAYS_S=['CN','T2','T3','T4','T5','T6','T7'];
-const DAYS_F=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
-const MONTHS=['tháng 1','tháng 2','tháng 3','tháng 4','tháng 5','tháng 6','tháng 7','tháng 8','tháng 9','tháng 10','tháng 11','tháng 12'];
+const DAYS_S = ['CN','T2','T3','T4','T5','T6','T7'];
+const DAYS_F = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+const MONTHS = ['tháng 1','tháng 2','tháng 3','tháng 4','tháng 5','tháng 6','tháng 7','tháng 8','tháng 9','tháng 10','tháng 11','tháng 12'];
 
-const QUOTES=[
+const QUOTES = [
   {t:'"Học hành hôm nay, tương lai rực rỡ ngày mai 💪"',s:'— Cố lên nhaaa, tớ tin em bé của tớ ạ! 🌸'},
   {t:'"Mỗi phút chăm chỉ là một bước gần hơn đến ước mơ ✨"',s:'— Bé giỏi lắm í, tiếp tục cố gắng như em đang làm nha!'},
   {t:'"Kiên trì là chìa khoá của mọi thành công 🗝️"',s:'— Không bỏ cuộc nhé em bé ui 💕'},
@@ -1185,7 +1275,8 @@ const QUOTES=[
   {t:'"Sự chuẩn bị hôm nay là nền tảng của ngày mai 🏆"',s:'— Cậu làm được mà! 🌸'},
   {t:'"Đừng so sánh với ai, chỉ cần tốt hơn ngày hôm qua 🌈"',s:'— Mi thúi đang tiến bộ từng ngày đó!'},
 ];
-const MUSIC=[
+
+const MUSIC = [
   {e:'🌊',n:'Lo-fi Hip Hop Radio',b:'~85 BPM',u:'https://www.youtube.com/watch?v=jfKfPfyJRdk'},
   {e:'🌿',n:'Study Ambience — Green',b:'Ambient',u:'https://www.youtube.com/watch?v=sjkrrmBnpGE'},
   {e:'🌙',n:'Chill Beats to Study',b:'~90 BPM',u:'https://www.youtube.com/watch?v=5qap5aO4i9A'},
@@ -1193,36 +1284,28 @@ const MUSIC=[
   {e:'☕',n:'Cafe Ambience + Jazz',b:'~75 BPM',u:'https://www.youtube.com/watch?v=VMAPTo7RVCo'},
 ];
 
-// ─── HELPERS ───
-const nm=()=>{const d=new Date();return d.getHours()*60+d.getMinutes()};
-const fmM=m=>{if(m<=0)return'0p';const h=Math.floor(m/60),mn=m%60;return h?`${h}h ${mn}p`:`${mn} phút`};
-const tk=()=>{const d=new Date();return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`};
+// ====================== HELPERS ======================
+const nm = () => { const d = new Date(); return d.getHours()*60 + d.getMinutes(); };
+const fmM = m => { if(m<=0) return '0p'; const h = Math.floor(m/60), mn = m%60; return h ? `${h}h ${mn}p` : `${mn} phút`; };
+const tk = () => { const d = new Date(); return `${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`; };
 
-// Keys được sync lên Firebase theo uid (dữ liệu quan trọng, không phụ thuộc thiết bị)
-const CLOUD_KEYS=['exams_v2','timetable_v1','sr_goals_v1','sr_streak_v2','sr_history_v2'];
-
+const CLOUD_KEYS = ['exams_v2','timetable_v1','sr_goals_v1','sr_streak_v2','sr_history_v2'];
 function _uid(){try{return JSON.parse(localStorage.getItem('studyroom_session'))?.uid||null}catch{return null}}
 
-// Đọc: local trước, Firebase là nguồn chính
-const LS={
+const LS = {
   g:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},
   s:(k,v)=>{
     localStorage.setItem(k,JSON.stringify(v));
-    const syncKeys = [...CLOUD_KEYS];
-    // Cho phép sync cả các key động theo ngày để tự động đồng bộ Tasks, Pomo, và cập nhật Streak
-    if(syncKeys.includes(k) || k.startsWith('tasks_') || k.startsWith('pomo_') || k.startsWith('mood_')){
-      const uid=_uid();
-      if(uid&&window._FB_READY){
-        try{
-          const{db,ref,set}=window._FB;
-          set(ref(db,`userData/${uid}/${k}`),v).catch(()=>{});
-        }catch{}
-      }
+    const uid = _uid();
+    if(uid && window._FB_READY && (CLOUD_KEYS.includes(k) || k.startsWith('tasks_') || k.startsWith('pomo_') || k.startsWith('mood_'))){
+      try{
+        const{db,ref,set}=window._FB;
+        set(ref(db,`userData/${uid}/${k}`),v).catch(()=>{});
+      }catch{}
     }
   }
 };
 
-// Load dữ liệu cloud về local khi đăng nhập xong
 async function syncFromCloud(uid){
   if(!window._FB_READY||!uid)return;
   try{
@@ -1230,17 +1313,13 @@ async function syncFromCloud(uid){
     const snap=await get(ref(db,`userData/${uid}`));
     if(!snap.exists())return;
     const data=snap.val();
-    
-    // Lấy TOÀN BỘ data từ Firebase (bao gồm cả task, pomo các ngày) đè xuống LocalStorage
     for(const k in data){
       localStorage.setItem(k,JSON.stringify(data[k]));
     }
-    
-    // Refresh UI sau khi sync
     ttData=loadTT();
     rExams();rTasks();rSlots();rTT();renderIdxGoals();rStats();
-    document.getElementById('sPo').textContent=LS.g('pomo_'+tk())||0; // Update pomo counter
-    restoreMood(); // Update mood
+    document.getElementById('sPo').textContent=LS.g('pomo_'+tk())||0;
+    restoreMood();
     notify('✅ Đã đồng bộ toàn bộ dữ liệu của bạn!','☁️');
   }catch(e){console.warn('Sync error:',e);}
 }
@@ -1258,7 +1337,7 @@ function formatTimeRange(startTime, endTime){
   return `${String(start.getHours()).padStart(2,'0')}:${String(start.getMinutes()).padStart(2,'0')} → ${String(end.getHours()).padStart(2,'0')}:${String(end.getMinutes()).padStart(2,'0')}`;
 }
 
-// ─── TIMETABLE DATA ───
+// ====================== TIMETABLE DATA ======================
 const DEFAULT_SLOTS = [
   {l:'Mốc 1',s:480,e:600},
   {l:'Mốc 2',s:840,e:960},
@@ -1282,7 +1361,6 @@ function loadTT(){
   return {slots: DEFAULT_SLOTS, sched: DEFAULT_SCHED};
 }
 function saveTTData(d){LS.s('timetable_v1',d)}
-
 let ttData = loadTT();
 
 function getSlotStr(sl){
@@ -1292,65 +1370,59 @@ function getSlotStr(sl){
 function timeToMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
 function minToTime(m){return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`}
 
-// ─── PETALS ───
-(()=>{
-  const cv=document.getElementById('petalsCanvas'),cx=cv.getContext('2d');
-  const resize=()=>{cv.width=innerWidth;cv.height=innerHeight};
-  resize();window.addEventListener('resize',resize);
+// ====================== PETALS CANVAS ======================
+(()=>{ const cv=document.getElementById('petalsCanvas'),cx=cv.getContext('2d');
+  const resize=()=>{cv.width=innerWidth;cv.height=innerHeight}; resize(); window.addEventListener('resize',resize);
   const cols=['#ffb3d4','#ffd0e8','#ff9dc8','#ffcce0','#ffa0cc'];
   const ps=Array.from({length:24},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*6+3,vx:(Math.random()-0.5)*0.4,vy:Math.random()*0.5+0.2,rot:Math.random()*360,vr:(Math.random()-0.5)*1.2,c:cols[Math.floor(Math.random()*5)],o:Math.random()*0.4+0.15}));
   const draw=()=>{cx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{cx.save();cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.globalAlpha=p.o;cx.beginPath();cx.ellipse(0,0,p.r,p.r*1.8,0,0,Math.PI*2);cx.fillStyle=p.c;cx.fill();cx.restore();p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;if(p.y>cv.height+20){p.y=-20;p.x=Math.random()*cv.width}});requestAnimationFrame(draw)};
   draw();
 })();
 
-// ─── NOTIF ───
+// ====================== NOTIFICATION ======================
 let nt;
 function notify(msg,ico='🌸'){clearTimeout(nt);document.getElementById('n1i').textContent=ico;document.getElementById('n1t').textContent=msg;const el=document.getElementById('notif1');el.classList.add('show');nt=setTimeout(()=>el.classList.remove('show'),3800)}
 
-// ─── HERO DATE ───
+// ====================== HERO & DATE ======================
 function renderHero(){const d=new Date();document.getElementById('heroDate').textContent=`${DAYS_F[d.getDay()]}, ngày ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`}
 
-// ─── MOOD ───
+// ====================== MOOD ======================
 function setMood(btn){document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');LS.s('mood_'+tk(),btn.dataset.m);document.getElementById('moodTxt').textContent=btn.dataset.m}
 function restoreMood(){const m=LS.g('mood_'+tk());if(!m)return;document.getElementById('moodTxt').textContent=m;document.querySelectorAll('.mood-btn').forEach(b=>{if(b.dataset.m===m)b.classList.add('on')})}
 
-// ─── QUOTES ───
+// ====================== QUOTES ======================
 let qI=0;
 function rQuote(){const q=QUOTES[qI];document.getElementById('qTxt').textContent=q.t;document.getElementById('qSrc').textContent=q.s;document.getElementById('qDots').innerHTML=QUOTES.map((_,i)=>`<div class="qdot ${i===qI?'on':''}" onclick="goQ(${i})"></div>`).join('')}
 function goQ(i){qI=i;rQuote()}
 setInterval(()=>{qI=(qI+1)%QUOTES.length;rQuote()},8000);
 
-// ─── CLOCK SOUND ───
+// ====================== CLOCK SOUND ======================
 let clockSoundOn = true;
 const clockAudio = document.getElementById('clockAudio');
-
 function updateSoundUI(){
   const btn = document.getElementById('soundToggle');
   const lbl = document.getElementById('soundLbl');
   if(clockSoundOn){btn.classList.add('on');lbl.textContent='Bật';}
   else{btn.classList.remove('on');lbl.textContent='Tắt';}
 }
-
 function toggleClockSound(){
   clockSoundOn = !clockSoundOn;
   updateSoundUI();
   if(!clockSoundOn){clockAudio.pause();clockAudio.currentTime=0;}
   else if(pSt.run) tryPlayClock();
 }
-
 function tryPlayClock(){
   if(!clockSoundOn) return;
   if(clockAudio.paused){
     clockAudio.play().catch(()=>{});
   }
 }
-
 function stopClock(){
   clockAudio.pause();
   clockAudio.currentTime = 0;
 }
 
-// ─── POMODORO ───
+// ====================== POMODORO ======================
 const pCfg={study:25,brk:5,sess:4};
 let pSt={run:false,isS:true,rem:25*60,sess:0,itv:null};
 function togglePCfg(){document.getElementById('pCfg').classList.toggle('show')}
@@ -1408,7 +1480,7 @@ function pomoSkip(){
   document.getElementById('pBtn').textContent='▶ Bắt đầu';rPomo();
 }
 
-// ─── CLOCK DISPLAY ───
+// ====================== CLOCK DISPLAY ======================
 function rClock(){
   const d=new Date(),hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0'),ss=String(d.getSeconds()).padStart(2,'0');
   document.getElementById('cBig').textContent=`${hh}:${mm}:${ss}`;
@@ -1472,7 +1544,7 @@ function rNext(dj){
   wrap.innerHTML=liveHTML+upcomingHTML;
 }
 
-// ─── EXAM ───
+// ====================== EXAM ======================
 const lEx=()=>LS.g('exams_v2')||[];
 const sEx=e=>LS.s('exams_v2',e);
 const dU=ds=>{const n=new Date();n.setHours(0,0,0,0);const t=new Date(ds);t.setHours(0,0,0,0);return Math.round((t-n)/86400000)};
@@ -1492,7 +1564,7 @@ function rExams(){
   }).join('');
 }
 
-// ─── TASKS ───
+// ====================== TASKS ======================
 const lT=()=>LS.g('tasks_'+tk())||[];
 const sT=t=>LS.s('tasks_'+tk(),t);
 function dTag(txt){
@@ -1527,7 +1599,7 @@ function addTask(){const inp=document.getElementById('tInp'),txt=inp.value.trim(
 function togT(i){const t=lT();t[i].done=!t[i].done;sT(t);rTasks();if(t[i].done)notify('💖 Hoàn thành nhiệm vụ rồi!','✅')}
 function delT(i){const t=lT();t.splice(i,1);sT(t);rTasks()}
 
-// ─── TODAY SLOTS ───
+// ====================== TODAY SLOTS ======================
 function rSlots(){
   const dj=new Date().getDay(),m=nm();
   const{slots,sched}=ttData;
@@ -1537,34 +1609,31 @@ function rSlots(){
   list.innerHTML=items.map(s=>{const live=m>=s.s&&m<s.e,past=m>=s.e,cls=live?'live':past?'past':'';return`<div class="slot-row ${cls}"><div class="slot-time">${getSlotStr(s)}</div><div class="slot-pills"><span class="spill ${SCLS[s.subj]||'sto'}">${SEMO[s.subj]||'📚'} ${s.subj}</span></div>${live?'<div class="live-badge"><div class="ldot" style="background:var(--p5)"></div> Đang học</div>':past?'<div style="font-size:0.72rem;color:var(--ink3);margin-left:auto">✓ Xong</div>':''}</div>`}).join('');
 }
 
-// ─── TIMETABLE DISPLAY ───
+// ====================== TIMETABLE DISPLAY ======================
 function rTT(){
   const dj=new Date().getDay(),m=nm(),ORDER=[1,2,3,4,5,6,0];
   const{slots,sched}=ttData;
   let h='<thead><th>Mốc</th><th>Giờ</th>';
   ORDER.forEach(d=>{h+=`<th class="${d===dj?'tdc':''}">${DAYS_S[d]}${d===dj?' 📍':''}</th>`});
   h+='</thead><tbody>';
-  slots.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}<td class="tc">${getSlotStr(sl)}`;ORDER.forEach(d=>{const s=sched[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]||'📚'} ${s}</span>`:'<span class="empty-m">—</span>'}`});h+='<tr>'});
-  h+='</tbody>';document.getElementById('ttTbl').innerHTML=h;
+  slots.forEach((sl,si)=>{const act=m>=sl.s&&m<sl.e;h+=`<tr class="${act?'arow':''}"><td class="tc">${sl.l}<td class="tc">${getSlotStr(sl)}`;ORDER.forEach(d=>{const s=sched[d][si];h+=`<td class="${d===dj?'tdc':''}">${s?`<span class="${SCLS2[s]||'spill2'}">${SEMO[s]||'📚'} ${s}</span>`:'<span class="empty-m">—</span>'}`});h+='</tr>'});h+='</tbody>';document.getElementById('ttTbl').innerHTML=h;
   const used=new Set();
   Object.values(sched).forEach(day=>day.forEach(s=>{if(s)used.add(s)}));
   document.getElementById('ttLegend').innerHTML=[...used].map(s=>`<span><span class="${SCLS2[s]||'spill2 sto'}">${SEMO[s]||'📚'} ${s}</span></span>`).join('')+'<span style="margin-left:auto;font-size:0.72rem;color:var(--ink3)">📍 = Hôm nay</span>';
 }
 
-// ─── TIMETABLE EDITOR ───
+// ====================== TIMETABLE EDITOR ======================
 function toggleTTEditor(){
   const ed=document.getElementById('ttEditor');
   ed.classList.toggle('open');
   if(ed.classList.contains('open')) renderSlotEditors();
 }
-
 function subjOptions(sel){
   const opts=['<option value="">— Trống —</option>'];
   ALL_SUBJECTS.forEach(s=>opts.push(`<option value="${s}" ${sel===s?'selected':''}>${SEMO[s]} ${s}</option>`));
   opts.push(`<option value="Khác" ${sel==='Khác'?'selected':''}>📚 Khác</option>`);
   return opts.join('');
 }
-
 function renderSlotEditors(){
   const{slots,sched}=ttData;
   const ORDER=[1,2,3,4,5,6,0];
@@ -1594,7 +1663,6 @@ function renderSlotEditors(){
     </div>
   `).join('');
 }
-
 function updateSlotTime(si){
   const s=timeToMin(document.getElementById(`stime_${si}`).value);
   const e=timeToMin(document.getElementById(`etime_${si}`).value);
@@ -1602,11 +1670,9 @@ function updateSlotTime(si){
   ttData.slots[si].s=s;
   ttData.slots[si].e=e;
 }
-
 function updateSchedCell(d,si,val){
   ttData.sched[d][si]=val||null;
 }
-
 function addSlotEditor(){
   const n=ttData.slots.length;
   const lastEnd=n>0?ttData.slots[n-1].e:480;
@@ -1614,7 +1680,6 @@ function addSlotEditor(){
   for(let d=0;d<7;d++) ttData.sched[d].push(null);
   renderSlotEditors();
 }
-
 function delSlotEditor(si){
   if(ttData.slots.length<=1){notify('Phải có ít nhất 1 mốc học!','⚠️');return}
   ttData.slots.splice(si,1);
@@ -1622,7 +1687,6 @@ function delSlotEditor(si){
   ttData.slots.forEach((sl,i)=>sl.l=`Mốc ${i+1}`);
   renderSlotEditors();
 }
-
 function saveTimetable(){
   const{slots,sched}=ttData;
   const ORDER=[1,2,3,4,5,6,0];
@@ -1654,12 +1718,12 @@ function saveTimetable(){
   document.getElementById('ttEditor').classList.remove('open');
 }
 
-// ─── MUSIC ───
+// ====================== MUSIC ======================
 let playT=-1;
 function rMusic(){document.getElementById('trkList').innerHTML=MUSIC.map((tr,i)=>`<div class="trow ${playT===i?'pl':''}" onclick="selT(${i})"><span class="temo">${tr.e}</span><span class="tname">${tr.n}</span><span class="tbpm">${tr.b}</span><span class="tplay">${playT===i?'▶':'▷'}</span></div>`).join('');document.getElementById('vizEl').classList.toggle('off',playT===-1)}
 function selT(i){if(playT===i)playT=-1;else{playT=i;window.open(MUSIC[i].u,'_blank')}rMusic()}
 
-// ─── STATS ───
+// ====================== STATS ======================
 function rStats(){
   let streak=0;
   for(let i=0;i<60;i++){const d=new Date();d.setDate(d.getDate()-i);const k=`tasks_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;const t=LS.g(k);if(t&&t.length&&t.some(x=>x.done))streak++;else break}
@@ -1668,14 +1732,12 @@ function rStats(){
   document.getElementById('sEx').textContent=up.length?dU(up[0].date):'—';
 }
 
-// ─── LỊCH SỬ HỌC ĐỒNG BỘ ───
+// ====================== HISTORY ======================
 const HIST_KEY = 'sr_history_v2';
-
 function todayStr() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
 }
-
 function fmtTime(sec) {
   if(!sec || sec < 60) return `${sec || 0}s`;
   const m = Math.floor(sec / 60);
@@ -1683,16 +1745,13 @@ function fmtTime(sec) {
   const rem = m % 60;
   return h ? `${h}g ${rem}p` : `${m}p`;
 }
-
 function openHistory() {
   document.getElementById('histModal').style.display = 'flex';
   renderHistory();
 }
-
 function closeHistory() {
   document.getElementById('histModal').style.display = 'none';
 }
-
 function renderHistory(filterDate = null) {
   let history = [];
   try {
@@ -1817,12 +1876,10 @@ function renderHistory(filterDate = null) {
     `;
   }).join('');
 }
-
 function toggleHistDetail(id){
   const el = document.getElementById(id);
   if(el) el.classList.toggle('open');
 }
-
 function openLightboxFromHistory(src, name) {
   const overlay = document.createElement('div');
   overlay.style.cssText = 'position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;cursor:zoom-out;padding:16px';
@@ -1834,7 +1891,6 @@ function openLightboxFromHistory(src, name) {
   overlay.onclick = () => overlay.remove();
   document.body.appendChild(overlay);
 }
-
 function showAllDatesModal() {
   let history = [];
   try {
@@ -1867,23 +1923,12 @@ function showAllDatesModal() {
   modalContainer.innerHTML = modalHtml;
   document.body.appendChild(modalContainer);
 }
-
 function closeDatePickerModal() {
   const modal = document.getElementById('datePickerModal');
   if(modal) modal.remove();
 }
 
-// ─── SESSION NOTIF ───
-let lastNM=-1;
-function chkNotif(){
-  const dj=new Date().getDay(),m=nm();
-  if(m===lastNM)return;lastNM=m;
-  const{slots,sched}=ttData;
-  slots.forEach((sl,si)=>{if(!sched[dj][si])return;const s=sched[dj][si];if(sl.s-m===15)notify(`⏰ Còn 15 phút nữa học ${s}!`,'📚');if(sl.s===m)notify(`🔔 Đến giờ học ${s} rồi em ơi!`,SEMO[s]||'📚')});
-}
-
-// ─── INIT ───
-// ─── DAILY GOALS (index) ───
+// ====================== DAILY GOALS ======================
 const IDX_GOALS_KEY='sr_goals_v1';
 function idxGoalsKey(){const uid=_uid();return uid?`sr_goals_v1_${uid}`:'sr_goals_v1'}
 function idxLoadGoals(){try{const d=JSON.parse(localStorage.getItem(idxGoalsKey())||'{}');const t=new Date().toDateString();return d.date===t?d.goals:[];}catch{return []}}
@@ -1941,6 +1986,7 @@ function renderIdxGoals(){
   }).join('');
 }
 
+// ====================== INIT ======================
 function init(){
   renderHero();restoreMood();qI=Math.floor(Math.random()*QUOTES.length);rQuote();pomoReset(true);rExams();seedT();rTasks();rSlots();rTT();rMusic();rStats();
   updateSoundUI();
@@ -1948,8 +1994,15 @@ function init(){
   setInterval(rClock,1000);setInterval(()=>{rSlots();rTT();chkNotif()},20000);setInterval(rExams,60000);setInterval(rStats,60000);rClock();
   let ld=new Date().getDate();setInterval(()=>{if(new Date().getDate()!==ld){ld=new Date().getDate();renderHero();seedT();rTasks();rSlots();rTT();notify('🌅 Ngày mới! Danh sách làm mới rồi 💕','🌸')}},30000);
 }
+let lastNM=-1;
+function chkNotif(){
+  const dj=new Date().getDay(),m=nm();
+  if(m===lastNM)return;lastNM=m;
+  const{slots,sched}=ttData;
+  slots.forEach((sl,si)=>{if(!sched[dj][si])return;const s=sched[dj][si];if(sl.s-m===15)notify(`⏰ Còn 15 phút nữa học ${s}!`,'📚');if(sl.s===m)notify(`🔔 Đến giờ học ${s} rồi em ơi!`,SEMO[s]||'📚')});
+}
 
-// ══ AUTH SYSTEM ══
+// ====================== AUTH SYSTEM ======================
 const AO_SESSION='studyroom_session';
 const AO_AVATARS=['🌸','🌷','🌼','⭐','🦋','🐱','🐰','🦊','🐻','🐼','🍓','🍀','🎀','🎵','🌙','💎','🔥','✨','🌈','🍭','🎯','💐','🌺','🌻'];
 let aoUser=null;
@@ -1964,7 +2017,6 @@ const AODB={
 
 function aoErr(m){const e=document.getElementById('aoErr');e.textContent=m;e.classList.add('show')}
 function aoErrClear(){document.getElementById('aoErr').classList.remove('show')}
-
 function aoSwitch(t){
   document.getElementById('aoLg').style.display=t==='l'?'block':'none';
   document.getElementById('aoRg').style.display=t==='r'?'block':'none';
@@ -1972,12 +2024,10 @@ function aoSwitch(t){
   document.getElementById('aoTabR').classList.toggle('on',t==='r');
   aoErrClear();
 }
-
 function aoRenderAvaGrid(){
   document.getElementById('aoAvaGrid').innerHTML=AO_AVATARS.map(a=>`<div class="ao-ava${a===aoSelAva?' on':''}" onclick="aoPickAva('${a}')">${a}</div>`).join('');
 }
 function aoPickAva(a){aoSelAva=a;document.querySelectorAll('#aoAvaGrid .ao-ava').forEach(e=>e.classList.toggle('on',e.textContent.trim()===a))}
-
 async function aoLogin(){
   const u=document.getElementById('aoLgU').value.trim().toLowerCase();
   const p=document.getElementById('aoLgP').value;
@@ -1992,7 +2042,6 @@ async function aoLogin(){
   syncFromCloud(u);
   notify(`🌸 Chào ${acc.name}! Học tốt nhé!`,'✨');
 }
-
 async function aoRegister(){
   const name=document.getElementById('aoRgN').value.trim();
   const u=document.getElementById('aoRgU').value.trim().toLowerCase();
@@ -2009,46 +2058,35 @@ async function aoRegister(){
   syncFromCloud(u);
   notify(`✨ Chào mừng ${name} đến với Mi's Study Space!`,'🌸');
 }
-
-// Hàm Logout đã được sửa lại dùng Modal
 function aoLogout(){
   document.getElementById('acctPanel').classList.remove('open');
   document.getElementById('logoutModal').style.display='flex';
 }
-
 function closeLogoutModal(){
   document.getElementById('logoutModal').style.display='none';
 }
-
 function confirmLogout(){
   localStorage.removeItem(AO_SESSION);
-  location.reload(); // Tải lại trang để reset trạng thái sạch sẽ
+  location.reload();
 }
-
 function aoShowUser(){
   if(!aoUser)return;
-  // Account button
   const btn=document.getElementById('acctBtn');
   btn.style.display='flex';
   document.getElementById('abAva').textContent=aoUser.avatar||'🌸';
   document.getElementById('abName').textContent=aoUser.name;
-  // Greeting
   const gp=document.getElementById('greetingPill');
   gp.style.display='inline-flex';
   document.getElementById('gpAva').textContent=aoUser.avatar||'🌸';
   document.getElementById('gpName').textContent=aoUser.name;
-  // Panel header
   document.getElementById('apAva').textContent=aoUser.avatar||'🌸';
   document.getElementById('apName').textContent=aoUser.name;
   document.getElementById('apUser').textContent='@'+aoUser.username;
-  // Edit form defaults
   document.getElementById('apEditName').value=aoUser.name;
   apEditAva=aoUser.avatar||'🌸';
   apRenderEditAva();
-  // Study dates
   apRenderDates();
 }
-
 function apRenderDates(){
   const grid=document.getElementById('apDates');
   let dates=[];
@@ -2060,22 +2098,18 @@ function apRenderDates(){
   if(!dates.length){grid.innerHTML='<span style="font-size:.76rem;color:var(--ink3)">Chưa có buổi học nhóm nào</span>';return;}
   grid.innerHTML=dates.map(d=>`<span class="ap-date${d===todayS?' today':''}">${d===todayS?'⭐ ':'📅 '}${d}</span>`).join('');
 }
-
 function toggleAcctPanel(){
   const p=document.getElementById('acctPanel');
   p.classList.toggle('open');
   if(p.classList.contains('open'))apRenderDates();
 }
-
 function toggleApEdit(){
   document.getElementById('apEdit').classList.toggle('open');
 }
-
 function apRenderEditAva(){
   document.getElementById('apEditAvaGrid').innerHTML=AO_AVATARS.map(a=>`<div class="ao-ava${a===apEditAva?' on':''}" onclick="apPickEditAva('${a}')">${a}</div>`).join('');
 }
 function apPickEditAva(a){apEditAva=a;document.querySelectorAll('#apEditAvaGrid .ao-ava').forEach(e=>e.classList.toggle('on',e.textContent.trim()===a))}
-
 async function apSaveEdit(){
   if(!aoUser)return;
   const newName=document.getElementById('apEditName').value.trim();
@@ -2090,8 +2124,6 @@ async function apSaveEdit(){
   document.getElementById('apEdit').classList.remove('open');
   notify('✅ Đã lưu thay đổi!','🌸');
 }
-
-// Close panel on outside click
 document.addEventListener('click',e=>{
   const panel=document.getElementById('acctPanel');
   const btn=document.getElementById('acctBtn');
@@ -2099,7 +2131,6 @@ document.addEventListener('click',e=>{
     panel.classList.remove('open');
   }
 });
-
 function aoCheckSession(){
   aoRenderAvaGrid();
   try{
@@ -2108,16 +2139,121 @@ function aoCheckSession(){
       aoUser=s;
       document.getElementById('authOverlay').classList.add('hidden');
       aoShowUser();
-      // Sync cloud data in background after page loads
       setTimeout(()=>syncFromCloud(s.uid),800);
       return;
     }
   }catch{}
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+// ====================== ADMIN FUNCTIONS ======================
+async function isAdmin() {
+  return !!(aoUser && aoUser.username === ADMIN_USERNAME);
+}
+function showAdminButton() {
+  if (isAdmin()) document.getElementById('adminBtn').style.display = 'flex';
+}
+async function openAdminPanel() {
+  if (!await isAdmin()) return alert("Bạn không có quyền Admin!");
+  document.getElementById('adminPanel').style.display = 'flex';
+  renderUserList();
+}
+function closeAdminPanel() {
+  document.getElementById('adminPanel').style.display = 'none';
+}
+async function getAllAccounts() {
+  if(!window._FB_READY) return {};
+  try{
+    const{db,ref,get}=window._FB;
+    const snap=await get(ref(db,'accounts'));
+    return snap.exists()?snap.val():{};
+  }catch(e){console.warn(e);return {};}
+}
+async function renderUserList() {
+  const accounts = await getAllAccounts();
+  const container = document.getElementById('userList');
+  if(!container) return;
+  if(Object.keys(accounts).length === 0){
+    container.innerHTML = '<div class="user-row">Chưa có người dùng nào</div>';
+    return;
+  }
+  container.innerHTML = Object.entries(accounts).map(([username, data]) => `
+    <div class="user-row">
+      <div style="flex:1; display:flex; gap:12px; align-items:center;">
+        <span style="font-size:1.5rem;">${data.avatar || '👤'}</span>
+        <div>
+          <div style="font-weight:600;">${escapeHtml(data.name || username)}</div>
+          <div style="font-size:.7rem; color:var(--ink3);">@${username}</div>
+        </div>
+        <div style="font-size:.7rem; color:var(--ink3); margin-left:auto;">${data.createdAt ? new Date(data.createdAt).toLocaleDateString() : ''}</div>
+      </div>
+      <div class="admin-actions">
+        <button class="btn btn-soft btn-sm" onclick="editUser('${username}')">✏️</button>
+        <button class="btn btn-ghost btn-sm" style="color:#e53935;" onclick="deleteUser('${username}')">🗑</button>
+      </div>
+    </div>
+  `).join('');
+}
+async function addNewUser() {
+  const newName = prompt("Nhập tên hiển thị:");
+  if(!newName) return;
+  const newUsername = prompt("Nhập tên đăng nhập (chữ thường, số, _):");
+  if(!newUsername || !/^[a-z0-9_]+$/.test(newUsername)) return alert("Username không hợp lệ!");
+  const newPass = prompt("Nhập mật khẩu (tối thiểu 4 ký tự):");
+  if(!newPass || newPass.length < 4) return alert("Mật khẩu phải có ít nhất 4 ký tự!");
+  const exists = await AODB.get(`accounts/${newUsername}`);
+  if(exists) return alert("Username đã tồn tại!");
+  await AODB.set(`accounts/${newUsername}`, {
+    name: newName,
+    avatar: '🌸',
+    password: btoa(newPass),
+    createdAt: Date.now()
+  });
+  notify(`✅ Đã thêm người dùng ${newUsername}`, '👑');
+  renderUserList();
+}
+async function editUser(username) {
+  const acc = await AODB.get(`accounts/${username}`);
+  if(!acc) return alert("Không tìm thấy người dùng!");
+  const newName = prompt("Tên hiển thị mới:", acc.name);
+  if(newName && newName.trim()) acc.name = newName.trim();
+  const newAvatar = prompt("Avatar mới (emoji hoặc ký tự):", acc.avatar);
+  if(newAvatar && newAvatar.trim()) acc.avatar = newAvatar.trim();
+  const newPass = prompt("Mật khẩu mới (để trống nếu không đổi):");
+  if(newPass && newPass.length >= 4) acc.password = btoa(newPass);
+  await AODB.set(`accounts/${username}`, acc);
+  notify(`✅ Đã cập nhật ${username}`, '👑');
+  renderUserList();
+}
+async function deleteUser(username) {
+  if(username === ADMIN_USERNAME) return alert("Không thể xóa tài khoản Admin!");
+  if(!confirm(`Xóa người dùng ${username}?`)) return;
+  await AODB.set(`accounts/${username}`, null);
+  notify(`🗑 Đã xóa ${username}`, '👑');
+  renderUserList();
+}
+
+// ====================== OVERRIDE & INIT ======================
+const originalAoLogin = aoLogin;
+aoLogin = async function() {
+  await originalAoLogin();
+  if (aoUser) showAdminButton();
+};
+const originalAoRegister = aoRegister;
+aoRegister = async function() {
+  const u = document.getElementById('aoRgU').value.trim().toLowerCase();
+  if (u === ADMIN_USERNAME) {
+    aoErr("Không được dùng username này!");
+    return;
+  }
+  await originalAoRegister();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
   aoCheckSession();
   init();
+  setTimeout(() => {
+    if (aoUser && aoUser.username === ADMIN_USERNAME) showAdminButton();
+  }, 800);
 });
 </script>
 </body>
