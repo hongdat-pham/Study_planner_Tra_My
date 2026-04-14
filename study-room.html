@@ -670,7 +670,31 @@ async function _doLogout(){
 // ══════════════════════════════════════════
 // FIND SLOT & ENTER ROOM
 // ══════════════════════════════════════════
+async function checkAndResetIfNewDay(){
+  // Check if room data is from a previous day and reset if so
+  const spSt=await DB.get(`${DB_PATH}/spState`);
+  const today=todayStr();
+  // Store the date of the current session in Firebase
+  const roomDate=await DB.get(`${DB_PATH}/roomDate`);
+  if(roomDate && roomDate!==today){
+    // New day! Reset everything
+    notify('Ngày mới! Đang reset dữ liệu học nhóm... 🌅','🌸');
+    await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:1500,sess:0,actorName:null,startTime:null}).catch(()=>{});
+    // Reset all slots' groupStudySec for the new day
+    const slots=await DB.get(`${DB_PATH}/slots`)||{};
+    for(const sid of Object.keys(slots)){
+      await DB.update(`${DB_PATH}/slots/${sid}`,{groupStudySec:0,studySec:0,online:false}).catch(()=>{});
+    }
+    await DB.remove(`${DB_PATH}/challenges`).catch(()=>{});
+  }
+  // Always update roomDate to today
+  await DB.set(`${DB_PATH}/roomDate`,today).catch(()=>{});
+}
+
 async function findSlotAndEnter(){
+  // Reset room if it's a new day
+  await checkAndResetIfNewDay();
+
   const slots=await DB.get(`${DB_PATH}/slots`)||{};
   let mySlot=null;
   for(const sid of SLOTS){
@@ -694,11 +718,17 @@ async function findSlotAndEnter(){
   }
   me.slotId=mySlot;
   localStorage.setItem(SESSION_KEY,JSON.stringify(me));
+  // Get previous groupStudySec for this user if they were in the room before
+  const prevSlot=slots[mySlot];
+  const prevGroupSec=(prevSlot&&prevSlot.uid===me.uid)?( prevSlot.groupStudySec||0):0;
+  const prevStudySec=(prevSlot&&prevSlot.uid===me.uid)?(prevSlot.studySec||0):0;
   await DB.set(`${DB_PATH}/slots/${mySlot}`,{
     slotId:mySlot,uid:me.uid,name:me.name,avatar:me.avatar,online:true,
-    joinedAt:Date.now(),subject:'',studySec:0,groupStudySec:0,uploads:{},
+    joinedAt:Date.now(),subject:prevSlot?.subject||'',studySec:prevStudySec,groupStudySec:prevGroupSec,uploads:{},
     pomo:{run:false,isStudy:true,rem:1500,sess:0}
   });
+  groupStudySec=prevGroupSec;
+  todayStudySec=prevStudySec;
   DB.dc(`${DB_PATH}/slots/${mySlot}`,{online:false,uid:me.uid});
   if(!await DB.get(`${DB_PATH}/spCfg`)) await DB.set(`${DB_PATH}/spCfg`,{study:25,brk:5,sessMax:4});
   if(!await DB.get(`${DB_PATH}/spState`)) await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:1500,sess:0,actorName:null,startTime:null});
@@ -753,10 +783,14 @@ function enterRoom(){
       DB.update(`${DB_PATH}/spState`,{startTime:Date.now()});
     }
     renderSpUI();
-    if(spState.run&&!spInterval) startSpTick();
-    if(!spState.run&&spInterval){
-      clearInterval(spInterval);
-      spInterval=null;
+    if(spState.run){
+      // Start tick for everyone online — only person managing tick updates Firebase
+      if(!spInterval) startSpTick();
+      // Start group timer for THIS user if they are online (they joined while pomo was running)
+      if(!groupSecInterval) startGroupTimer();
+    }
+    if(!spState.run){
+      if(spInterval){clearInterval(spInterval);spInterval=null;}
       stopGroupTimer();
     }
     updateActorTag();
@@ -788,10 +822,12 @@ async function checkRoomEmpty(onlineCount){
 function startSoloTimer(){
   if(studySecInterval) return;
   if(!sessionStartTime) sessionStartTime=Date.now();
-  studySecInterval=setInterval(()=>{
+  studySecInterval=setInterval(async()=>{
     todayStudySec++;
     saveTodayStudyTime();
     updateTodayBar();
+    // Sync solo study time to Firebase so leaderboard stays accurate
+    await DB.update(`${DB_PATH}/slots/${me.slotId}`,{studySec:todayStudySec}).catch(()=>{});
   },1000);
 }
 
@@ -986,6 +1022,7 @@ async function spToggle(){
   if(spState.run){
     clearInterval(spInterval);spInterval=null;stopGroupTimer();stopClockSound();
     await saveSessionToHistory();
+    await DB.update(`${DB_PATH}/slots/${me.slotId}`,{groupStudySec}).catch(()=>{});
     await DB.update(`${DB_PATH}/spState`,{run:false,actorName:me.name});
     notify(`${me.name} đã dừng Pomodoro nhóm`,'⏸');
   }else{
@@ -1001,15 +1038,26 @@ function startSpTick(){
   clearInterval(spInterval);
   spInterval=setInterval(async()=>{
     if(!spState.run){clearInterval(spInterval);spInterval=null;stopGroupTimer();return;}
-    const rem=Math.max(0,spState.rem-1);
+    // Decrement local state for smooth UI
+    spState.rem=Math.max(0,spState.rem-1);
+    renderSpUI();
+    const rem=spState.rem;
     if(rem<=0){
       clearInterval(spInterval);spInterval=null;stopGroupTimer();stopClockSound();
       const isStudy=!spState.isStudy,sess=spState.isStudy?(spState.sess+1)%spCfg.sessMax:spState.sess;
-      await DB.update(`${DB_PATH}/spState`,{run:false,isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,actorName:null});
+      // Only the actor updates Firebase at end
+      if(spState.actorName===me.name){
+        await DB.update(`${DB_PATH}/spState`,{run:false,isStudy,rem:isStudy?spCfg.study*60:spCfg.brk*60,sess,actorName:null});
+      }
       notify(spState.isStudy?'🎉 Pomodoro nhóm xong! Cả phòng nghỉ~':'💪 Hết nghỉ! Học tiếp!',spState.isStudy?'🍃':'📖');
       await DB.update(`${DB_PATH}/slots/${me.slotId}`,{groupStudySec}).catch(()=>{});
       await saveSessionToHistory();
-    }else await DB.update(`${DB_PATH}/spState`,{rem}).catch(()=>{});
+    } else {
+      // Only the actor writes rem to Firebase (every second)
+      if(spState.actorName===me.name){
+        await DB.update(`${DB_PATH}/spState`,{rem}).catch(()=>{});
+      }
+    }
   },1000);
 }
 
@@ -1060,7 +1108,13 @@ function myPomoReset(){
 
 function syncMyPomo(){DB.update(`${DB_PATH}/slots/${me.slotId}/pomo`,{run:myPomo.run,isStudy:myPomo.isStudy,rem:myPomo.rem,sess:myPomo.sess}).catch(()=>{});}
 
-function toggleMyPomoCfg(){const p=document.getElementById('myPomoCfgPanel');if(p)p.classList.toggle('open');}
+let myPomoCfgOpen=false;
+
+function toggleMyPomoCfg(){
+  myPomoCfgOpen=!myPomoCfgOpen;
+  const p=document.getElementById('myPomoCfgPanel');
+  if(p) p.classList.toggle('open',myPomoCfgOpen);
+}
 
 function onMpCfg(){
   const s=+document.getElementById('mpS').value,b=+document.getElementById('mpB').value;
@@ -1121,7 +1175,7 @@ function renderMyPomo(){
     <button class="btn btn-soft btn-xs" onclick="myPomoReset()">↺</button>
     <button class="btn btn-ghost btn-xs" onclick="toggleMyPomoCfg()">⚙</button>
   </div>
-  <div class="mc-pomo-cfg" id="myPomoCfgPanel">
+  <div class="mc-pomo-cfg${myPomoCfgOpen?' open':''}" id="myPomoCfgPanel">
     <div class="pc-g">
       <div class="pc-item"><label>⏱ Học (p)</label><input type="range" id="mpS" min="5" max="60" value="${cfg.study}" oninput="onMpCfg()"><div class="pc-val"><span id="mpSV">${cfg.study}</span>p</div></div>
       <div class="pc-item"><label>☕ Nghỉ (p)</label><input type="range" id="mpB" min="1" max="30" value="${cfg.brk}" oninput="onMpCfg()"><div class="pc-val"><span id="mpBV">${cfg.brk}</span>p</div></div>
@@ -1133,12 +1187,17 @@ function renderMyPomo(){
 // LEADERBOARD
 // ══════════════════════════════════════════
 function renderLeaderboard(){
-  const members=Object.values(roomSnap.slots||{}).filter(s=>s.online).sort((a,b)=>(b.studySec||0)+(b.groupStudySec||0)-((a.studySec||0)+(a.groupStudySec||0)));
-  const maxS=(members[0]?(members[0].studySec||0)+(members[0].groupStudySec||0):0)||1;
+  // Show ALL members (online + offline who have studied), sorted by total time
+  const allSlots=Object.values(roomSnap.slots||{}).filter(s=>s.uid);
+  const members=allSlots.map(s=>{
+    const total=isMe(s)?(todayStudySec+groupStudySec):((s.studySec||0)+(s.groupStudySec||0));
+    return {...s,_total:total};
+  }).filter(s=>s._total>0||s.online).sort((a,b)=>b._total-a._total);
+  const maxS=(members[0]?members[0]._total:0)||1;
   document.getElementById('leaderboard').innerHTML=members.length
     ?members.map((m,i)=>{
-      const total=isMe(m)?(todayStudySec+groupStudySec):(m.studySec||0)+(m.groupStudySec||0);
-      return `<div class="lb-item"><div class="lb-rank">${MEDALS[i]||i+1}</div><div class="lb-ava">${m.avatar}</div><div class="lb-info"><div class="lb-n">${escapeHtml(m.name)}${isMe(m)?' (Tôi)':''}</div><div class="lb-bar"><div class="lb-bar-f" style="width:${Math.round((total/maxS)*100)}%"></div></div></div><div class="lb-val">${fmtTime(total)}</div></div>`;
+      const offlineBadge=!m.online?'<span style="font-size:.55rem;background:#f3f3f3;color:#999;padding:1px 5px;border-radius:8px;margin-left:4px">offline</span>':'';
+      return `<div class="lb-item" style="${!m.online?'opacity:.65':''}"><div class="lb-rank">${MEDALS[i]||i+1}</div><div class="lb-ava">${m.avatar}</div><div class="lb-info"><div class="lb-n">${escapeHtml(m.name)}${isMe(m)?' (Tôi)':''}${offlineBadge}</div><div class="lb-bar"><div class="lb-bar-f" style="width:${Math.round((m._total/maxS)*100)}%"></div></div></div><div class="lb-val">${fmtTime(m._total)}</div></div>`;
     }).join('')
     :'<div style="color:var(--ink3);font-size:.85rem;text-align:center;padding:18px 0">Chưa có ai học cả 😴</div>';
 }
@@ -1749,7 +1808,9 @@ async function _doLeave(){
 
 window.addEventListener('beforeunload',()=>{
   if(me){
-    DB.update(`${DB_PATH}/slots/${me.slotId}`,{online:false}).catch(()=>{});
+    stopSoloTimer();
+    stopGroupTimer();
+    DB.update(`${DB_PATH}/slots/${me.slotId}`,{online:false,studySec:todayStudySec,groupStudySec}).catch(()=>{});
   }
 });
 </script>
