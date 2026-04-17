@@ -501,7 +501,10 @@ let groupStudySec=0;
 let studySecInterval=null;
 let groupSecInterval=null;
 let sessionStartTime=null;
+let currentSessionStartTime=null;
 let qrGenerated=false;
+// Track all participants in current session: uid -> {name, avatar, joinTime, studySec, groupStudySec, subject, pomo}
+const sessionParticipants={};
 const unsubs=[];
 const clockAudio=document.getElementById('clockAudio');
 
@@ -760,6 +763,26 @@ function saveTodayStudyTime(){
 function enterRoom(){
   unsubs.push(DB.listen(`${DB_PATH}/slots`,snap=>{
     roomSnap.slots=snap||{};
+    // Track all online members into sessionParticipants
+    Object.values(roomSnap.slots).forEach(s=>{
+      if(s && s.uid && s.online){
+        if(!sessionParticipants[s.uid]){
+          sessionParticipants[s.uid]={
+            name:s.name,avatar:s.avatar,
+            studySec:0,groupStudySec:0,pomo:0,subject:s.subject||''
+          };
+          if(!currentSessionStartTime) currentSessionStartTime=Date.now();
+          if(!sessionStartTime) sessionStartTime=Date.now();
+        }
+        // Always update latest info
+        sessionParticipants[s.uid].name=s.name;
+        sessionParticipants[s.uid].avatar=s.avatar;
+        sessionParticipants[s.uid].studySec=isMe(s)?todayStudySec:(s.studySec||0);
+        sessionParticipants[s.uid].groupStudySec=isMe(s)?groupStudySec:(s.groupStudySec||0);
+        sessionParticipants[s.uid].pomo=s.pomo?.sess||0;
+        sessionParticipants[s.uid].subject=s.subject||sessionParticipants[s.uid].subject;
+      }
+    });
     renderMembers();
     renderLeaderboard();
     const onlineCount=Object.values(roomSnap.slots).filter(s=>s.online).length;
@@ -811,7 +834,10 @@ async function checkRoomEmpty(onlineCount){
     await saveSessionToHistory();
     await DB.set(`${DB_PATH}/spState`,{run:false,isStudy:true,rem:(spCfg.study||25)*60,sess:0,actorName:null,startTime:null}).catch(()=>{});
     await DB.remove(`${DB_PATH}/challenges`).catch(()=>{});
+    // Reset session tracking for next session
     sessionStartTime = null;
+    currentSessionStartTime = null;
+    Object.keys(sessionParticipants).forEach(k=>delete sessionParticipants[k]);
     notify('Phòng trống! Đã reset và lưu lịch sử học 🌸','📝');
   }
 }
@@ -821,6 +847,7 @@ async function checkRoomEmpty(onlineCount){
 // ══════════════════════════════════════════
 function startSoloTimer(){
   if(studySecInterval) return;
+  if(!currentSessionStartTime) currentSessionStartTime=Date.now();
   if(!sessionStartTime) sessionStartTime=Date.now();
   studySecInterval=setInterval(async()=>{
     todayStudySec++;
@@ -838,6 +865,7 @@ function stopSoloTimer(){
 
 function startGroupTimer(){
   if(groupSecInterval) return;
+  if(!currentSessionStartTime) currentSessionStartTime=Date.now();
   if(!sessionStartTime) sessionStartTime=Date.now();
   groupSecInterval=setInterval(async()=>{
     groupStudySec++;
@@ -857,15 +885,41 @@ function stopGroupTimer(){
 // SAVE HISTORY
 // ══════════════════════════════════════════
 async function saveSessionToHistory(){
-  const members = Object.values(roomSnap.slots || {}).filter(s => s.online);
   const now = Date.now();
+  // Use currentSessionStartTime (set when timer actually starts), not spState.startTime
+  const sessionStart = currentSessionStartTime || sessionStartTime || (now - 60000);
   const sessionEnd = now;
-  const sessionStart = spState.startTime || sessionStartTime || now;
   
-  if(members.length === 0) return;
+  // Merge current online members into sessionParticipants
+  const onlineNow = Object.values(roomSnap.slots || {}).filter(s => s.online);
+  onlineNow.forEach(s => {
+    if(!sessionParticipants[s.uid]) {
+      sessionParticipants[s.uid] = {
+        name: s.name, avatar: s.avatar,
+        studySec: 0, groupStudySec: 0,
+        pomo: 0, subject: s.subject || ''
+      };
+    }
+    // Update with latest data
+    const p = sessionParticipants[s.uid];
+    p.name = s.name;
+    p.avatar = s.avatar;
+    p.studySec = isMe(s) ? todayStudySec : (s.studySec || 0);
+    p.groupStudySec = isMe(s) ? groupStudySec : (s.groupStudySec || 0);
+    p.pomo = s.pomo?.sess || 0;
+    p.subject = s.subject || p.subject;
+  });
   
-  const totalStudySec = members.reduce((sum, m) => sum + (m.studySec || 0) + (m.groupStudySec || 0), 0);
+  const participantList = Object.values(sessionParticipants);
+  if(participantList.length === 0) return;
+  
+  const totalStudySec = participantList.reduce((sum, m) => sum + (m.studySec || 0) + (m.groupStudySec || 0), 0);
   if(totalStudySec === 0) return;
+  
+  // Validate time range — only use if start < end and duration > 30s
+  const duration = sessionEnd - sessionStart;
+  const validTime = duration > 30000;
+  const start = validTime ? sessionStart : (sessionEnd - Math.max(totalStudySec * 1000 / Math.max(participantList.length, 1), 60000));
   
   const challenges = Object.values(roomSnap.challenges || {}).map(ch => ({
     name: ch.name, type: ch.type, val: ch.val, subj: ch.subj,
@@ -876,19 +930,19 @@ async function saveSessionToHistory(){
   
   const entry = {
     date: todayStr(),
-    startTime: sessionStart,
+    startTime: start,
     endTime: sessionEnd,
-    timeRange: formatTimeRange(sessionStart, sessionEnd),
-    members: members.map(m => ({
+    timeRange: formatTimeRange(start, sessionEnd),
+    members: participantList.map(m => ({
       name: m.name, avatar: m.avatar,
       studySec: m.studySec || 0,
       groupStudySec: m.groupStudySec || 0,
       totalStudySec: (m.studySec || 0) + (m.groupStudySec || 0),
-      pomo: m.pomo?.sess || 0,
+      pomo: m.pomo || 0,
       subject: m.subject || ''
     })),
     challenges,
-    totalStudySec: totalStudySec
+    totalStudySec
   };
   
   let history = [];
@@ -897,11 +951,14 @@ async function saveSessionToHistory(){
     if(saved) history = JSON.parse(saved);
   } catch(e) {}
   
-  const existingIndex = history.findIndex(h => h.date === todayStr());
-  if(existingIndex !== -1) {
-    history[existingIndex] = entry;
+  // Always append a new session entry (don't overwrite today's existing ones)
+  // But merge if this is a very recent save (within 2 minutes) to avoid duplicates on auto-save
+  const twoMinAgo = now - 120000;
+  const recentIdx = history.findIndex(h => h.date === todayStr() && h.startTime === start);
+  if(recentIdx !== -1) {
+    history[recentIdx] = entry; // Update same session
   } else {
-    history.unshift(entry);
+    history.unshift(entry); // New session entry
   }
   
   const cutoff = Date.now() - 180 * 86400000;
@@ -910,6 +967,14 @@ async function saveSessionToHistory(){
   
   updateStreak();
   renderStreak();
+}
+
+// Call when a new group/solo session starts to reset session tracking
+function startNewSessionTracking(){
+  currentSessionStartTime = Date.now();
+  if(!sessionStartTime) sessionStartTime = currentSessionStartTime;
+  // Clear old participant snapshots for fresh session
+  // (Keep existing ones so returning members are still counted)
 }
 
 // ══════════════════════════════════════════
@@ -1027,6 +1092,7 @@ async function spToggle(){
     notify(`${me.name} đã dừng Pomodoro nhóm`,'⏸');
   }else{
     if(myPomo.run) myPomoToggle();
+    startNewSessionTracking();
     await DB.update(`${DB_PATH}/spState`,{run:true,actorName:me.name,startTime:Date.now()});
     startSpTick();startGroupTimer();tryPlayClock();
     notify(`${me.name} đã bắt đầu Pomodoro nhóm`,'▶');
@@ -1082,6 +1148,7 @@ function myPomoToggle(){
     stopSoloTimer();stopClockSound();
   }else{
     myPomo.run=true;myPomoInterval=setInterval(myPomoTick,1000);
+    startNewSessionTracking();
     startSoloTimer();tryPlayClock();
   }
   syncMyPomo();renderMembers();
@@ -1592,14 +1659,20 @@ function renderHistory(filterDate=null){
         </div>
         <div class="hist-detail" id="${sessionId}">
           <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px">
-            ${(h.members || []).map(m => `
-              <div style="background:white;border:1.5px solid var(--p2);border-radius:10px;padding:8px 11px;text-align:center;min-width:84px">
+            ${(h.members || []).map(m => {
+              const totalMin = Math.floor((m.totalStudySec || 0) / 60);
+              const soloMin = Math.floor((m.studySec || 0) / 60);
+              const grpMin = Math.floor((m.groupStudySec || 0) / 60);
+              return `
+              <div style="background:white;border:1.5px solid var(--p2);border-radius:10px;padding:8px 11px;text-align:center;min-width:90px">
                 <div style="font-size:1.3rem">${m.avatar || '👤'}</div>
-                <div style="font-weight:600;font-size:.8rem">${escapeHtml(m.name)}</div>
-                <div style="color:var(--p5);font-family:'Cormorant Garamond',serif;font-size:1rem">${Math.floor((m.totalStudySec || 0) / 60)}p</div>
+                <div style="font-weight:600;font-size:.8rem;margin-bottom:4px">${escapeHtml(m.name)}</div>
+                <div style="color:var(--p5);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600">${totalMin}p</div>
+                <div style="font-size:.6rem;color:var(--ink3);margin-top:2px">${soloMin>0?'⏱ '+soloMin+'p cá nhân':''}${soloMin>0&&grpMin>0?' · ':''}${grpMin>0?'👥 '+grpMin+'p nhóm':''}</div>
+                ${m.pomo ? `<div style="font-size:.62rem;color:var(--ink3)">🍅 ${m.pomo} pomodoro</div>` : ''}
                 ${m.subject ? `<div style="font-size:.62rem;color:var(--ink3)">${escapeHtml(m.subject)}</div>` : ''}
-              </div>
-            `).join('')}
+              </div>`;
+            }).join('')}
           </div>
           ${h.challenges?.length ? h.challenges.map(ch => `
             <div style="margin-bottom:8px">
